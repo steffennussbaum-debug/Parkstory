@@ -412,3 +412,241 @@ export const quality = {
   ],
   caption: 'Conveyor segment on the load test rig',
 };
+
+/* ------------------------------------------------------------------------
+ * Additional explainer content from Parkstory's "How TilePark works" page,
+ * used by Concept B to restore the depth and flow of the original.
+ * --------------------------------------------------------------------- */
+
+/** From arrival to pickup. */
+export const journey = [
+  {
+    k: 'Effortless drop-off',
+    v: 'Drive into the friendly and safe transfer cabin, switch off the engine, and step out. From that moment on, the system takes over, and no one ever has to walk through the garage.',
+  },
+  {
+    k: 'Fully automated parking',
+    v: 'Your car stays on its own pallet throughout. The conveyors beneath move it precisely in X and Y to an available position, without anyone at the wheel.',
+  },
+  {
+    k: 'Secure, space-efficient storage',
+    v: 'Without ramps, driving lanes, or walkways, almost the entire floor area is available for parking. The storage area is not accessible to the public.',
+  },
+  {
+    k: 'Ready when you are',
+    v: 'Request your car via app or terminal. The system calculates the best route, moves the surrounding cars aside, and presents your car in the transfer cabin.',
+  },
+];
+
+/** Who benefits from the architecture. */
+export const audience = [
+  {
+    who: 'For architects',
+    k: 'The grid adapts to the site',
+    v: 'Without a fixed shuttle aisle or a central lift core dictating the layout, irregular plots, columns, and awkward corners all become usable parking.',
+  },
+  {
+    who: 'For developers',
+    k: 'No single point of failure',
+    v: 'A faulty conveyor never shuts down the garage. That protects uptime, tenant satisfaction, and the long-term value of the asset.',
+  },
+  {
+    who: 'For everyone',
+    k: 'Conveyors everywhere, no aisles',
+    v: 'Every position is a conveyor. With no ramps or driving lanes, almost the entire floor area is used for parking.',
+  },
+];
+
+/** The third dimension: stackers. */
+export const third = {
+  eyebrow: 'The third dimension',
+  title: 'Add Z.',
+  titleAccent: 'Up to four cars on the footprint of one.',
+  body: 'The XY grid moves cars across the floor. Add a TilePark stacker above selected conveyors, or above every conveyor, and the footprint of a single car holds up to four cars instead of one.',
+  steps: [
+    {
+      k: 'XY handles the logistics',
+      v: 'The transport level brings each car beneath its stacker, using the same sliding-puzzle routing.',
+    },
+    {
+      k: 'The stacker lifts it up',
+      v: 'The stacker raises the car into a storage level directly above its conveyor. The storage levels need no conveyors, because cars are stacked as in a silo.',
+    },
+    {
+      k: 'And brings it back down',
+      v: 'On request, the stacker lowers the car onto a free conveyor, which carries it to the transfer cabin.',
+    },
+    {
+      k: 'Still no single point of failure',
+      v: 'Each stacker serves only its own conveyor. With no central lift tower that every car depends on, the rest of the garage keeps running.',
+    },
+  ],
+  whyTitle: 'One automation level.',
+  whyAccent: 'Everything above is simple storage.',
+  whyBody:
+    'All of the automation is concentrated on the transport level. The levels above are stacked like a silo and need neither conveyors nor floor slabs. The building becomes simpler, lighter, and less expensive.',
+  why: [
+    {
+      k: 'Conveyors on one level only',
+      v: 'Conveyors and drives are installed on the transport level alone. The storage levels are simple steel shelving: less equipment to purchase and maintain.',
+    },
+    {
+      k: 'No slabs to build',
+      v: 'A stacked silo replaces intermediate parking decks, eliminating concrete slabs, formwork, and reinforcement.',
+    },
+    {
+      k: 'No height lost to slabs',
+      v: 'Without slabs and their build-up, every meter of height is used for cars, so more levels fit within the same building.',
+    },
+    {
+      k: 'Lower build-up height',
+      v: 'The XY conveyor level itself is very low, which saves floor height, pit depth and construction cost.',
+    },
+    {
+      k: 'Lightweight construction',
+      v: 'The light steel structure means lower loads on the building, smaller foundations, and an easy fit in existing structures.',
+    },
+    {
+      k: 'Less excavation',
+      v: 'A lower structure for the same number of cars means a shallower pit, reducing excavation, shoring, and waterproofing.',
+    },
+  ],
+  whyFoot:
+    'It unlocks height. Whether in a basement, on a ground floor, or in a dedicated building, the clear height you already have becomes parking capacity.',
+};
+
+/** Resilience during a power outage. */
+export const power = {
+  title: 'And if the power goes out?',
+  titleAccent: 'Your car still comes out.',
+  body: 'TilePark requires remarkably little power. With as little as 30 amps, the entire system can run on a generator, so drivers can still collect their cars during a power outage.',
+  points: [
+    {
+      k: 'Low energy use.',
+      v: 'On the XY level, cars only ever move horizontally, along the shortest optimized routes. Only the conveyors needed for a sequence move.',
+    },
+    {
+      k: 'Multiple redundancy.',
+      v: 'Every conveyor has at least four drive motors, and every conveyor can take over for any other.',
+    },
+    { k: 'No single point of failure.', v: 'If one conveyor is down, the others route around it.' },
+  ],
+};
+
+/** Designed around the driver. */
+export const driver = {
+  eyebrow: 'Designed around the driver',
+  title: 'Behind the machine,',
+  titleAccent: 'it is all about you.',
+  items: [
+    {
+      k: 'Your time, not the system’s',
+      v: 'Retrieval is planned around your schedule. Tell the app when you leave, or let it learn your routine, and your car is waiting instead of you.',
+    },
+    {
+      k: 'No searching, no guessing',
+      v: 'No ramps, no levels, no hunting for a free space or for where you parked. You always know where your car is and when it will be ready.',
+    },
+    {
+      k: 'Safe and stress-free',
+      v: 'No dark stairwells, no tight ramps and no walking through a garage at night. You only ever enter the friendly and safe transfer cabin.',
+    },
+    {
+      k: 'Your circle, your rules',
+      v: 'Family, guests, a valet or a colleague: you decide who may use the garage, when, and with which car, and you can change it at any time.',
+    },
+    {
+      k: 'Always informed',
+      v: 'Notifications tell you when your car is ready, when charging is complete and when a booking is about to end.',
+    },
+    {
+      k: 'One app, one journey',
+      v: 'Access, parking, charging, guests and payment in one place, with no tickets, no cards and no second app.',
+    },
+  ],
+};
+
+/**
+ * Owning the entire value chain. The contrast with the market is stated in
+ * general terms as Parkstory's own market assessment; no supplier is named.
+ */
+export const valueChain = {
+  eyebrow: 'One company, the entire value chain',
+  title: 'You can’t control what you don’t',
+  titleAccent: 'design and build yourself.',
+  body: 'In automated parking, the value chain is often split between several companies: one designs the system, others manufacture it, supply the controls or write the software. Parkstory owns all of it. Our engineers design every TilePark system, our team writes the controls and the app, and our own factories in Kehl, Germany, and Gastonia, USA, build it from raw steel to finished conveyor.',
+  steps: [
+    { k: 'Engineering', v: 'Mechanical, electrical and structural' },
+    { k: 'Controls', v: 'Decentralised, developed in-house' },
+    { k: 'Software & app', v: 'App and operator platform' },
+    { k: 'Steel processing', v: 'Laser cutting and CNC bending' },
+    { k: 'Welding', v: 'Robotic and manual' },
+    { k: 'Machining', v: 'CNC turning and machining' },
+    { k: 'Assembly', v: 'Drives and pre-assembly' },
+    { k: 'Testing', v: '100 %, under load' },
+    { k: 'Installation', v: 'By our own team' },
+    { k: 'Service', v: 'Remote updates, 30+ years of parts' },
+  ],
+  statement: 'Every step. One company. One team that knows your system.',
+  pillars: [
+    { k: 'Designed in-house', v: 'Every component is designed specifically for TilePark by our own engineers.' },
+    { k: 'Our own controls', v: 'The decentralised control system is developed in-house. We know every line of code.' },
+    {
+      k: 'Made in our own factories',
+      v: 'Laser cutting, bending, robotic welding and assembly under our own roof, in Germany and the USA.',
+    },
+    {
+      k: 'Pre-assembled, 100 % tested',
+      v: 'Every system is pre-assembled at the plant; every conveyor passes a full functional test.',
+    },
+    {
+      k: 'Spare parts for 30+ years',
+      v: 'Because we own the drawings, the tooling and the production, independent of any supplier’s catalogue.',
+    },
+    {
+      k: 'One partner, start to finish',
+      v: 'Design, production, installation and service from one company under one contract.',
+    },
+    {
+      k: 'Every component serialised',
+      v: 'Each component can be traced at any time, so we keep full control of quality and supply chain.',
+    },
+    {
+      k: 'Industry-standard parts',
+      v: 'Proven industrial parts inside our own design: robust, widely available and easy to service.',
+    },
+  ],
+  banner: {
+    title: 'Built in our factories. Installed in your building.',
+    caption: 'TilePark conveyors with their drives, pre-assembled and tested before delivery.',
+  },
+  plants: [
+    {
+      flag: 'DE',
+      name: 'Kehl, Germany',
+      text: 'Parkstory Manufacturing Kehl: approximately 10,000 m² of sheet-metal processing, welding and assembly under one roof.',
+      caps: [
+        'Coil processing and laser cutting',
+        'CNC bending up to 6 m',
+        'Robotic and manual welding',
+        'CNC turning',
+        'Steel structures and assembly',
+        'Pre-assembly and functional testing',
+      ],
+    },
+    {
+      flag: 'US',
+      name: 'Gastonia, North Carolina, USA',
+      text: 'Production, machining and assembly for North America: TilePark, built in the USA.',
+      caps: [
+        'Fiber laser cutting with automatic shuttle table',
+        'CNC press brake bending',
+        'CNC turning and machining centers',
+        'Welding and steel fabrication',
+        'Conveyor drive assembly and testing',
+        'Gantry and jib cranes for heavy assemblies',
+      ],
+    },
+  ],
+  youtube: 'https://www.youtube.com/@parkstory2332',
+};

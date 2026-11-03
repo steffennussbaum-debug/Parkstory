@@ -32,6 +32,12 @@ import {
   nature,
   app,
   quality,
+  journey,
+  audience,
+  third,
+  power,
+  driver,
+  valueChain,
 } from '~/data/concepts';
 
 import drives from '~/assets/images/tilepark/gastonia-drive-assembly.webp';
@@ -41,6 +47,10 @@ import bending from '~/assets/images/tilepark/kehl-bending.webp';
 import wheels from '~/assets/images/tilepark/gastonia-wheels.webp';
 import evCharging from '~/assets/images/tilepark/ev-charging.webp';
 import evApp from '~/assets/images/tilepark/ev-app-screen.webp';
+import conveyors from '~/assets/images/tilepark/conveyors-installed.webp';
+import kehlPlant from '~/assets/images/tilepark/kehl-plant.webp';
+import gastPlant from '~/assets/images/tilepark/gastonia-plant.webp';
+import steel from '~/assets/images/tilepark/kehl-steel.webp';
 
 import '@fontsource-variable/inter';
 import '@fontsource-variable/outfit';
@@ -49,16 +59,31 @@ import '~/assets/styles/concept-demos.css';
 
 const questionWords = question.title.split(' ');
 const ex = economics.example.rows;
+// photos per plant: [image, caption, object-position]
+const plantPics = [
+  [
+    [kehlPlant, 'Our plant in Kehl', '50% 55%'],
+    [welding, 'Robotic welding', '50% 35%'],
+    [bending, 'CNC bending', '75% 55%'],
+    [steel, 'Galvanised steel', '50% 50%'],
+  ],
+  [
+    [drives, 'TilePark conveyor drive assembly · Gastonia', '50% 52%'],
+    [gastPlant, 'Our plant', '55% 60%'],
+    [cnc, 'CNC machining', '50% 50%'],
+    [wheels, 'Drive wheel units', '50% 50%'],
+  ],
+];
 const chapters = [
   ['01', 'The shift', '#shift'],
   ['02', 'The question', '#question'],
   ['03', 'The breakthrough', '#breakthrough'],
   ['04', 'Why TilePark leads', '#edge'],
-  ['05', 'Economics', '#economics'],
+  ['05', 'Third dimension', '#economics'],
   ['06', 'EV charging', '#ev-charging'],
   ['07', 'The app', '#app'],
   ['08', 'What comes next', '#next'],
-  ['09', 'Engineering', '#heritage'],
+  ['09', 'Value chain', '#heritage'],
   ['10', 'The decision', '#decision'],
 ];
 ---
@@ -118,6 +143,7 @@ const chapters = [
             ))
           }
         </ol>
+        <a class="cb-nextch" href={chapters[1][2]}><span>Next</span><b>{chapters[1][0]}</b>{chapters[1][1]}<i>↓</i></a>
       </div>
     </section>
 
@@ -153,6 +179,7 @@ const chapters = [
           <DecadeTimeline />
           <p class="cb-note">{question.timeline.note}</p>
         </div>
+        <a class="cb-nextch" href={chapters[2][2]}><span>Next</span><b>{chapters[2][0]}</b>{chapters[2][1]}<i>↓</i></a>
       </div>
     </section>
 
@@ -190,6 +217,33 @@ const chapters = [
         <div class="cx-demos"><GridDemo /></div>
         <p class="cb-note">{breakthrough.patent}</p>
 
+        <div class="cb-journey">
+          <p class="cb-kicker" data-reveal><b>—</b>From arrival to pickup</p>
+          <ol>
+            {
+              journey.map((j, i) => (
+                <li data-reveal style={`--reveal-delay:${0.08 * i}s`}>
+                  <span class="cb-journey-n">{i + 1}</span>
+                  <h3>{j.k}</h3>
+                  <p>{j.v}</p>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+
+        <ul class="cb-audience">
+          {
+            audience.map((a, i) => (
+              <li data-reveal style={`--reveal-delay:${0.08 * i}s`}>
+                <span class="cb-label">{a.who}</span>
+                <h3>{a.k}</h3>
+                <p>{a.v}</p>
+              </li>
+            ))
+          }
+        </ul>
+
         <div class="cb-nature">
           <div class="cb-split">
             <div>
@@ -218,6 +272,7 @@ const chapters = [
             }
           </ol>
         </div>
+        <a class="cb-nextch" href={chapters[3][2]}><span>Next</span><b>{chapters[3][0]}</b>{chapters[3][1]}<i>↓</i></a>
       </div>
     </section>
 
@@ -283,46 +338,107 @@ const chapters = [
           </ol>
           <p class="cb-note">{edge.loopNote}</p>
         </div>
+
+        <div class="cb-power" data-reveal>
+          <div class="cb-power-bolt" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="30" height="30"
+              ><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z" fill="#f5a524"></path></svg
+            >
+          </div>
+          <div>
+            <h3>{power.title} <span class="cb-amber">{power.titleAccent}</span></h3>
+            <p>{power.body}</p>
+          </div>
+          <ul>
+            {
+              power.points.map((pt) => (
+                <li>
+                  <b>{pt.k}</b> {pt.v}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <a class="cb-nextch" href={chapters[4][2]}><span>Next</span><b>{chapters[4][0]}</b>{chapters[4][1]}<i>↓</i></a>
       </div>
     </section>
 
-    <!-- 05 THE ECONOMICS OF CHANGE -->
+    <!-- 05 THE THIRD DIMENSION AND THE ECONOMICS OF CHANGE -->
     <section class="cb-sec" id="economics">
       <div class="cb-wrap">
-        <p class="cb-kicker" data-reveal><b>05</b>{economics.eyebrow}</p>
-        <h2 class="cb-h2" data-reveal>{economics.title}</h2>
-
-        <div class="cb-big" data-reveal>
-          <p class="cb-big-cap">Same grid, same 297 m². {economics.example.caption}</p>
-          <div class="cb-big-row">
-            {
-              ex.map((r, i) => (
-                <div class:list={['cb-big-cell', { hi: i === ex.length - 1 }]}>
-                  <b>{r.cars}</b>
-                  <span>cars</span>
-                  <p>{r.config}</p>
-                  <em>{r.perCar} per car</em>
-                </div>
-              ))
-            }
-          </div>
-          <details class="cb-assume">
-            <summary>Assumptions behind these numbers</summary>
-            <ol>{economics.example.assumptions.map((a) => <li>{a}</li>)}</ol>
-          </details>
+        <p class="cb-kicker" data-reveal><b>05</b>{third.eyebrow}</p>
+        <div class="cb-split">
+          <h2 class="cb-h2" data-reveal>{third.title} <span class="cb-lime">{third.titleAccent}</span></h2>
+          <p class="cb-body" data-reveal>{third.body}</p>
         </div>
-
-        <ul class="cb-five">
+        <div class="cx-demos cb-stacker"><StackerDemo /></div>
+        <ol class="cb-four">
           {
-            economics.levers.map((l, i) => (
-              <li data-reveal style={`--reveal-delay:${0.05 * i}s`}>
-                <h3>{l.k}</h3>
-                <p>{l.v}</p>
+            third.steps.map((st, i) => (
+              <li data-reveal style={`--reveal-delay:${0.08 * i}s`}>
+                <span class="cb-n">{String(i + 1).padStart(2, '0')}</span>
+                <h3>{st.k}</h3>
+                <p>{st.v}</p>
               </li>
             ))
           }
-        </ul>
-        <div class="cx-demos"><StackerDemo /></div>
+        </ol>
+
+        <div class="cb-whyz">
+          <div class="cb-split">
+            <h3 class="cb-h3" data-reveal>{third.whyTitle} <span class="cb-lime">{third.whyAccent}</span></h3>
+            <p class="cb-body" data-reveal>{third.whyBody}</p>
+          </div>
+          <ul class="cb-six">
+            {
+              third.why.map((w, i) => (
+                <li data-reveal style={`--reveal-delay:${0.05 * i}s`}>
+                  <h3>{w.k}</h3>
+                  <p>{w.v}</p>
+                </li>
+              ))
+            }
+          </ul>
+          <p class="cb-foot-line" data-reveal>
+            <b>It unlocks height.</b>
+            {third.whyFoot.replace('It unlocks height. ', '')}
+          </p>
+        </div>
+
+        <div class="cb-econ-block">
+          <p class="cb-kicker" data-reveal><b>—</b>{economics.eyebrow}</p>
+          <h3 class="cb-h3" data-reveal>{economics.title}</h3>
+          <div class="cb-big" data-reveal>
+            <p class="cb-big-cap">Same grid, same 297 m². {economics.example.caption}</p>
+            <div class="cb-big-row">
+              {
+                ex.map((r, i) => (
+                  <div class:list={['cb-big-cell', { hi: i === ex.length - 1 }]}>
+                    <b>{r.cars}</b>
+                    <span>cars</span>
+                    <p>{r.config}</p>
+                    <em>{r.perCar} per car</em>
+                  </div>
+                ))
+              }
+            </div>
+            <details class="cb-assume">
+              <summary>Assumptions behind these numbers</summary>
+              <ol>{economics.example.assumptions.map((a) => <li>{a}</li>)}</ol>
+            </details>
+          </div>
+          <ul class="cb-five">
+            {
+              economics.levers.map((l, i) => (
+                <li data-reveal style={`--reveal-delay:${0.05 * i}s`}>
+                  <h3>{l.k}</h3>
+                  <p>{l.v}</p>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <a class="cb-nextch" href={chapters[5][2]}><span>Next</span><b>{chapters[5][0]}</b>{chapters[5][1]}<i>↓</i></a>
       </div>
     </section>
 
@@ -379,6 +495,7 @@ const chapters = [
             </div>
           </div>
         </div>
+        <a class="cb-nextch" href={chapters[6][2]}><span>Next</span><b>{chapters[6][0]}</b>{chapters[6][1]}<i>↓</i></a>
       </div>
     </section>
 
@@ -420,6 +537,22 @@ const chapters = [
             }
           </ul>
         </div>
+
+        <div class="cb-driver">
+          <p class="cb-kicker" data-reveal><b>—</b>{driver.eyebrow}</p>
+          <h3 class="cb-h3" data-reveal>{driver.title} <span class="cb-lime">{driver.titleAccent}</span></h3>
+          <ul class="cb-six">
+            {
+              driver.items.map((d, i) => (
+                <li data-reveal style={`--reveal-delay:${0.05 * i}s`}>
+                  <h3>{d.k}</h3>
+                  <p>{d.v}</p>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <a class="cb-nextch" href={chapters[7][2]}><span>Next</span><b>{chapters[7][0]}</b>{chapters[7][1]}<i>↓</i></a>
       </div>
     </section>
 
@@ -451,37 +584,35 @@ const chapters = [
             ))
           }
         </div>
+        <a class="cb-nextch" href={chapters[8][2]}><span>Next</span><b>{chapters[8][0]}</b>{chapters[8][1]}<i>↓</i></a>
       </div>
     </section>
 
-    <!-- 09 ENGINEERING HERITAGE -->
-    <section class="cb-sec" id="heritage">
+    <!-- 09 ONE COMPANY, THE ENTIRE VALUE CHAIN -->
+    <section class="cb-sec cb-chain-sec" id="heritage">
+      <div class="cb-grid-bg" aria-hidden="true"></div>
       <div class="cb-wrap">
-        <p class="cb-kicker" data-reveal><b>09</b>{heritage.eyebrow}</p>
-        <h2 class="cb-h2" data-reveal>
-          We design what we build. <span class="cb-lime">We build what we develop.</span>
-        </h2>
-        <div class="cb-collage">
-          {
-            [
-              [drives, 'TilePark conveyor drive assembly, Gastonia', 'big'],
-              [welding, 'Robotic welding, Kehl', ''],
-              [bending, 'CNC bending, Kehl', ''],
-              [cnc, 'CNC machining, Gastonia', ''],
-            ].map(([img, cap, cls], i) => (
-              <figure class={cls as string} data-reveal style={`--reveal-delay:${0.08 * i}s`}>
-                <Image
-                  src={img as ImageMetadata}
-                  alt={cap as string}
-                  widths={[500, 900]}
-                  sizes="(max-width: 760px) 100vw, 50vw"
-                />
-                <figcaption>{cap as string}</figcaption>
-              </figure>
-            ))
-          }
+        <p class="cb-kicker" data-reveal><b>09</b>{valueChain.eyebrow}</p>
+        <h2 class="cb-h2" data-reveal>{valueChain.title} <span class="cb-lime">{valueChain.titleAccent}</span></h2>
+        <p class="cb-body cb-body--wide" data-reveal>{valueChain.body}</p>
+
+        <div class="cb-chain" data-reveal>
+          <ol>
+            {
+              valueChain.steps.map((st, i) => (
+                <li style={`--i:${i}`}>
+                  <span class="cb-chain-node" />
+                  <b>{st.k}</b>
+                  <em>{st.v}</em>
+                  <small>Parkstory</small>
+                </li>
+              ))
+            }
+          </ol>
+          <p class="cb-chain-statement">{valueChain.statement}</p>
         </div>
-        <div class="cb-split">
+
+        <div class="cb-split cb-heritage-copy">
           {
             heritage.body.map((b) => (
               <p class="cb-body" data-reveal>
@@ -490,16 +621,32 @@ const chapters = [
             ))
           }
         </div>
-        <dl class="cb-facts">
+
+        <ul class="cb-eight">
           {
-            heritage.facts.map((f, i) => (
-              <div data-reveal style={`--reveal-delay:${0.05 * i}s`}>
-                <dt>{f.k}</dt>
-                <dd>{f.v}</dd>
-              </div>
+            valueChain.pillars.map((p, i) => (
+              <li data-reveal style={`--reveal-delay:${0.04 * i}s`}>
+                <span class="cb-check">✓</span>
+                <h3>{p.k}</h3>
+                <p>{p.v}</p>
+              </li>
             ))
           }
-        </dl>
+        </ul>
+
+        <figure class="cb-banner" data-reveal>
+          <Image
+            src={conveyors}
+            alt="TilePark conveyors with their drives, installed in an underground garage"
+            widths={[800]}
+            sizes="100vw"
+          />
+          <figcaption>
+            <b>{valueChain.banner.title}</b>
+            <span>{valueChain.banner.caption}</span>
+          </figcaption>
+        </figure>
+
         <div class="cb-qc" id="quality">
           <div class="cb-qc-text">
             <p class="cb-kicker" data-reveal><b>—</b>{quality.eyebrow}</p>
@@ -528,9 +675,47 @@ const chapters = [
             <figcaption>{quality.caption}</figcaption>
           </figure>
         </div>
-        <ol class="cb-flow" aria-label="From design to service">
-          {heritage.flow.map((s) => <li data-reveal>{s}</li>)}
-        </ol>
+
+        <div class="cb-plants">
+          {
+            valueChain.plants.map((pl, pi) => (
+              <div class="cb-plant" data-reveal style={`--reveal-delay:${0.1 * pi}s`}>
+                <div class="cb-plant-head">
+                  <span class="cb-flag">{pl.flag}</span>
+                  <div>
+                    <b>{pl.name}</b>
+                    <span>{pl.text}</span>
+                  </div>
+                </div>
+                <div class="cb-plant-pics">
+                  {plantPics[pi].map(([img, cap, pos], i) => (
+                    <figure class:list={{ big: i === 0 }}>
+                      <Image
+                        src={img as ImageMetadata}
+                        alt={cap as string}
+                        widths={i === 0 ? [600, 1000] : [300, 500]}
+                        sizes={i === 0 ? '(max-width: 960px) 100vw, 50vw' : '(max-width: 960px) 33vw, 16vw'}
+                        style={`object-position:${pos}`}
+                      />
+                      <figcaption>{cap as string}</figcaption>
+                    </figure>
+                  ))}
+                </div>
+                <ul class="cb-plant-caps">
+                  {pl.caps.map((c) => (
+                    <li>{c}</li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
+        </div>
+        <p class="cb-note cb-yt">
+          See TilePark and Parkstory in action on our <a href={valueChain.youtube} target="_blank" rel="noopener"
+            >YouTube channel</a
+          >.
+        </p>
+        <a class="cb-nextch" href={chapters[9][2]}><span>Next</span><b>{chapters[9][0]}</b>{chapters[9][1]}<i>↓</i></a>
       </div>
     </section>
 
@@ -574,6 +759,20 @@ const chapters = [
     if (word && nav) {
       new IntersectionObserver((es) => nav.classList.toggle('show-mark', !es[0].isIntersecting)).observe(word);
     }
+
+    // Highlight the chapter currently on screen in the navigation.
+    const links = [...document.querySelectorAll<HTMLAnchorElement>('.cb-chapters a')];
+    const byId = new Map(links.map((a) => [a.getAttribute('href')!.slice(1), a]));
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          links.forEach((a) => a.classList.toggle('on', a === byId.get(e.target.id)));
+        }
+      },
+      { rootMargin: '-45% 0px -50% 0px' }
+    );
+    document.querySelectorAll('main section[id]').forEach((sec) => io.observe(sec));
 
     // Scroll-driven word highlight for the central question.
     const q = document.querySelector<HTMLElement>('[data-words]');
@@ -764,7 +963,7 @@ const chapters = [
   }
   .cb-sec {
     position: relative;
-    padding: clamp(96px, 12vw, 192px) 0;
+    padding: clamp(72px, 9vw, 144px) 0;
     border-top: 1px solid var(--line);
   }
   .cb-tight {
@@ -1106,7 +1305,7 @@ const chapters = [
   /* --- cinema --- */
   .cb-cinema {
     position: relative;
-    height: 92svh;
+    height: 82svh;
     min-height: 560px;
     overflow: hidden;
     display: flex;
@@ -1731,6 +1930,508 @@ const chapters = [
     padding: 2rem 1rem 0.8rem;
     font-size: 0.82rem;
     background: linear-gradient(transparent, rgb(4 13 9 / 92%));
+  }
+
+  /* --- flow: next-chapter links and active chapter --- */
+  .cb-nextch {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    width: fit-content;
+    margin-top: clamp(56px, 7vw, 104px);
+    padding: 0.9rem 1.2rem;
+    border: 1px solid var(--line-2);
+    border-radius: 3px;
+    text-decoration: none;
+    color: var(--soft);
+    font-size: 0.9rem;
+    transition:
+      border-color 0.2s,
+      color 0.2s;
+  }
+  .cb-nextch span {
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--grey);
+  }
+  .cb-nextch b {
+    color: var(--lime);
+    font-weight: 600;
+  }
+  .cb-nextch i {
+    font-style: normal;
+    color: var(--lime);
+    transition: transform 0.2s;
+  }
+  .cb-nextch:hover {
+    border-color: var(--lime);
+    color: var(--white);
+  }
+  .cb-nextch:hover i {
+    transform: translateY(3px);
+  }
+  .cb-chapters a.on {
+    color: var(--white);
+  }
+  .cb-chapters a.on i {
+    color: var(--lime);
+  }
+  .cb-amber {
+    color: var(--amber);
+  }
+
+  /* --- journey (arrival to pickup) --- */
+  .cb-journey {
+    margin-top: clamp(64px, 8vw, 120px);
+  }
+  .cb-journey ol {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+  .cb-journey ol::before {
+    content: '';
+    position: absolute;
+    left: 18px;
+    right: 18px;
+    top: 18px;
+    height: 1px;
+    background: linear-gradient(90deg, var(--lime), rgb(184 240 60 / 20%));
+  }
+  .cb-journey-n {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 37px;
+    height: 37px;
+    border-radius: 50%;
+    background: var(--black);
+    border: 1.5px solid var(--lime);
+    color: var(--lime);
+    font-family: var(--display);
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+  }
+  .cb-journey h3 {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 1.2rem;
+  }
+  .cb-journey p {
+    margin-top: 0.5rem;
+    color: var(--soft);
+    font-size: 0.95rem;
+  }
+  .cb-audience {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    margin-top: clamp(56px, 7vw, 104px);
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .cb-audience li {
+    background: var(--black);
+    padding: 1.6rem 1.75rem 1.9rem;
+  }
+  .cb-audience .cb-label {
+    display: inline-block;
+    border: 0;
+    padding: 0;
+    margin-bottom: 0.75rem;
+  }
+  .cb-audience h3 {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 1.3rem;
+  }
+  .cb-audience p {
+    margin-top: 0.5rem;
+    color: var(--soft);
+    font-size: 0.95rem;
+  }
+
+  /* --- power outage --- */
+  .cb-power {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(24px, 3vw, 48px);
+    align-items: center;
+    margin-top: clamp(64px, 8vw, 120px);
+    padding: clamp(24px, 3vw, 40px);
+    border: 1px solid rgb(245 165 36 / 40%);
+    background: rgb(245 165 36 / 4%);
+    border-radius: 4px;
+  }
+  .cb-power-bolt {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 1px solid var(--amber);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cb-power h3 {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(1.5rem, 2.4vw, 2.2rem);
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+  }
+  .cb-power p {
+    margin-top: 0.75rem;
+    color: var(--soft);
+  }
+  .cb-power ul {
+    display: grid;
+    gap: 0.6rem;
+  }
+  .cb-power li {
+    padding: 0.75rem 0.9rem;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    font-size: 0.92rem;
+    color: var(--soft);
+  }
+  .cb-power li b {
+    color: var(--white);
+  }
+
+  /* --- third dimension --- */
+  .cb-stacker {
+    margin-top: clamp(48px, 6vw, 88px);
+  }
+  .cb-whyz {
+    margin-top: clamp(40px, 5vw, 72px);
+    padding-top: clamp(56px, 7vw, 104px);
+    border-top: 1px solid var(--line);
+  }
+  .cb-six,
+  .cb-eight {
+    display: grid;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    margin-top: clamp(40px, 5vw, 72px);
+  }
+  .cb-six {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .cb-eight {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .cb-six li,
+  .cb-eight li {
+    background: var(--black);
+    padding: 1.5rem 1.6rem 1.75rem;
+  }
+  .cb-chain-sec .cb-eight li,
+  .cb-app .cb-six li {
+    background: var(--ink-2);
+  }
+  .cb-six h3,
+  .cb-eight h3 {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 1.15rem;
+  }
+  .cb-six p,
+  .cb-eight p {
+    margin-top: 0.45rem;
+    color: var(--soft);
+    font-size: 0.92rem;
+  }
+  .cb-check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1px solid var(--lime);
+    color: var(--lime);
+    font-size: 0.8rem;
+    margin-bottom: 0.9rem;
+  }
+  .cb-foot-line {
+    margin-top: 1.5rem;
+    font-size: 1.05rem;
+    color: var(--soft);
+    max-width: 80ch;
+  }
+  .cb-foot-line b {
+    color: var(--lime);
+    font-weight: 600;
+    margin-right: 0.3rem;
+  }
+  .cb-econ-block {
+    margin-top: clamp(80px, 10vw, 144px);
+    padding-top: clamp(56px, 7vw, 104px);
+    border-top: 1px solid var(--line);
+  }
+  .cb-econ-block .cb-big {
+    margin-top: clamp(40px, 5vw, 64px);
+  }
+
+  /* --- driver --- */
+  .cb-driver {
+    margin-top: clamp(80px, 10vw, 144px);
+  }
+
+  /* --- value chain --- */
+  .cb-chain-sec {
+    overflow: hidden;
+    background: var(--ink-2);
+  }
+  .cb-chain-sec > .cb-wrap {
+    position: relative;
+  }
+  .cb-chain {
+    margin-top: clamp(56px, 7vw, 104px);
+    padding: clamp(28px, 3vw, 44px) clamp(20px, 3vw, 40px);
+    border: 1px solid rgb(184 240 60 / 35%);
+    background: rgb(184 240 60 / 3%);
+    border-radius: 4px;
+  }
+  .cb-chain ol {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+  .cb-chain ol::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    right: 7px;
+    top: 7px;
+    height: 2px;
+    background: var(--lime);
+  }
+  .cb-chain li {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  .cb-chain-node {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--lime);
+    box-shadow: 0 0 0 4px var(--ink-2);
+    margin-bottom: 0.8rem;
+  }
+  .cb-chain b {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.2;
+  }
+  .cb-chain em {
+    font-style: normal;
+    font-size: 0.78rem;
+    color: var(--grey);
+    line-height: 1.35;
+  }
+  .cb-chain small {
+    margin-top: 0.35rem;
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--lime);
+  }
+  .cb-chain-statement {
+    margin-top: clamp(28px, 3vw, 40px);
+    padding-top: 1.25rem;
+    border-top: 1px solid rgb(184 240 60 / 20%);
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(1.3rem, 2.2vw, 2rem);
+    letter-spacing: -0.02em;
+  }
+  .cb-heritage-copy {
+    margin-top: clamp(48px, 6vw, 88px);
+    align-items: start;
+  }
+  .cb-banner {
+    position: relative;
+    margin: clamp(56px, 7vw, 104px) 0 0;
+    height: clamp(260px, 38vw, 520px);
+    overflow: hidden;
+    border-radius: 4px;
+  }
+  .cb-banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 60%;
+    filter: grayscale(0.4) contrast(1.05) brightness(0.85);
+  }
+  .cb-banner figcaption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 3rem clamp(20px, 3vw, 40px) 1.5rem;
+    background: linear-gradient(transparent, rgb(4 13 9 / 92%));
+  }
+  .cb-banner b {
+    display: block;
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(1.3rem, 2.4vw, 2rem);
+    letter-spacing: -0.02em;
+  }
+  .cb-banner span {
+    color: var(--soft);
+  }
+  .cb-plants {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: clamp(64px, 8vw, 120px);
+  }
+  .cb-plant {
+    border: 1px solid var(--line);
+    background: var(--black);
+    padding: 1.1rem;
+    border-radius: 4px;
+  }
+  .cb-plant-head {
+    display: flex;
+    gap: 0.9rem;
+    align-items: center;
+    margin: 0.2rem 0.2rem 1rem;
+  }
+  .cb-flag {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--lime);
+    color: var(--lime);
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+  .cb-plant-head b {
+    display: block;
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 1.15rem;
+  }
+  .cb-plant-head span {
+    font-size: 0.85rem;
+    color: var(--grey);
+  }
+  .cb-plant-pics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: clamp(180px, 22vw, 300px) clamp(110px, 12vw, 170px);
+    gap: 6px;
+  }
+  .cb-plant-pics figure {
+    position: relative;
+    margin: 0;
+    overflow: hidden;
+    border-radius: 3px;
+  }
+  .cb-plant-pics figure.big {
+    grid-column: 1 / span 3;
+  }
+  .cb-plant-pics img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(0.5);
+    transition: filter 0.5s;
+  }
+  .cb-plant-pics figure:hover img {
+    filter: none;
+  }
+  .cb-plant-pics figcaption {
+    position: absolute;
+    left: 8px;
+    bottom: 8px;
+    font-size: 0.68rem;
+    background: rgb(4 13 9 / 85%);
+    padding: 0.2rem 0.5rem;
+    border-radius: 2px;
+  }
+  .cb-plant-caps {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem 1rem;
+    margin: 1rem 0.2rem 0.2rem;
+  }
+  .cb-plant-caps li {
+    position: relative;
+    padding-left: 1rem;
+    font-size: 0.85rem;
+    color: var(--soft);
+  }
+  .cb-plant-caps li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--lime);
+  }
+  .cb-yt a {
+    color: var(--lime);
+  }
+
+  @media (max-width: 1100px) {
+    .cb-chain ol {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      row-gap: 2rem;
+    }
+    .cb-chain ol::before {
+      display: none;
+    }
+    .cb-eight {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 960px) {
+    .cb-journey ol,
+    .cb-six {
+      grid-template-columns: 1fr 1fr;
+    }
+    .cb-journey ol::before {
+      display: none;
+    }
+    .cb-audience,
+    .cb-plants,
+    .cb-power {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 640px) {
+    .cb-journey ol,
+    .cb-six,
+    .cb-eight,
+    .cb-plant-caps {
+      grid-template-columns: 1fr;
+    }
+    .cb-chain ol {
+      grid-template-columns: 1fr 1fr;
+    }
+    .cb-plant-pics {
+      grid-template-rows: 200px 110px;
+    }
   }
 
   /* --- next --- */
