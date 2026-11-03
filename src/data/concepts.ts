@@ -155,7 +155,7 @@ export const economics = {
 export const next = {
   eyebrow: 'Built for what comes next',
   title: 'Infrastructure that keeps up with mobility.',
-  body: 'A building outlives several generations of cars. We separate clearly what TilePark does today, what we are developing, and where we are heading.',
+  body: 'A building outlives several generations of cars. We separate clearly what TilePark does today, what we keep developing, and where we are heading.',
   today: [
     {
       k: 'Integrated EV charging',
@@ -176,8 +176,8 @@ export const next = {
   ],
   developing: [
     {
-      k: 'Learning from operation',
-      v: 'Every sequence is a lesson in which routes and storage positions work best. TilePark has begun implementing these learning capabilities, using anonymous usage patterns, never personal tracking.',
+      k: 'Swarm technology through AI',
+      v: 'Like a swarm, every TilePark learns, and all systems learn from each other. Each sequence teaches which routes and storage positions work best, and every garage contributes to this shared intelligence through anonymous usage patterns, such as typical arrival and departure times, never through personal tracking. Parkstory has begun implementing these learning capabilities and keeps extending them.',
     },
   ],
   future: [
@@ -332,7 +332,7 @@ export const edge = {
     'Decentralised control: a controller in every conveyor',
     'Routes calculated for the current layout',
     'Many conveyors moving in parallel',
-    'Learning from operation (in development)',
+    'Swarm learning through AI: all systems learn from each other (continuous development)',
     'Remote diagnostics and remote updates',
   ],
   mechanics: [
