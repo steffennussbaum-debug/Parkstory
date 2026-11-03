@@ -1,559 +1,872 @@
 ---
+// Parkstory home page: "How TilePark works", rebuilt with AstroWind widgets.
+// The interactive demos live in src/components/tilepark/.
 import Layout from '~/layouts/PageLayout.astro';
 
 import Hero from '~/components/widgets/Hero.astro';
-import Note from '~/components/widgets/Note.astro';
 import Features from '~/components/widgets/Features.astro';
-import QuickStart from '~/components/widgets/QuickStart.astro';
-import Features2 from '~/components/widgets/Features2.astro';
-import Timeline from '~/components/widgets/Timeline.astro';
 import Steps from '~/components/widgets/Steps.astro';
 import Content from '~/components/widgets/Content.astro';
-import BlogHighlightedPosts from '~/components/widgets/BlogHighlightedPosts.astro';
-import FAQs from '~/components/widgets/FAQs.astro';
-import Stats from '~/components/widgets/Stats.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
-import SocialProof from '~/components/widgets/SocialProof.astro';
-import StructuredData from '~/components/common/StructuredData.astro';
-import { SITE, METADATA, I18N } from 'astrowind:config';
-import favIconSvg from '~/assets/favicons/favicon.svg';
+import WidgetWrapper from '~/components/ui/WidgetWrapper.astro';
+import Headline from '~/components/ui/Headline.astro';
+import Image from '~/components/common/Image.astro';
+import { Icon } from 'astro-icon/components';
+
+import BeesFigure from '~/components/tilepark/BeesFigure.astro';
+import RealVideo from '~/components/tilepark/RealVideo.astro';
+import GridDemo from '~/components/tilepark/GridDemo.astro';
+import StackerDemo from '~/components/tilepark/StackerDemo.astro';
+import EvDemo from '~/components/tilepark/EvDemo.astro';
+import AppShowcase from '~/components/tilepark/AppShowcase.astro';
+import FutureTimeline from '~/components/tilepark/FutureTimeline.astro';
+
+import '~/assets/styles/tilepark.css';
 
 const metadata = {
-  title: 'AstroWind — Free template for creating websites with Astro + Tailwind CSS',
+  title: 'Parkstory – How TilePark works',
   ignoreTitleTemplate: true,
+  description:
+    'TilePark XY: hundreds of independent conveyors, no central control, one shared goal: getting your car to you by the shortest route.',
 };
 
-// Structured data for the site and its publisher, built only from
-// `src/config.yaml` (`site.name`, `site.site`, `metadata.twitter.handle`), so
-// it is correct for any site made with the template. Blog posts add
-// BlogPosting on their own; the FAQs widget adds FAQPage.
-const organizationId = `${SITE?.site}/#organization`;
-const structuredData = [
+// Emphasised words in headings use AstroWind's accent colour, like its own hero.
+const em = (s: string) => `<span class="text-accent dark:text-white">${s}</span>`;
+
+const beeRules = [
   {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    '@id': `${SITE?.site}/#website`,
-    name: SITE?.name,
-    url: SITE?.site,
-    inLanguage: I18N?.language,
-    publisher: { '@id': organizationId },
+    q: '“Don’t waste a single cell.”',
+    bees: 'A honeycomb stores the most in the least space. No other shape divides an area into equal cells with less wall, a fact proven mathematically in 1999.',
+    tp: 'Every position is a conveyor. No ramps, no driving lanes, no wasted floor.',
   },
   {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    '@id': organizationId,
-    name: SITE?.name,
-    url: SITE?.site,
-    logo: new URL(favIconSvg.src, SITE?.site).toString(),
-    ...(METADATA?.twitter?.handle ? { sameAs: [`https://x.com/${METADATA.twitter.handle.replace(/^@/, '')}`] } : {}),
+    q: '“Take the shortest way.”',
+    bees: 'Bees learn the shortest route between flowers, even when they found them in a different order. Computers need to compare every route; bees do it with a brain the size of a grass seed.',
+    tp: 'For every request, the system calculates the fastest route for the grid’s current layout. No two sequences are the same.',
+  },
+  {
+    q: '“Nobody is in charge.”',
+    bees: 'A hive has no boss and no master plan. Thousands of bees follow simple rules, and order emerges on its own.',
+    tp: 'Each conveyor has its own controller and hands cars to its neighbors. No central computer, shuttle, or lift that every car depends on.',
+  },
+  {
+    q: '“If a cell breaks, go around it.”',
+    bees: 'Bees simply work around a damaged cell. The colony keeps going.',
+    tp: 'If a conveyor goes offline, the others route around it, and every car stays accessible.',
+  },
+  {
+    q: '“Keep getting better.”',
+    bees: 'Bees refine their route with every flight and keep whatever is shorter.',
+    tp: 'Every sequence teaches the system which routes and positions work best. The more it runs, the smarter it gets.',
   },
 ];
+
+const plants = [
+  {
+    flag: 'DE',
+    name: 'Kehl, Germany',
+    text: 'Parkstory Manufacturing Kehl: approximately 10,000 m² of sheet-metal processing, welding, and assembly under one roof',
+    pics: [
+      {
+        src: '~/assets/images/tilepark/kehl-plant.webp',
+        alt: 'Aerial view of the Parkstory Manufacturing plant in Kehl',
+        cap: 'Our plant in Kehl',
+        pos: '50% 55%',
+      },
+      {
+        src: '~/assets/images/tilepark/kehl-welding.webp',
+        alt: 'CLOOS welding robot cell in Kehl',
+        cap: 'Robotic welding',
+        pos: '50% 35%',
+      },
+      {
+        src: '~/assets/images/tilepark/kehl-bending.webp',
+        alt: 'CNC press brake control panel in Kehl',
+        cap: 'CNC bending',
+        pos: '75% 55%',
+      },
+      {
+        src: '~/assets/images/tilepark/kehl-steel.webp',
+        alt: 'Galvanized steel frames in Kehl',
+        cap: 'Galvanized steel',
+        pos: '50% 50%',
+      },
+    ],
+    caps: [
+      'Coil processing and laser cutting',
+      'CNC bending up to 6 m',
+      'Robotic and manual welding',
+      'CNC turning',
+      'Steel structures and assembly',
+      'Pre-assembly and functional testing',
+    ],
+  },
+  {
+    flag: 'US',
+    name: 'Gastonia, North Carolina, USA',
+    text: 'Production, machining, and assembly for North America: TilePark, built in the USA',
+    pics: [
+      {
+        src: '~/assets/images/tilepark/gastonia-drive-assembly.webp',
+        alt: 'TilePark conveyor drives with geared motors and polyurethane wheels in assembly in Gastonia',
+        cap: 'TilePark conveyor drive assembly · Gastonia',
+        pos: '50% 52%',
+      },
+      {
+        src: '~/assets/images/tilepark/gastonia-plant.webp',
+        alt: 'Parkstory plant in Gastonia, North Carolina',
+        cap: 'Our plant',
+        pos: '55% 60%',
+      },
+      {
+        src: '~/assets/images/tilepark/gastonia-cnc.webp',
+        alt: 'Haas CNC lathe with bar feeder in Gastonia',
+        cap: 'CNC machining',
+        pos: '50% 50%',
+      },
+      {
+        src: '~/assets/images/tilepark/gastonia-wheels.webp',
+        alt: 'Drive wheel units with yellow polyurethane wheels',
+        cap: 'Drive wheel units',
+        pos: '50% 50%',
+      },
+    ],
+    caps: [
+      'Fiber laser cutting with automatic shuttle table',
+      'CNC press brake bending',
+      'CNC turning and machining centers',
+      'Welding and steel fabrication',
+      'Conveyor drive assembly and testing',
+      'Gantry and jib cranes for heavy assemblies',
+    ],
+  },
+];
+
+const flow = [
+  'Design',
+  'Controls',
+  'Steel & cutting',
+  'Welding',
+  'Pre-assembly',
+  '100% test',
+  'Installation',
+  'Service & 30+ years of parts',
+];
+
+const card = 'rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm';
+const blueBg = '<div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>';
 ---
 
 <Layout metadata={metadata}>
-  <StructuredData slot="head" schema={structuredData} />
-  <!-- Hero Widget ******************* -->
+  <Fragment slot="announcement"></Fragment>
 
+  <!-- Hero ******************* -->
   <Hero
-    tagline="Free & open source"
+    tagline="TilePark XY"
     actions={[
-      {
-        variant: 'primary',
-        text: 'Get template',
-        href: 'https://github.com/arthelokyo/astrowind',
-        target: '_blank',
-        icon: 'tabler:download',
-      },
-      { text: 'Learn more', href: '#features' },
+      { variant: 'primary', text: 'See how it works', href: '#how-it-works', icon: 'tabler:arrow-down' },
+      { text: 'Inspired by nature', href: '#inspired-by-nature' },
     ]}
-    image={{ src: '~/assets/images/hero-image.png', alt: 'AstroWind Hero Image' }}
+    image={{
+      src: '~/assets/images/tilepark/conveyors-installed.webp',
+      alt: 'TilePark conveyors with their drives, installed in an underground garage',
+    }}
   >
     <Fragment slot="title">
-      Free template for <span class="hidden xl:inline">creating websites with</span>
-      <span class="text-accent dark:text-white"> Astro v7</span> + Tailwind CSS
+      Parking that <span class="text-accent dark:text-white">organizes itself.</span>
     </Fragment>
-
     <Fragment slot="subtitle">
-      <span class="hidden sm:inline">
-        <span class="font-semibold">AstroWind</span> is a free, customizable and production-ready template for Astro v7 +
-        Tailwind CSS v4.</span
-      >
-      <span class="block mb-1 sm:hidden font-bold text-blue-600">AstroWind: Production-ready.</span>
-      Suitable for Startups, Small Business, SaaS websites, Professional Portfolios, Marketing websites, Landing Pages & Blogs.
+      Hundreds of independent conveyors, no central control, one shared goal: getting your car to you by the shortest
+      route. Here is how TilePark works, from the idea to the factory.
     </Fragment>
   </Hero>
 
-  <!-- SocialProof Widget ************ -->
+  <!-- Inspired by nature ******************* -->
+  <WidgetWrapper id="inspired-by-nature" containerClass="max-w-7xl">
+    <Headline
+      tagline="Inspired by nature"
+      title={`We asked the bees ${em('how to park.')}`}
+      subtitle="Bees have been solving our problem for millions of years: storing as much as possible in as little space as possible, and getting everywhere fast. So we asked them how they do it. Here are their five rules, and how TilePark follows each one."
+    />
+    <BeesFigure />
 
-  <SocialProof
-    id="proof"
-    classes={{ container: '!pb-14 md:!pb-20' }}
-    items={[
+    <h3 class="mt-16 mb-6 text-center text-base text-secondary dark:text-blue-200 font-bold tracking-wide uppercase">
+      The bees’ five rules for parking
+    </h3>
+    <ol class="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
       {
-        value: '#1',
-        label: 'most starred Astro theme',
-        icon: 'tabler:star-filled',
-        color: 'text-amber-400',
-        href: 'https://github.com/arthelokyo/astrowind',
-      },
-      { value: '100', label: 'Lighthouse score', icon: 'tabler:gauge', color: 'text-emerald-500' },
-      { value: 'MIT', label: 'licensed, free to use', icon: 'tabler:license', color: 'text-sky-500' },
-    ]}
-  />
-
-  <!-- QuickStart Widget ************* -->
-
-  <QuickStart
-    id="quick-start"
-    classes={{ icon: 'bg-green-600 dark:bg-green-700' }}
-    tagline="TL;DR"
-    title="One command. That is the whole setup."
-    subtitle="For the people who scroll past the features and ask “how do I run it?”. This is how."
-    commands={['npm create astro@latest -- --template arthelokyo/astrowind']}
-    items={[
-      {
-        title: 'Two minutes, one terminal',
-        description:
-          'Answer the prompts, run <code>npm run dev</code>, open localhost:4321. The demo site is now yours to edit. The only requirement is a current Node.js.',
-        icon: 'tabler:terminal-2',
-      },
-      {
-        title: 'AI-ready out of the box',
-        description:
-          'An <code>AGENTS.md</code> and step-by-step skills tell Claude Code, Cursor or any coding assistant how this template works. Ask it for a page; it knows where things go.',
-        icon: 'tabler:sparkles',
-      },
-      {
-        title: 'Free, MIT licensed, no strings',
-        description:
-          'Use it for client work, side projects or the company site. Star the repo if it saves you an afternoon.',
-        icon: 'tabler:license',
-      },
-    ]}
-  >
-    <Fragment slot="bg">
-      <div
-        class="absolute inset-0 bg-[radial-gradient(60%_55%_at_15%_20%,rgb(129_140_248/0.28),transparent_65%),radial-gradient(50%_50%_at_85%_25%,rgb(244_114_182/0.22),transparent_65%)] dark:bg-[radial-gradient(60%_55%_at_15%_20%,rgb(99_102_241/0.25),transparent_65%),radial-gradient(50%_50%_at_85%_25%,rgb(217_70_239/0.18),transparent_65%)]"
-      >
-      </div>
-    </Fragment>
-  </QuickStart>
-
-  <!-- Features Widget *************** -->
+        beeRules.map((r, i) => (
+          <li class={`${card} p-5 flex flex-col gap-3`}>
+            <span class="flex w-8 h-8 items-center justify-center rounded-full bg-primary text-white text-sm font-bold">
+              {i + 1}
+            </span>
+            <p class="font-heading text-lg font-bold leading-snug text-heading">{r.q}</p>
+            <p class="text-sm text-muted">
+              <b class="block text-xs uppercase tracking-wider text-amber-600 dark:text-amber-400">The bees</b>
+              {r.bees}
+            </p>
+            <p class="mt-auto pt-3 border-t border-gray-200 dark:border-slate-700 text-sm text-muted">
+              <b class="block text-xs uppercase tracking-wider text-primary dark:text-blue-300">TilePark</b>
+              {r.tp}
+            </p>
+          </li>
+        ))
+      }
+    </ol>
+  </WidgetWrapper>
 
   <Features
-    id="features"
-    tagline="Features"
-    title="What you get with AstroWind"
-    subtitle="One of the most professional and comprehensive templates currently on the market. Most starred & forked Astro theme in 2022, 2023, 2024 and 2025."
+    isDark
+    tagline="Built for artificial intelligence"
+    title="Swarm intelligence, made for machine learning."
+    subtitle="Because TilePark works like a swarm, with many independent conveyors and countless possible routes, it is an ideal foundation for artificial intelligence. Every sequence the system runs is a lesson in which routes are fastest and which storage positions work best. The more it runs, the smarter it gets."
+    columns={2}
     items={[
       {
-        title: 'Astro + Tailwind CSS Integration',
+        title: 'Learning from every garage',
         description:
-          'A seamless integration between two great frameworks that offer high productivity, performance and versatility. Now powered by Tailwind CSS v4.',
-        icon: 'tabler:brand-tailwind',
+          'Every garage contributes to this shared intelligence through anonymous usage patterns, such as typical arrival and departure times, never through personal tracking.',
+        icon: 'tabler:brain',
       },
       {
-        title: 'Ready-to-use Components',
-        description:
-          'Widgets made with Tailwind CSS v4 ready to be used in Marketing Websites, SaaS, Blogs, Personal Profiles, Small Business...',
-        icon: 'tabler:components',
-      },
-      {
-        title: 'Best Practices',
-        description:
-          'Creating secure, efficient, and user-friendly websites that deliver exceptional experiences and lasting value.',
-        icon: 'tabler:list-check',
-      },
-      {
-        title: 'Excellent Page Speed',
-        description:
-          'Having a good page speed impacts organic search ranking, improves user experience (UI/UX) and increase conversion rates.',
+        title: 'Already under way',
+        description: 'TilePark has already begun implementing these learning capabilities.',
         icon: 'tabler:rocket',
-      },
-      {
-        title: 'Search Engine Optimization (SEO)',
-        description:
-          "SEO lies in its ability to enhance a website's visibility, driving organic traffic and enabling it to reach a wider audience.",
-        icon: 'tabler:arrows-right-left',
-      },
-      {
-        title: 'Open to new ideas and contributions',
-        description:
-          'Embracing a culture that is open to new ideas and contributions is integral fostering innovation, collaboration, and a dynamic user experience.',
-        icon: 'tabler:bulb',
       },
     ]}
   />
 
-  <!-- Content Widget **************** -->
-
-  <Content
-    isReversed
-    tagline="Inside template"
-    title="AstroWind's Blueprint: Fun Meets Functionality!"
+  <Features
+    columns={3}
     items={[
       {
-        title: 'Built on top of Astro v7',
+        title: 'The grid adapts to the site',
         description:
-          'Benefiting from the performance and developer-friendly features of this modern static site generator.',
+          '<strong>For architects.</strong> Without a fixed shuttle aisle or a central lift core dictating the layout, irregular plots, columns, and awkward corners are no longer a problem.',
+        icon: 'tabler:ruler-2',
       },
       {
-        title: 'Styled using Tailwind CSS v4',
+        title: 'No single point of failure',
         description:
-          'Facilitating rapid design and consistent styling with this highly popular utility-first CSS framework.',
+          '<strong>For developers.</strong> A faulty conveyor never shuts down the garage. That protects uptime, tenant satisfaction, and the long-term value of the asset.',
+        icon: 'tabler:shield-check',
       },
       {
-        title: 'Cross-browser compatibility',
+        title: 'Conveyors everywhere, no aisles',
         description:
-          'Ensure your website looks and functions consistently across various web browsers, delivering a seamless experience to all users.',
+          '<strong>For everyone.</strong> Every position is a conveyor. With no ramps or driving lanes, almost the entire floor area is used for parking.',
+        icon: 'tabler:layout-grid',
       },
     ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-      alt: 'Colorful Image',
-    }}
-  >
-    <Fragment slot="content">
-      <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">Building on modern foundations</h3>
-      Gain a competitive advantage by incorporating industry leading practices
-    </Fragment>
+  />
 
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Content>
-
-  <!-- Content Widget **************** -->
-
-  <Content
-    isAfterContent
-    items={[
-      {
-        title: 'High level of customization',
-        description: `Tailor the template effortlessly to match your brand's identity and requirements, making your website distinct and saving you time.`,
-      },
-      {
-        title: 'Multiple layout possibilities',
-        description:
-          'Explore various layout options to find the structure that best presents your content, enhancing user engagement and navigation.',
-      },
-      {
-        title: 'Fully responsive design',
-        description:
-          "Ensure your website's optimal performance on various devices and screen sizes, providing a consistent and enjoyable user experience.",
-      },
-      {
-        title: 'Integration of media',
-        description:
-          'Seamlessly incorporate images, videos, and multimedia elements that enhance your content and engage visitors effectively.',
-      },
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1616674282942-2835e62d612e?auto=format&fit=crop&w=1600&q=80',
-      alt: 'Printed website wireframes on a black table',
-    }}
-  >
-    <Fragment slot="content">Ensure your online presence truly represents you.</Fragment>
-
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Content>
-
-  <!-- Content Widget **************** -->
-
-  <Content
-    isReversed
-    isAfterContent
-    items={[
-      {
-        title: 'Enhanced user engagement',
-        description:
-          'Captivate your audience with interactive elements, intuitive navigation, and visually appealing layouts, encouraging longer visits.',
-      },
-      {
-        title: 'Continuous improvement',
-        description:
-          'Ensure your website stays aligned with the latest trends and technologies through regular updates and enhancements.',
-      },
-      {
-        title: 'Time and resource efficiency',
-        description:
-          'Skip the time-consuming process of building a website from scratch and launch your online presence sooner with AstroWind.',
-      },
-      {
-        title: 'Community support',
-        description: `Join the growing AstroWind community for insights, resources, and assistance, ensuring you're never alone on your web development journey.`,
-      },
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1611462985358-60d3498e0364?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-      alt: 'Astronauts Image',
-    }}
-  >
-    <Fragment slot="content">Designed to foster growth and success.</Fragment>
-
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Content>
-
-  <!-- Steps Widget ****************** -->
+  <!-- How it works ******************* -->
+  <WidgetWrapper id="how-it-works" containerClass="max-w-7xl">
+    <Fragment slot="bg"><Fragment set:html={blueBg} /></Fragment>
+    <Headline
+      tagline="How it works"
+      title={`A garage that works like a ${em('sliding puzzle.')}`}
+      subtitle="In a conventional garage, roughly half of the floor area is taken up by ramps and driving lanes. TilePark needs neither. Each car rests on a pallet, and the conveyors beneath move it lengthwise and crosswise, like the tiles of a sliding puzzle, until it reaches the transfer cabin."
+    />
+    <RealVideo />
+    <GridDemo />
+  </WidgetWrapper>
 
   <Steps
-    title="Get your dream website up and running in no time with AstroWind."
+    title="From arrival to pickup"
+    subtitle="Four steps, and the system does all the work in between."
     items={[
       {
-        title: 'Step 1: <span class="font-medium">Download</span>',
+        title: 'Effortless drop-off',
         description:
-          "Kickstart with GitHub! Either fork the AstroWind template or simply click 'Use this template'. Your canvas awaits, ready for your digital masterpiece. In just a few clicks, you've already set the foundation.",
-        icon: 'tabler:package',
+          'Drive into the friendly and safe transfer cabin, switch off the engine, and step out. From that moment on, the system takes over, and no one else drives your car.',
+        icon: 'tabler:door-enter',
       },
       {
-        title: 'Step 2: <span class="font-medium">Add content</span>',
+        title: 'Fully automated parking',
         description:
-          "Pour your vision into it. Add images, text, and all that jazz to breathe life into your digital space. Remember, it's the content that tells your story, so make it captivating.",
-        icon: 'tabler:letter-case',
+          'Your car stays on its own pallet throughout. The conveyors beneath move it precisely in X and Y to an available position, without anyone driving it.',
+        icon: 'tabler:arrows-move',
       },
       {
-        title: 'Step 3: <span class="font-medium">Customize styles</span>',
+        title: 'Secure, space-efficient storage',
         description:
-          'Give it your personal touch. Tailor colors, fonts, and layouts until it feels just right. Your unique flair, amplified by AstroWind! Precision in design ensures a seamless user experience.',
-        icon: 'tabler:paint',
+          'Without ramps, driving lanes, or walkways, almost the entire floor area is available for parking. The storage area is not accessible to the public.',
+        icon: 'tabler:lock',
       },
       {
-        title: 'Ready!',
-        icon: 'tabler:check',
+        title: 'Ready when you are',
+        description:
+          'Request your car via app or terminal. The system calculates the best route, moves the surrounding cars aside, and presents your car in the transfer cabin.',
+        icon: 'tabler:circle-check',
       },
     ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1616198814651-e71f960c3180?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=987&q=80',
-      alt: 'Steps image',
-    }}
   />
 
-  <!-- Features2 Widget ************** -->
+  <!-- Third dimension ******************* -->
+  <WidgetWrapper id="third-dimension" containerClass="max-w-7xl">
+    <Headline
+      tagline="The third dimension"
+      title={`Add Z. ${em('Up to four cars on the footprint of one.')}`}
+      subtitle="The XY grid moves cars across the floor. Add a TilePark stacker above selected conveyors, or above every conveyor, and the footprint of a single car holds up to four cars instead of one."
+    />
+    <StackerDemo />
+  </WidgetWrapper>
 
-  <Features2
-    title="Most used widgets"
-    subtitle="Provides frequently used components for building websites using Tailwind CSS v4"
-    tagline="Components"
+  <Features
+    columns={4}
+    classes={{ container: 'max-w-7xl pt-0 md:pt-0 lg:pt-0' }}
     items={[
       {
-        title: 'Headers',
-        description: "Ever tried driving without GPS? Boom! That's why websites need headers for direction.",
-        icon: 'flat-color-icons:template',
+        title: 'XY handles the logistics',
+        description: 'The transport level brings each car beneath its stacker, using the same sliding-puzzle routing.',
+        icon: 'tabler:arrows-move',
       },
       {
-        title: 'Heros',
+        title: 'The stacker lifts it up',
         description:
-          "Picture a superhero landing – epic, right? That's the job of a Hero section, making grand entrances!",
-        icon: 'flat-color-icons:gallery',
+          'The stacker raises the car into a storage level directly above its conveyor. The storage levels need no conveyors, because cars are stacked as in a silo.',
+        icon: 'tabler:arrow-bar-to-up',
       },
       {
-        title: 'Features',
+        title: 'And brings it back down',
         description:
-          'Where websites strut their stuff and show off superpowers. No holding back on the bragging rights here!',
-        icon: 'flat-color-icons:approval',
+          'On request, the stacker lowers the car onto a free conveyor, which carries it to the transfer cabin.',
+        icon: 'tabler:arrow-bar-to-down',
       },
       {
-        title: 'Content',
+        title: 'Still no single point of failure',
         description:
-          "Dive into the meat and potatoes of a site; without it, you'd just be window shopping. Content is king.",
-        icon: 'flat-color-icons:document',
+          'Each stacker serves only its own conveyor. With no central lift tower that every car depends on, the rest of the garage keeps running.',
+        icon: 'tabler:shield-check',
       },
+    ]}
+  />
+
+  <Features
+    tagline="Why Z pays off"
+    title="One automation level. Everything above is simple storage."
+    subtitle="All of the automation is concentrated on the ground floor; only the transport level has conveyors. The levels above are stacked like a silo and need neither conveyors nor floor slabs. The building becomes simpler, lighter, and less expensive. <strong>It unlocks height.</strong> Whether in a basement, on a ground floor, or in a dedicated building, the clear height you already have becomes parking capacity."
+    columns={3}
+    defaultIcon="tabler:check"
+    items={[
       {
-        title: 'Call-to-Action',
+        title: 'Conveyors on one level only',
         description:
-          'That enthusiastic friend who\'s always urging, "Do it! Do it!"? Yeah, that\'s this button nudging you towards adventure.',
-        icon: 'flat-color-icons:advertising',
+          'Conveyors and drives are installed on the transport level alone. The storage levels are simple steel shelving, which means less equipment to purchase and maintain.',
       },
       {
-        title: 'Pricing',
-        description: 'Behold the dessert menu of the website world. Tempting choices await, can you resist?',
-        icon: 'flat-color-icons:currency-exchange',
-      },
-      {
-        title: 'Testimonial',
-        description: 'Step into the gossip corner! Here, other visitors spill the beans and share the juicy details.',
-        icon: 'flat-color-icons:voice-presentation',
-      },
-      {
-        title: 'Contact',
+        title: 'No slabs to build',
         description:
-          'Like a digital mailbox, but faster! Drop a line, ask a question, or send a virtual high-five. Ding! Message in.',
-        icon: 'flat-color-icons:business-contact',
+          'A stacked silo replaces intermediate parking decks, eliminating the cost of concrete slabs, formwork, and reinforcement.',
       },
       {
-        title: 'Footers',
-        description: "The footer's like the credits of a movie but sprinkled with easter eggs. Time to hunt!",
-        icon: 'flat-color-icons:database',
+        title: 'No height lost to slabs',
+        description:
+          'Without slabs and their build-up, every meter of height is used for cars, so more levels fit within the same building.',
+      },
+      {
+        title: 'Lower build-up height',
+        description:
+          'The XY conveyor level itself is very low, which saves floor height, pit depth and construction cost.',
+      },
+      {
+        title: 'Lightweight construction',
+        description:
+          'The light steel structure means lower loads on the building, smaller foundations, and an easy fit in existing structures.',
+      },
+      {
+        title: 'Less excavation',
+        description:
+          'A lower structure for the same number of cars means a shallower pit, reducing the cost of excavation, shoring, and waterproofing.',
       },
     ]}
   >
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Features2>
+    <Fragment slot="bg"><Fragment set:html={blueBg} /></Fragment>
+  </Features>
 
-  <!-- Timeline Widget **************** -->
-
-  <Timeline
-    id="story"
-    layout="alternate"
-    tagline="Our story"
-    title="One template, since 2022"
-    subtitle="Started before Astro 1.0 shipped, shaped by every Astro release since, and by the people who kept sending pull requests."
+  <!-- The heart ******************* -->
+  <Content
+    id="heart"
+    tagline="The heart of TilePark"
+    title="No central control. No central point of failure."
+    content="Just like bees in a hive, each TilePark conveyor has its own controller and acts independently. There is no master computer, shuttle, or lift that every car depends on. This decentralized control is the core of our technology and the source of the system’s speed and reliability."
     items={[
       {
-        date: 'June 2022',
-        title: 'A template for a framework still in beta',
-        description:
-          'AstroWind starts on Astro 1.0 beta with a handful of pages, a few widgets and one idea: a website can be fast, simple and good-looking at the same time.',
-        icon: 'tabler:rocket',
+        title: 'Conveyors move in parallel',
+        description: 'Many conveyors move simultaneously, so no car has to wait for the one ahead of it.',
       },
       {
-        date: '2022',
-        title: 'The most starred Astro theme, in its first year',
+        title: 'A new route every time',
         description:
-          'By December it is the most starred theme in the Astro ecosystem, a place it would hold year after year. The first pull requests from strangers arrive, and they keep coming.',
-        icon: 'tabler:star-filled',
+          'Each sequence is calculated for the grid’s current layout, so the system adapts rather than replaying a fixed program.',
       },
       {
-        date: '2022–2023',
-        title: 'The busiest stretch',
+        title: 'Robust by design',
         description:
-          'Astro grows fast and the template grows with it: collections for content, better images, page transitions. The blog matures, the widgets double, the road to 1.0 begins, and more people than ever send pull requests.',
+          'A modular structure built from industry-standard components means fewer faults and fast replacement. Remote diagnostics let our team respond to any issue immediately.',
+      },
+      {
+        title: 'A single fault never stops the garage',
+        description:
+          'If a conveyor goes offline, the others route around it, just like bees in a hive. <a class="underline" href="#how-it-works">Try it in the demo above.</a>',
+      },
+    ]}
+    image={{
+      src: '~/assets/images/tilepark/gastonia-drive-assembly.webp',
+      alt: 'TilePark conveyor drives with geared motors and polyurethane wheels in assembly',
+      aspect: '3/4',
+    }}
+  />
+
+  <Features
+    id="power-outage"
+    isDark
+    tagline="Power outage"
+    title="And if the power goes out? Your car still comes out."
+    subtitle="TilePark requires remarkably little power. With as little as 30 amps, the entire system can run on a generator, so drivers can still collect their cars during a power outage."
+    columns={3}
+    items={[
+      {
+        title: 'Low energy use',
+        description:
+          'On the XY level, cars only ever move horizontally, along the shortest optimized routes. Only the transport level is automated, and only the conveyors needed for a sequence move.',
+        icon: 'tabler:bolt',
+      },
+      {
+        title: 'Multiple redundancy',
+        description: 'Every conveyor has at least four drive motors, and every conveyor can take over for any other.',
+        icon: 'tabler:engine',
+      },
+      {
+        title: 'No single point of failure',
+        description: 'If one conveyor is down, the others route around it.',
+        icon: 'tabler:route',
+      },
+    ]}
+  />
+
+  <Features
+    columns={2}
+    items={[
+      {
+        title: 'Factory precision, tested before shipping',
+        description:
+          'Every system is pre-assembled in our own factories, and 100% of the conveyors pass a functional test before delivery. <a class="underline" href="#factories">Learn more about our factories below.</a>',
+        icon: 'tabler:building-factory-2',
+      },
+      {
+        title: 'Patented principle',
+        description:
+          'The TilePark XY sliding-puzzle principle is protected by European patent EP 3924576 B1, with further patents pending in the US and Germany.',
+        icon: 'tabler:certificate',
+      },
+    ]}
+  />
+
+  <!-- EV charging ******************* -->
+  <WidgetWrapper id="ev-charging" containerClass="max-w-7xl">
+    <Fragment slot="bg"><Fragment set:html={blueBg} /></Fragment>
+    <Headline
+      tagline="Integrated EV charging"
+      title={`Every space can charge. ${em('Every charger keeps working.')}`}
+      subtitle="With fixed charging bays, a fully charged car blocks the charger until its driver returns. TilePark moves each EV to a charger, charges it to the level requested in the app, and then moves it away so the next vehicle can charge. Chargers never sit idle."
+    />
+    <EvDemo />
+
+    <div class="mt-8 grid gap-4 md:grid-cols-[1.5fr_1fr_210px] items-start">
+      <figure class="relative overflow-hidden rounded-lg shadow-lg bg-gray-500 h-80 md:h-[484px]">
+        <Image
+          src="~/assets/images/tilepark/ev-charging.webp"
+          alt="Electric car charging on a TilePark pallet"
+          layout="cover"
+          widths={[480, 900]}
+          sizes="(max-width: 767px) 100vw, 600px"
+          width={900}
+          height={744}
+          class="w-full h-full object-cover"
+        />
+        <figcaption class="absolute left-3 right-3 bottom-3 rounded-md bg-slate-900/85 px-3 py-2 text-sm text-white">
+          An EV charging on its pallet: the cable plugs into the socket built into the pallet.
+        </figcaption>
+      </figure>
+      <figure class="relative overflow-hidden rounded-lg shadow-lg bg-black h-80 md:h-[484px]">
+        <video
+          src="/videos/ev-connection.mp4"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          class="w-full h-full object-cover"></video>
+        <figcaption class="absolute left-3 right-3 bottom-3 rounded-md bg-slate-900/85 px-3 py-2 text-sm text-white">
+          Connection to the charging point
+        </figcaption>
+      </figure>
+      <figure class="mx-auto w-[220px] md:w-auto rounded-[26px] bg-slate-900 p-2 shadow-lg">
+        <Image
+          src="~/assets/images/tilepark/ev-app-screen.webp"
+          alt="Charging session in the Parkstory app"
+          width={460}
+          height={995}
+          widths={[230, 460]}
+          sizes="220px"
+          class="w-full h-auto rounded-[18px]"
+        />
+        <figcaption class="px-1 pt-2 pb-1 text-center text-xs text-slate-300">
+          Real app screen: charging session with live kWh
+        </figcaption>
+      </figure>
+    </div>
+  </WidgetWrapper>
+
+  <Features
+    columns={4}
+    items={[
+      {
+        title: 'Every pallet is EV-ready',
+        description:
+          'No dedicated charging bays and no wasted spaces. Park on the pallet, plug in your own cable at the Level 2 socket, and start charging from the app.',
+        icon: 'tabler:plug-connected',
+      },
+      {
+        title: 'Fewer chargers, higher utilization',
+        description:
+          'Because chargers never sit blocked, a small number of charging points can serve every EV in the garage. Fewer chargers to buy, more revenue per charger.',
+        icon: 'tabler:chart-arrows-vertical',
+      },
+      {
+        title: 'Metered and billed in the app',
+        description:
+          'Live kWh, stop at any time, and pay in the same app that manages your arrival and pickup. Automated re-parking means no idle fees.',
+        icon: 'tabler:receipt',
+      },
+      {
+        title: 'Smart load management',
+        description:
+          'Charging power is managed intelligently across the whole system, and capacity can grow with demand without rebuilding the garage.',
+        icon: 'tabler:adjustments-bolt',
+      },
+    ]}
+    classes={{ container: 'max-w-7xl' }}
+  />
+
+  <Features
+    columns={2}
+    defaultIcon="tabler:check"
+    classes={{ container: 'pt-0 md:pt-0 lg:pt-0' }}
+    items={[
+      {
+        title: 'For the driver',
+        description:
+          'No waiting for a free charging station.<br>Automated re-parking after charging, so no idle fees.<br>One seamless journey, from arrival to pickup, in one app.',
+      },
+      {
+        title: 'For the owner and operator',
+        description:
+          'Fewer dedicated charging points needed.<br>Expandable as demand grows.<br>Intelligent load management across the whole system.',
+      },
+    ]}
+  />
+
+  <!-- The app ******************* -->
+  <WidgetWrapper id="app" containerClass="max-w-7xl">
+    <Fragment slot="bg"><Fragment set:html={blueBg} /></Fragment>
+    <AppShowcase />
+  </WidgetWrapper>
+
+  <Features
+    tagline="For operators"
+    title="Running a garage, made simple."
+    subtitle="The same platform gives owners and operators everything they need to run TilePark day to day, from one dashboard."
+    columns={4}
+    classes={{ container: 'max-w-7xl' }}
+    items={[
+      {
+        title: 'Billing',
+        description: 'Subscriptions, short-term parking, EV charging and guest access, billed automatically.',
+        icon: 'tabler:file-invoice',
+      },
+      {
+        title: 'User management',
+        description: 'Add, change and remove users, vehicles and access rights in a few clicks.',
+        icon: 'tabler:users',
+      },
+      {
+        title: 'Groups and roles',
+        description:
+          'Residents, employees, hotel guests or pool cars, each with their own rules, rates and time windows.',
         icon: 'tabler:users-group',
       },
       {
-        date: '2024',
-        title: 'Polish',
-        description:
-          'Astro 4, and a year of small, careful improvements, most of them sent in by contributors: accessibility, tooling, ways to edit and ways to deploy. Three thousand stars by September.',
-        icon: 'tabler:puzzle',
+        title: 'Live dashboard',
+        description: 'Occupancy, charging, revenue and system status at a glance, with reports for every period.',
+        icon: 'tabler:layout-dashboard',
       },
-      {
-        date: '2025',
-        title: 'Steady, and quieter',
-        description:
-          'Astro 5 and regular updates. Fewer commits, nothing broken, and the stars kept coming: five thousand by October.',
-        icon: 'tabler:refresh',
-      },
-      {
-        date: '2026',
-        title: 'Astro 7 and Tailwind CSS 4',
-        description:
-          'Two framework majors in one year. The template gets a new generation of widgets, complete landing pages, a blog that finally reads like documentation, and a guide so coding assistants know their way around.',
-        icon: 'tabler:sparkles',
-      },
-      {
-        date: '2026',
-        title: 'Release v1',
-        description:
-          'Four years after the first commit, the demo has no placeholders left: every page, every landing page and every post is real, and the template is ready for whatever comes next.',
-        icon: 'tabler:circle-check-filled',
-        highlight: true,
-      },
-      { icon: 'tabler:dots', ghost: true },
     ]}
   />
 
-  <!-- Note Widget ******************* -->
-
-  <Note title="Philosophy:" description="Simplicity, Best Practices and High Performance" />
-
-  <!-- HighlightedPosts Widget ******* -->
-
-  <BlogHighlightedPosts
-    title="Find out more content in our Blog"
-    postIds={[
-      'get-started-website-with-astro-tailwind-css',
-      'how-to-customize-astrowind-to-your-brand',
-      'useful-resources-to-create-websites',
-      'landing',
-    ]}
-    information={`The blog is used to display AstroWind documentation.
-                        Each new article will be an important step that you will need to know to be an expert in creating a website using Astro v7 + Tailwind CSS v4.
-                        Astro is a very interesting technology. Thanks.
-                `}
-  />
-
-  <!-- FAQs Widget ******************* -->
-
-  <FAQs
-    id="faqs"
-    title="Frequently Asked Questions"
-    subtitle="The questions people ask before they clone the repository, answered briefly. For step-by-step tasks, the repository ships skills your AI coding assistant can follow."
-    tagline="FAQs"
-    schema
+  <Features
+    isDark
+    tagline="Designed around the driver"
+    title="Behind the machine, it is all about you."
+    subtitle="Every part of TilePark exists to serve one moment: the moment you arrive and want your car. The app is where the system meets the people who use it, and it shapes everything around their needs, not the other way round."
+    columns={3}
+    classes={{ container: 'max-w-7xl' }}
     items={[
       {
-        title: 'What is AstroWind?',
+        title: 'Your time, not the system’s',
         description:
-          'A free, open-source template for Astro and Tailwind CSS: a static site with a header, footer, twenty-plus reusable widgets, a Markdown/MDX blog, dark mode, RTL support, image optimisation, SEO metadata and an RSS feed, ready to be customised and deployed anywhere static files are served.',
+          'Retrieval is planned around your schedule. Tell the app when you leave, or let it learn your routine, and your car is waiting instead of you.',
+        icon: 'tabler:clock',
       },
       {
-        title: 'What do I need to start?',
+        title: 'No searching, no guessing',
         description:
-          'A current Node.js (the exact minimum is in <code>package.json</code>) and a terminal. Run <code>npm create astro@latest -- --template arthelokyo/astrowind</code>, then <code>npm run dev</code>. Site name, URL, metadata and blog options live in <code>src/config.yaml</code>; colours and fonts in <code>src/components/CustomStyles.astro</code>.',
+          'No ramps, no levels, no hunting for a free space or for where you parked. You always know where your car is and when it will be ready.',
+        icon: 'tabler:compass',
       },
       {
-        title: 'Can I use it for a site without a blog?',
+        title: 'Safe and stress-free',
         description:
-          'Yes. Set <code>apps.blog.isEnabled: false</code> in <code>src/config.yaml</code> and the blog routes, the RSS feed and the post widgets disappear from the build. The rest of the template is unaffected.',
+          'No dark stairwells, no tight ramps and no walking through a garage at night. You only ever enter the friendly and safe transfer cabin, with your own car.',
+        icon: 'tabler:shield-heart',
       },
       {
-        title: 'How do I change colours, fonts and the logo?',
+        title: 'Your circle, your rules',
         description:
-          'Colours are CSS variables in <code>src/components/CustomStyles.astro</code> (light and dark), fonts are configured in <code>astro.config.ts</code> through Astro’s Fonts API, and the logo is <code>src/components/Logo.astro</code>. The same variables also feed the shadcn/ui-compatible tokens, so shadcn-style components pick up your theme.',
+          'Family, guests, a valet or a colleague: you decide who may use the garage, when, and with which car, and you can change it at any time.',
+        icon: 'tabler:users',
       },
       {
-        title: 'Does it work with an AI coding assistant?',
+        title: 'Always informed',
         description:
-          'It is built for it. The repository includes <code>AGENTS.md</code> with the project conventions and a <code>.agents/skills/</code> folder with step-by-step guides for common tasks (disable the blog, set an Open Graph image, deploy under a base path, connect a CMS, deploy to Cloudflare…), so tools like Claude Code, Codex or Cursor can do them reliably.',
+          'Notifications tell you when your car is ready, when charging is complete and when a booking is about to end, so nothing comes as a surprise.',
+        icon: 'tabler:bell',
       },
       {
-        title: 'Where can I deploy it and what does it cost?',
+        title: 'One app, one journey',
         description:
-          'Anywhere that serves static files: Vercel, Netlify, Cloudflare, GitHub Pages, an nginx container (a Dockerfile is included) or your own server. The template is MIT licensed and free for personal and commercial projects.',
+          'Access, parking, charging, guests and payment in one place, with no tickets, no cards and no second app. It feels like having your own valet.',
+        icon: 'tabler:sparkles',
       },
     ]}
   />
 
-  <!-- Stats Widget ****************** -->
+  <!-- Future-proof ******************* -->
+  <WidgetWrapper id="future-proof" containerClass="max-w-7xl">
+    <Headline
+      tagline="Decide for tomorrow"
+      title={`Don’t miss the bus. ${em('Choose the system that keeps getting better.')}`}
+      subtitle="Real estate takes time. Years pass between the first sketch and the day the first residents move in, and the building then serves for decades. A parking technology chosen today is already years old on opening day, and the gap only widens from there. TilePark moves the other way."
+      classes={{ container: 'max-w-4xl' }}
+    />
+    <FutureTimeline />
+  </WidgetWrapper>
 
-  <Stats
-    id="stats"
-    countUp
-    stats={[
-      { title: 'GitHub stars', amount: '6K' },
-      { title: 'Forks', amount: '1.7K' },
-      { title: 'Ready-made widgets', amount: '34' },
-      { title: 'Lighthouse score', amount: '100' },
+  <Features
+    columns={4}
+    classes={{ container: 'max-w-7xl pt-0 md:pt-0 lg:pt-0' }}
+    items={[
+      {
+        title: 'The most advanced system on the market',
+        description:
+          'Decentralized swarm control and artificial intelligence that is already being integrated make TilePark a true disruptor. It has moved beyond rack-and-rail systems, shuttles and fixed conveyor loops.',
+        icon: 'tabler:trophy',
+      },
+      {
+        title: 'It learns and improves',
+        description:
+          'Every day of operation makes TilePark better: smarter routes, better storage positions, more precise timing. The system you open with is not the system you will have in five years. It will be better.',
+        icon: 'tabler:trending-up',
+      },
+      {
+        title: 'Parkstory stays in control',
+        description:
+          'We design and build the hardware, the controls, the software and the app ourselves. That is why we can keep improving TilePark for years after installation, through updates rather than replacements, backed by spare parts for at least 30 years.',
+        icon: 'tabler:steering-wheel',
+      },
+      {
+        title: 'Updated remotely',
+        description:
+          'Like a modern car, TilePark receives remote updates: new functions and improvements without a site visit, low maintenance effort, and a fast response if something goes wrong.',
+        icon: 'tabler:cloud-download',
+      },
     ]}
   />
 
-  <!-- CallToAction Widget *********** -->
+  <!-- Made by Parkstory ******************* -->
+  <Features
+    id="factories"
+    tagline="Made by Parkstory"
+    title="You can’t control what you don’t design and build yourself."
+    subtitle="This conviction is part of our DNA. Our engineers design every TilePark system, our team writes the controls that run it, and our own factories in Kehl, Germany, and Gastonia, USA, build it from raw steel to finished conveyor. No importer, no third-party system, and no outside assembler stand between you and the people who built your garage."
+    columns={4}
+    defaultIcon="tabler:check"
+    classes={{ container: 'max-w-7xl', headline: { container: 'max-w-4xl' } }}
+    items={[
+      {
+        title: 'Designed in-house',
+        description:
+          'Mechanical, electrical, and structural engineering by our own team, so every component is designed specifically for TilePark.',
+      },
+      {
+        title: 'Our own controls',
+        description:
+          'The decentralized control system that runs every conveyor is developed in-house. We know every line of code.',
+      },
+      {
+        title: 'Made in our own factories',
+        description:
+          'Laser cutting, bending, robotic welding, and assembly under our own roof, in Germany and the USA.',
+      },
+      {
+        title: 'Pre-assembled and 100% tested',
+        description:
+          'Every system is pre-assembled at the plant, and every conveyor passes a full functional test before shipping.',
+      },
+      {
+        title: 'Spare parts for at least 30 years',
+        description:
+          'Because we own the drawings, the tooling, and the production, we guarantee spare parts for at least 30 years, independent of any supplier’s catalog.',
+      },
+      {
+        title: 'One partner from start to finish',
+        description:
+          'Design, production, installation, and service from one company under one contract, with one team that knows your system.',
+      },
+      {
+        title: 'Every component serialized',
+        description:
+          'Each component carries a serial number and can be traced at any time, so we keep full control of quality and of our supply chain.',
+      },
+      {
+        title: 'Industry-standard components',
+        description: 'Proven industrial parts inside our own design: robust, widely available and easy to service.',
+      },
+    ]}
+  >
+    <Fragment slot="bg"><Fragment set:html={blueBg} /></Fragment>
+  </Features>
+
+  <WidgetWrapper containerClass="max-w-7xl">
+    <ol class="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-8 gap-2" aria-label="From design to service">
+      {
+        flow.map((step, i) => (
+          <li
+            class:list={[
+              'rounded-md px-2 py-3 text-center text-sm font-semibold text-white',
+              i === flow.length - 1 ? 'bg-primary' : 'bg-slate-800 dark:bg-slate-800',
+            ]}
+          >
+            <span class="mx-auto mb-1.5 flex w-6 h-6 items-center justify-center rounded-full bg-white/20 text-xs">
+              {i + 1}
+            </span>
+            {step}
+          </li>
+        ))
+      }
+    </ol>
+  </WidgetWrapper>
+
+  <Content
+    id="quality"
+    tagline="Quality control"
+    title="Every conveyor segment is tested under load."
+    content="Before a conveyor leaves our factory, it goes onto the test rig. A hydraulic press applies load from above while the drives run, just as they will under a parked car. Only conveyors that pass are released for shipping."
+    isReversed
+    classes={{ container: 'pt-0 md:pt-0 lg:pt-0' }}
+    items={[
+      { title: 'Drives, gearboxes and rollers', description: 'run under load, not just switched on.' },
+      { title: 'Structure and alignment', description: 'are checked while the conveyor carries weight.' },
+      { title: 'Every result is logged', description: 'against the component’s serial number.' },
+    ]}
+  >
+    <Fragment slot="image">
+      <figure class="relative mx-auto max-w-sm overflow-hidden rounded-lg shadow-lg bg-black aspect-[4/5]">
+        <video
+          src="/videos/load-test.mp4"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          aria-label="A conveyor segment running on the load test rig"
+          class="w-full h-full object-cover"></video>
+        <span
+          class="absolute top-3 left-3 flex items-center gap-1.5 rounded-full bg-slate-900/80 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-white"
+        >
+          <i class="block w-2 h-2 rounded-full bg-red-500 animate-pulse"></i>Load test
+        </span>
+        <figcaption
+          class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-900/90 to-transparent px-4 pt-6 pb-3 text-sm text-white"
+        >
+          Conveyor segment on the load test rig
+        </figcaption>
+      </figure>
+    </Fragment>
+  </Content>
+
+  <WidgetWrapper containerClass="max-w-7xl pt-0 md:pt-0 lg:pt-0">
+    <div class="grid gap-6 lg:grid-cols-2">
+      {
+        plants.map((p) => (
+          <div class={`${card} p-4`}>
+            <div class="flex items-center gap-3 mb-4">
+              <span class="flex-none flex w-10 h-10 items-center justify-center rounded-full bg-primary text-white text-sm font-bold">
+                {p.flag}
+              </span>
+              <div>
+                <b class="block text-lg text-heading">{p.name}</b>
+                <span class="text-sm text-muted">{p.text}</span>
+              </div>
+            </div>
+            <div class="grid grid-cols-3 grid-rows-[170px_110px] md:grid-rows-[300px_170px] gap-2">
+              {p.pics.map((pic, i) => (
+                <figure class:list={['relative overflow-hidden rounded-md bg-slate-800', { 'col-span-3': i === 0 }]}>
+                  <Image
+                    src={pic.src}
+                    alt={pic.alt}
+                    layout="cover"
+                    width={i === 0 ? 1200 : 400}
+                    height={i === 0 ? 600 : 400}
+                    widths={i === 0 ? [600, 1200] : [300, 600]}
+                    sizes={i === 0 ? '(max-width: 1023px) 100vw, 600px' : '200px'}
+                    class="w-full h-full object-cover"
+                    style={`object-position:${pic.pos}`}
+                  />
+                  <figcaption class="absolute left-2 bottom-2 rounded-full bg-slate-900/85 px-2.5 py-0.5 text-xs font-semibold text-white">
+                    {pic.cap}
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+            <ul class="mt-4 grid gap-x-4 gap-y-1.5 sm:grid-cols-2">
+              {p.caps.map((c) => (
+                <li class="flex items-start gap-2 text-sm text-muted">
+                  <Icon name="tabler:check" class="mt-0.5 w-4 h-4 flex-none text-primary" />
+                  {c}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </WidgetWrapper>
 
   <CallToAction
     actions={[
       {
         variant: 'primary',
-        text: 'Get template',
-        href: 'https://github.com/arthelokyo/astrowind',
+        text: 'Visit our YouTube channel',
+        href: 'https://www.youtube.com/@parkstory2332',
         target: '_blank',
-        icon: 'tabler:download',
+        icon: 'tabler:brand-youtube',
       },
     ]}
   >
-    <Fragment slot="title">
-      Astro&nbsp;+&nbsp;<br class="block sm:hidden" /><span class="sm:whitespace-nowrap">Tailwind CSS</span>
-    </Fragment>
-
-    <Fragment slot="subtitle">
-      Free, open source and production-ready. <br class="hidden md:inline" />Clone it, replace the content and deploy.
-    </Fragment>
+    <Fragment slot="title">See TilePark in action</Fragment>
+    <Fragment slot="subtitle">Watch TilePark and Parkstory at work, from our factories to finished garages.</Fragment>
   </CallToAction>
 </Layout>

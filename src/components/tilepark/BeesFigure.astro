@@ -1,0 +1,515 @@
+---
+// Animated comparison: bees crossing a honeycomb vs. TilePark cars routing
+// around an offline conveyor.
+---
+
+<figure class="dark tp-panel tp-bio-fig">
+  <svg id="bioSvg" viewBox="0 0 1000 420" role="img" aria-labelledby="bioT bioD">
+    <title id="bioT">Nature and TilePark compared</title>
+    <desc id="bioD"
+      >Left: bees move across a honeycomb and around a damaged cell. Right: a TilePark car is routed around an offline
+      conveyor.</desc
+    >
+  </svg>
+  <figcaption>
+    One principle, two scales. Every cell is connected to its neighbors, no central coordinator is needed, and each
+    route is calculated anew. When a cell is out of action, both systems simply work around it.
+  </figcaption>
+</figure>
+
+<script>
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- demo scripts ported from plain JavaScript
+  // @ts-nocheck
+  const ACC = '#93c5fd'; // highlight colour (AstroWind blue-300)
+  const svg = document.getElementById('bioSvg'),
+    NS = 'http://www.w3.org/2000/svg';
+  let P = svg;
+  const el = (t, a, p = P) => {
+    const e = document.createElementNS(NS, t);
+    for (const k in a) e.setAttribute(k, a[k]);
+    p.appendChild(e);
+    return e;
+  };
+  const txt = (x, y, t, a = {}) => {
+    const e = el('text', Object.assign({ x, y, 'text-anchor': 'middle', 'font-family': 'inherit' }, a));
+    e.textContent = t;
+    return e;
+  };
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  let labelLayer = null;
+  function pill(x, y, label) {
+    const g = el('g', {}, labelLayer || P);
+    const t = el(
+      'text',
+      {
+        x,
+        y: y + 4,
+        'text-anchor': 'middle',
+        'font-size': 11,
+        'font-weight': 700,
+        fill: '#0f172a',
+        'font-family': 'inherit',
+      },
+      g
+    );
+    t.textContent = label;
+    requestAnimationFrame(() => {
+      const bb = t.getBBox();
+      const b = el(
+        'rect',
+        { x: bb.x - 7, y: bb.y - 3, width: bb.width + 14, height: bb.height + 6, rx: 9, fill: '#f5a524' },
+        g
+      );
+      g.insertBefore(b, t);
+    });
+    return g;
+  }
+  const shuffle = (a) => {
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = (Math.random() * (i + 1)) | 0;
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  };
+  let visible = true;
+  new IntersectionObserver((es) => {
+    visible = es[0].isIntersecting;
+  }).observe(svg);
+  const waitVisible = async () => {
+    while (!visible || document.hidden) await sleep(400);
+  };
+  const gL = el('g', {}),
+    gD = el('g', {}),
+    gR = el('g', {});
+
+  // generic randomised BFS (different shortest route each call)
+  function bfs(start, isGoal, nbr, avoid) {
+    const k = (r, c) => r + ',' + c,
+      q = [start],
+      prev = new Map([[k(...start), null]]);
+    while (q.length) {
+      const cur = q.shift();
+      if (isGoal(cur)) {
+        const p = [];
+        let x = k(...cur);
+        while (x) {
+          p.unshift(x.split(',').map(Number));
+          x = prev.get(x);
+        }
+        return p;
+      }
+      for (const n of shuffle(nbr(...cur))) {
+        const kk = k(...n);
+        if (prev.has(kk) || (avoid && avoid(n))) continue;
+        prev.set(kk, k(...cur));
+        q.push(n);
+      }
+    }
+    return null;
+  }
+
+  // =============== LEFT: the hive ===============
+  P = gL;
+  const R = 38,
+    W = Math.sqrt(3) * R,
+    X0 = 78,
+    Y0 = 92,
+    HR = 4,
+    HC = 5,
+    dead = [1, 2];
+  let deadXY = null;
+  const hc = (r, c) => [X0 + c * W + ((r % 2) * W) / 2, Y0 + r * R * 1.5];
+  const isDead = (r, c) => r === dead[0] && c === dead[1];
+  const hexN = (r, c) =>
+    (r % 2
+      ? [
+          [r - 1, c],
+          [r - 1, c + 1],
+          [r, c - 1],
+          [r, c + 1],
+          [r + 1, c],
+          [r + 1, c + 1],
+        ]
+      : [
+          [r - 1, c - 1],
+          [r - 1, c],
+          [r, c - 1],
+          [r, c + 1],
+          [r + 1, c - 1],
+          [r + 1, c],
+        ]
+    ).filter(([a, b]) => a >= 0 && a < HR && b >= 0 && b < HC && !isDead(a, b));
+  const hexPts = (x, y) =>
+    Array.from({ length: 6 }, (_, i) => {
+      const a = (Math.PI / 180) * (60 * i - 30);
+      return (x + R * 0.94 * Math.cos(a)).toFixed(1) + ',' + (y + R * 0.94 * Math.sin(a)).toFixed(1);
+    }).join(' ');
+  for (let r = 0; r < HR; r++)
+    for (let c = 0; c < HC; c++) {
+      const [x, y] = hc(r, c),
+        d = isDead(r, c);
+      const honey = (r * 7 + c * 3) % 5 < 2,
+        capped = (r * 5 + c * 11) % 7 === 3;
+      el('polygon', {
+        points: hexPts(x, y),
+        fill: d ? '#3a2f1c' : capped ? '#d9a23a' : honey ? '#c98a1e' : '#5a4320',
+        stroke: d ? '#f5a524' : '#e8b04a',
+        'stroke-width': d ? 2.2 : 1.6,
+        'stroke-dasharray': d ? '5 4' : '',
+        opacity: d ? 1 : 0.92,
+      });
+      if (!d && honey && !capped) el('ellipse', { cx: x - 6, cy: y - 8, rx: 9, ry: 5, fill: '#ffe08a', opacity: 0.35 });
+      if (d) {
+        deadXY = [x, y];
+      }
+    }
+  // connectors: every live cell is linked to every live neighbour
+  for (let r = 0; r < HR; r++)
+    for (let c = 0; c < HC; c++) {
+      if (isDead(r, c)) continue;
+      for (const [a, b] of hexN(r, c)) {
+        if (a * HC + b < r * HC + c) continue;
+        const [x1, y1] = hc(r, c),
+          [x2, y2] = hc(a, b);
+        el('circle', { cx: (x1 + x2) / 2, cy: (y1 + y2) / 2, r: 2.4, fill: ACC, opacity: 0.7 });
+      }
+    }
+  const trail = el('path', {
+    fill: 'none',
+    stroke: ACC,
+    'stroke-width': 2.5,
+    'stroke-dasharray': '6 6',
+    'stroke-linecap': 'round',
+    opacity: 0.9,
+  });
+  function makeBee() {
+    const g = el('g', {}),
+      body = el('g', {}, g);
+    const w1 = el(
+      'ellipse',
+      { cx: -1, cy: -6, rx: 6.5, ry: 3.6, fill: '#ffffffc0', stroke: '#ffffff60', 'stroke-width': 0.6 },
+      body
+    );
+    const w2 = el(
+      'ellipse',
+      { cx: -1, cy: 6, rx: 6.5, ry: 3.6, fill: '#ffffffc0', stroke: '#ffffff60', 'stroke-width': 0.6 },
+      body
+    );
+    el('ellipse', { cx: -1, cy: 0, rx: 8.5, ry: 5.4, fill: '#f2b632' }, body);
+    el('rect', { x: -4.5, y: -5, width: 2.4, height: 10, rx: 1, fill: '#1a1206' }, body);
+    el('rect', { x: 0.4, y: -5.2, width: 2.4, height: 10.4, rx: 1, fill: '#1a1206' }, body);
+    el('path', { d: 'M-9.5 0 L-12.5 0', stroke: '#1a1206', 'stroke-width': 1.4, 'stroke-linecap': 'round' }, body);
+    el('circle', { cx: 8, cy: 0, r: 3.6, fill: '#1a1206' }, body);
+    el(
+      'path',
+      { d: 'M10 -2 Q13 -5 14 -6 M10 2 Q13 5 14 6', stroke: '#1a1206', 'stroke-width': 0.9, fill: 'none' },
+      body
+    );
+    return { g, w1, w2 };
+  }
+  const liveCells = [];
+  for (let r = 0; r < HR; r++) for (let c = 0; c < HC; c++) if (!isDead(r, c)) liveCells.push([r, c]);
+  const starts = shuffle(liveCells.slice()).slice(0, 9);
+  const bees = starts.map((cell, i) => {
+    const b = makeBee();
+    return {
+      cell,
+      g: b.g,
+      w1: b.w1,
+      w2: b.w2,
+      hi: i === 0,
+      route: [],
+      seg: 0,
+      t: 0,
+      pause: Math.random() * 1.2,
+      speed: 45 + Math.random() * 35,
+      ph: Math.random() * 6.28,
+    };
+  });
+  function newRoute(b) {
+    let goal;
+    do {
+      goal = liveCells[(Math.random() * liveCells.length) | 0];
+    } while (goal[0] === b.cell[0] && goal[1] === b.cell[1]);
+    b.route = bfs(b.cell, ([r, c]) => r === goal[0] && c === goal[1], hexN).map(([r, c]) => {
+      const [x, y] = hc(r, c);
+      return [x + (Math.random() - 0.5) * 14, y + (Math.random() - 0.5) * 12];
+    });
+    b.seg = 0;
+    b.t = 0;
+    b.goal = goal;
+    if (b.hi)
+      trail.setAttribute('d', b.route.map((p, i) => (i ? 'L' : 'M') + p.map((v) => v.toFixed(1)).join(',')).join(' '));
+  }
+  bees.forEach((b) => {
+    const [x, y] = hc(...b.cell);
+    b.x = x;
+    b.y = y;
+    b.ang = Math.random() * 360;
+    b.g.setAttribute('transform', `translate(${x},${y}) rotate(${b.ang})`);
+    if (!reduce) newRoute(b);
+  });
+  if (reduce) newRoute(bees[0]);
+  let last = performance.now();
+  function tick(now) {
+    const dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+    if (visible && !document.hidden)
+      for (const b of bees) {
+        const flap = Math.abs(Math.sin(now / 28 + b.ph));
+        b.w1.setAttribute('ry', (1.2 + 2.6 * flap).toFixed(2));
+        b.w2.setAttribute('ry', (1.2 + 2.6 * flap).toFixed(2));
+        if (b.pause > 0) {
+          b.pause -= dt; // working on a cell: small jitter
+          const jx = Math.sin(now / 180 + b.ph) * 1.2,
+            jy = Math.cos(now / 150 + b.ph) * 1.2;
+          b.g.setAttribute(
+            'transform',
+            `translate(${(b.x + jx).toFixed(1)},${(b.y + jy).toFixed(1)}) rotate(${b.ang.toFixed(0)})`
+          );
+          if (b.pause <= 0) newRoute(b);
+          continue;
+        }
+        const A = b.route[b.seg],
+          B = b.route[b.seg + 1];
+        if (!B) {
+          b.cell = b.goal;
+          b.pause = 0.4 + Math.random() * 1.6;
+          continue;
+        }
+        const len = Math.hypot(B[0] - A[0], B[1] - A[1]);
+        b.t += (dt * b.speed) / len;
+        if (b.t >= 1) {
+          b.seg++;
+          b.t = 0;
+          continue;
+        }
+        const wob = Math.sin(b.t * Math.PI * 2 + b.ph) * 3,
+          nx = -(B[1] - A[1]) / len,
+          ny = (B[0] - A[0]) / len;
+        b.x = A[0] + (B[0] - A[0]) * b.t + nx * wob;
+        b.y = A[1] + (B[1] - A[1]) * b.t + ny * wob;
+        const target = (Math.atan2(B[1] - A[1], B[0] - A[0]) * 180) / Math.PI;
+        const d = ((target - b.ang + 540) % 360) - 180;
+        b.ang += d * Math.min(1, dt * 10);
+        b.g.setAttribute('transform', `translate(${b.x.toFixed(1)},${b.y.toFixed(1)}) rotate(${b.ang.toFixed(0)})`);
+      }
+    requestAnimationFrame(tick);
+  }
+  if (!reduce) requestAnimationFrame(tick);
+  P = gL;
+  pill(deadXY[0], deadXY[1] - R * 1.12, 'Damaged cell');
+  txt(245, 384, 'IN NATURE', { fill: ACC, 'font-size': 13, 'font-weight': 700, 'letter-spacing': '2' });
+  txt(245, 406, 'Bees find their own way, every time', { fill: '#cbd5e1', 'font-size': 15 });
+
+  // =============== divider ===============
+  P = gD;
+  el('line', { x1: 500, y1: 40, x2: 500, y2: 330, stroke: '#ffffff1f', 'stroke-width': 1 });
+  el('circle', { cx: 500, cy: 190, r: 20, fill: '#0f172a', stroke: '#ffffff2e' });
+  el('path', {
+    d: 'M492 190 H507 M501 183 L508 190 L501 197',
+    stroke: '#fff',
+    'stroke-width': 2,
+    fill: 'none',
+    'stroke-linecap': 'round',
+    'stroke-linejoin': 'round',
+  });
+
+  // =============== RIGHT: TilePark (tiles everywhere, real sliding sequences) ===============
+  P = gR;
+  const S = 64,
+    GX = 590,
+    GY = 50,
+    TC = 5,
+    TR = 4,
+    fault = [1, 2],
+    exit = [3, 2];
+  let faultPill = null;
+  const isFault = (r, c) => r === fault[0] && c === fault[1];
+  const tN = (r, c) =>
+    [
+      [r - 1, c],
+      [r + 1, c],
+      [r, c - 1],
+      [r, c + 1],
+    ].filter(([a, b]) => a >= 0 && a < TR && b >= 0 && b < TC && !isFault(a, b));
+  const tc = (r, c) => [GX + c * S + S / 2, GY + r * S + S / 2];
+  // module floor on every position
+  for (let r = 0; r < TR; r++)
+    for (let c = 0; c < TC; c++) {
+      const x = GX + c * S,
+        y = GY + r * S,
+        f = isFault(r, c),
+        ex = r === exit[0] && c === exit[1];
+      el('rect', {
+        x: x + 2,
+        y: y + 2,
+        width: S - 4,
+        height: S - 4,
+        rx: 6,
+        fill: f ? '#f5a52422' : '#1e293b',
+        stroke: f ? '#f5a524' : ex ? ACC : '#ffffff26',
+        'stroke-width': f || ex ? 2 : 1,
+        'stroke-dasharray': f ? '5 4' : '',
+      });
+      if (!f)
+        for (const k of [-1, 1])
+          el('line', {
+            x1: x + 12,
+            y1: y + S / 2 + k * 14,
+            x2: x + S - 12,
+            y2: y + S / 2 + k * 14,
+            stroke: '#ffffff14',
+            'stroke-width': 2,
+            'stroke-linecap': 'round',
+          }); // rollers
+      if (f) {
+        const [cx, cy] = tc(r, c);
+        faultPill = [cx, cy];
+      }
+    }
+  // X/Y connectors between all neighbouring modules
+  for (let r = 0; r < TR; r++)
+    for (let c = 0; c < TC; c++) {
+      if (isFault(r, c)) continue;
+      for (const [a, b] of tN(r, c)) {
+        if (a * TC + b < r * TC + c) continue;
+        const [x1, y1] = tc(r, c),
+          [x2, y2] = tc(a, b);
+        el('circle', { cx: (x1 + x2) / 2, cy: (y1 + y2) / 2, r: 2.6, fill: ACC, opacity: 0.55 });
+      }
+    }
+  txt(tc(...exit)[0], GY + TR * S + 16, 'TRANSFER CABIN', {
+    fill: ACC,
+    'font-size': 10,
+    'font-weight': 700,
+    'letter-spacing': '2',
+  });
+  const ttrail = el('path', {
+    fill: 'none',
+    stroke: ACC,
+    'stroke-width': 2.5,
+    'stroke-dasharray': '6 6',
+    'stroke-linecap': 'round',
+    opacity: 0.9,
+  });
+  const carLayer = el('g', {});
+  function carIcon(g, col) {
+    el('rect', { x: -9, y: -16, width: 18, height: 32, rx: 6, fill: col }, g);
+    el('rect', { x: -7, y: -10, width: 14, height: 7, rx: 2, fill: '#020617', opacity: 0.55 }, g);
+    el('rect', { x: -7, y: 7, width: 14, height: 4, rx: 1.5, fill: '#020617', opacity: 0.45 }, g);
+  }
+  const grid = Array.from({ length: TR }, () => Array(TC).fill(null)),
+    cars = {};
+  const empty0 = new Set(['0,4', '2,0']);
+  let cid = 0;
+  for (let r = 0; r < TR; r++)
+    for (let c = 0; c < TC; c++) {
+      if (isFault(r, c) || empty0.has(r + ',' + c)) continue;
+      const id = ++cid,
+        g = el('g', {}, carLayer),
+        base = el(
+          'rect',
+          { x: -S / 2 + 7, y: -S / 2 + 7, width: S - 14, height: S - 14, rx: 5, fill: '#334155', stroke: '#ffffff24' },
+          g
+        );
+      carIcon(g, ['#cbd5e1', '#94a3b8', '#e2e8f0', '#a5b4c3'][id % 4]);
+      g.style.transition = 'transform .34s cubic-bezier(.2,.7,.2,1)';
+      cars[id] = { r, c, g, base };
+      grid[r][c] = id;
+      const [x, y] = tc(r, c);
+      g.style.transform = `translate(${x}px,${y}px)`;
+    }
+  labelLayer = el('g', {});
+  if (faultPill) pill(faultPill[0], faultPill[1] - S * 0.62, 'Conveyor offline');
+  labelLayer = null;
+  const seqLbl = txt(750, 406, 'Cars route around an offline conveyor', { fill: '#cbd5e1', 'font-size': 15 });
+  txt(750, 384, 'IN TILEPARK XY', { fill: ACC, 'font-size': 13, 'font-weight': 700, 'letter-spacing': '2' });
+  let moves = 0,
+    seq = 0;
+  async function slide(id, r, c) {
+    const k = cars[id];
+    grid[k.r][k.c] = null;
+    grid[r][c] = id;
+    k.r = r;
+    k.c = c;
+    const [x, y] = tc(r, c);
+    k.g.style.transform = `translate(${x}px,${y}px)`;
+    moves++;
+    await sleep(380);
+    await waitVisible();
+  }
+  async function clearCell(to, protect) {
+    if (grid[to[0]][to[1]] === null) return true;
+    const p = bfs(
+      to,
+      ([r, c]) => grid[r][c] === null,
+      tN,
+      (n) => n[0] === protect[0] && n[1] === protect[1]
+    );
+    if (!p) return false;
+    for (let i = p.length - 1; i > 0; i--) {
+      const [fr, fc] = p[i - 1],
+        [tr, tcl] = p[i];
+      await slide(grid[fr][fc], tr, tcl);
+    }
+    return true;
+  }
+  async function run() {
+    while (true) {
+      await waitVisible();
+      let ids = Object.keys(cars)
+        .map(Number)
+        .filter((id) => Math.abs(cars[id].r - exit[0]) + Math.abs(cars[id].c - exit[1]) >= 3);
+      if (!ids.length)
+        ids = Object.keys(cars)
+          .map(Number)
+          .filter((id) => !(cars[id].r === exit[0] && cars[id].c === exit[1]));
+      const id = ids[(Math.random() * ids.length) | 0],
+        k = cars[id];
+      seq++;
+      moves = 0;
+      k.base.setAttribute('fill', '#0161ef');
+      k.base.setAttribute('stroke', ACC);
+      carLayer.appendChild(k.g);
+      let guard = 0;
+      while (!(k.r === exit[0] && k.c === exit[1]) && guard++ < 40) {
+        const route = bfs([k.r, k.c], ([r, c]) => r === exit[0] && c === exit[1], tN);
+        ttrail.setAttribute('d', route.map((p, i) => (i ? 'L' : 'M') + tc(...p).join(',')).join(' '));
+        let ok = false;
+        for (const nx of [route[1], ...tN(k.r, k.c)]) {
+          if (await clearCell(nx, [k.r, k.c])) {
+            await slide(id, nx[0], nx[1]);
+            ok = true;
+            break;
+          }
+        }
+        if (!ok) break;
+      }
+      ttrail.setAttribute('d', '');
+      seqLbl.textContent = `Sequence #${seq}: ${moves} moves, route calculated for this layout`;
+      await sleep(1400);
+      k.base.setAttribute('fill', '#334155');
+      k.base.setAttribute('stroke', '#ffffff24');
+      await sleep(500);
+    }
+  }
+  if (!reduce) run();
+
+  // =============== responsive stacking ===============
+  const mq = matchMedia('(max-width:620px)');
+  const lay = () => {
+    if (mq.matches) {
+      svg.setAttribute('viewBox', '30 30 440 830');
+      gR.setAttribute('transform', 'translate(-500,440)');
+      gD.setAttribute('display', 'none');
+    } else {
+      svg.setAttribute('viewBox', '0 0 1000 420');
+      gR.removeAttribute('transform');
+      gD.removeAttribute('display');
+    }
+  };
+  lay();
+  mq.addEventListener('change', lay);
+</script>

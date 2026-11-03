@@ -1,0 +1,804 @@
+---
+// Isometric XY + Z simulator: stackers above the conveyors hold up to four
+// cars on the footprint of one.
+---
+
+<div class="dark tp-panel tp-zcard">
+  <svg
+    id="zSvg"
+    viewBox="-34 15 474 400"
+    role="img"
+    aria-label="Isometric view of a TilePark grid with stackers above the conveyors"></svg>
+  <div>
+    <div class="tp-modes" role="group" aria-label="Configuration">
+      <button data-m="0">XY only</button>
+      <button data-m="1" class="on">Selected stackers</button>
+      <button data-m="2">Stackers everywhere</button>
+    </div>
+    <div class="tp-modes" role="group" aria-label="Levels per stack">
+      <span class="tp-lbl">Levels per stack</span>
+      <button data-l="2">2</button><button data-l="3">3</button><button data-l="4" class="on">4</button>
+    </div>
+    <div class="tp-zbig"><span class="n" id="zN">–</span><span class="x" id="zX"></span></div>
+    <p class="tp-zsub">
+      car spaces in this example. Each conveyor is the size of one parked car (<span id="zOne"></span>). Averaged across
+      the grid, including the free conveyors the system needs.
+    </p>
+    <div class="tp-zdims">
+      <div><span>Grid area</span><b id="zFp">–</b><i id="zFpA"></i></div>
+      <div><span>Clear height needed</span><b id="zHt">–</b><i id="zHtN"></i></div>
+      <div><span>Floor area per car</span><b id="zPer">–</b><i>grid only, excl. transfer cabin</i></div>
+    </div>
+    <div class="tp-zunits" role="group" aria-label="Units">
+      <button data-u="m" class="on">Metric</button><button data-u="ft">Imperial</button>
+    </div>
+    <div class="tp-zbar"><i id="zBar"></i></div>
+    <div class="tp-btns" style="margin-bottom:1rem">
+      <button class="btn-primary" id="zRand">Deliver a random car</button><button class="btn" id="zPark"
+        >Park a car</button
+      >
+    </div>
+    <div class="tp-znote" id="zNote" aria-live="polite"></div>
+  </div>
+</div>
+
+<script>
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- demo scripts ported from plain JavaScript
+  // @ts-nocheck
+  const ACC = '#93c5fd';
+  const svg = document.getElementById('zSvg'),
+    NS = 'http://www.w3.org/2000/svg';
+  const el = (t, a, p = svg) => {
+    const e = document.createElementNS(NS, t);
+    for (const k in a) e.setAttribute(k, a[k]);
+    p.appendChild(e);
+    return e;
+  };
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  const shuffle = (a) => {
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = (Math.random() * (i + 1)) | 0;
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  };
+  const C = 6,
+    R = 4,
+    TW = 60,
+    TH = 30,
+    LH = 36,
+    PT = 6,
+    X0 = 172,
+    Y0 = 176,
+    GC = 2,
+    GATE = [R - 1, GC];
+  const P = (c, r, z) => [X0 + ((c - r) * TW) / 2, Y0 + ((c + r) * TH) / 2 - z];
+  const poly = (pts) => pts.map((p) => p.map((v) => v.toFixed(1)).join(',')).join(' ');
+  const FREE = ['1,1', '3,2', '4,0', '0,3', '5,2']; // "c,r" free conveyors at start
+  const SELECTED = new Set();
+  for (let c = 0; c < C; c++) SELECTED.add(c + ',0');
+  for (let r = 1; r < R; r++) SELECTED.add('5,' + r);
+  SELECTED.add('0,1');
+  SELECTED.add('0,2');
+  const pal = ['#e9edf0', '#9aa8b8', '#2f5aa8', '#a83c3c', '#4b5563', '#d8dfdc', '#64748b', '#c7c9cc'];
+  const N = document.getElementById('zN'),
+    X = document.getElementById('zX'),
+    B = document.getElementById('zBar'),
+    NT = document.getElementById('zNote');
+  const mBtns = [...document.querySelectorAll('.tp-zcard button[data-m]')],
+    lBtns = [...document.querySelectorAll('.tp-zcard button[data-l]')];
+  const bRand = document.getElementById('zRand'),
+    bPark = document.getElementById('zPark');
+  const say = (h) => (NT.innerHTML = h);
+
+  function shade(hex, f) {
+    const n = parseInt(hex.slice(1), 16);
+    return (
+      'rgb(' +
+      [n >> 16, (n >> 8) & 255, n & 255].map((v) => Math.max(0, Math.min(255, Math.round(v * f)))).join(',') +
+      ')'
+    );
+  }
+  function box(g, c0, c1, r0, r1, z0, z1, top, front, side, op = 1) {
+    el(
+      'polygon',
+      { points: poly([P(c0, r1, z0), P(c1, r1, z0), P(c1, r1, z1), P(c0, r1, z1)]), fill: front, opacity: op },
+      g
+    );
+    el(
+      'polygon',
+      { points: poly([P(c1, r1, z0), P(c1, r0, z0), P(c1, r0, z1), P(c1, r1, z1)]), fill: side, opacity: op },
+      g
+    );
+    el(
+      'polygon',
+      { points: poly([P(c0, r0, z1), P(c1, r0, z1), P(c1, r1, z1), P(c0, r1, z1)]), fill: top, opacity: op },
+      g
+    );
+  }
+  function drawCar(g, col) {
+    // drawn at cell (0,0) on top of conveyor
+    const c = 0,
+      r = 0,
+      z = PT,
+      w0 = c + 0.27,
+      w1 = c + 0.73,
+      l0 = r + 0.1,
+      l1 = r + 0.9,
+      zb = z + 3,
+      hb = 8,
+      hc = 7;
+    const hl = el(
+      'polygon',
+      {
+        points: poly([
+          P(c + 0.04, r + 0.04, z + 0.5),
+          P(c + 0.96, r + 0.04, z + 0.5),
+          P(c + 0.96, r + 0.96, z + 0.5),
+          P(c + 0.04, r + 0.96, z + 0.5),
+        ]),
+        fill: '#93c5fd33',
+        stroke: ACC,
+        'stroke-width': 2.2,
+        display: 'none',
+      },
+      g
+    );
+    for (const rr of [l0 + 0.17, l1 - 0.17]) {
+      const q = P(w1, rr, z + 3.5);
+      el('ellipse', { cx: q[0] + 0.5, cy: q[1], rx: 3.6, ry: 4.2, fill: '#0b1120' }, g);
+    }
+    box(g, w0, w1, l0, l1, zb, zb + hb, col, shade(col, 0.78), shade(col, 0.62));
+    box(g, w0 + 0.05, w1 - 0.05, l0 + 0.22, l1 - 0.26, zb + hb, zb + hb + hc, shade(col, 1.05), '#1e293b', '#334155');
+    for (const cc of [w0 + 0.07, w1 - 0.13]) {
+      const a = P(cc, l1, zb + 4.2),
+        b = P(cc + 0.06, l1, zb + 4.2);
+      el(
+        'line',
+        { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: '#fff7d6', 'stroke-width': 2.2, 'stroke-linecap': 'round' },
+        g
+      );
+    }
+    const m = el('g', { display: 'none' }, g);
+    const tp = P(0.5, 0.5, z + 34);
+    el(
+      'path',
+      {
+        d: `M${tp[0] - 7} ${tp[1] - 10} L${tp[0] + 7} ${tp[1] - 10} L${tp[0]} ${tp[1]} Z`,
+        fill: ACC,
+        stroke: '#0f172a',
+        'stroke-width': 1.5,
+      },
+      m
+    );
+    hl.marker = m;
+    return hl;
+  }
+  function conveyor(c, r, p) {
+    box(p, c + 0.03, c + 0.97, r + 0.03, r + 0.97, 0, PT, '#475569', '#1e293b', '#334155');
+    for (const t of [0.18, 0.32, 0.46, 0.6, 0.74, 0.88]) {
+      const a = P(c + 0.1, r + t, PT + 0.2),
+        b = P(c + 0.9, r + t, PT + 0.2);
+      el(
+        'line',
+        {
+          x1: a[0],
+          y1: a[1],
+          x2: b[0],
+          y2: b[1],
+          stroke: '#cbd5e1',
+          'stroke-width': 1.6,
+          'stroke-linecap': 'round',
+          opacity: 0.9,
+        },
+        p
+      );
+    }
+    for (const u of [0.28, 0.72]) {
+      const a = P(c + u, r + 0.07, PT + 0.6),
+        b = P(c + u, r + 0.93, PT + 0.6);
+      el(
+        'line',
+        { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: '#0f172a', 'stroke-width': 3.4, 'stroke-linecap': 'round' },
+        p
+      );
+    }
+    const led = P(c + 0.9, r + 0.92, PT * 0.5);
+    el('circle', { cx: led[0], cy: led[1], r: 1.6, fill: ACC }, p);
+  }
+
+  let unit = 'm';
+  const PW = 2.3,
+    PLEN = 5.25,
+    EDGE = 0.1; // pallet pitch (2.25 + 0.05) x (5.20 + 0.05), clearance to building
+  const CLEAR = { 1: 2.45, 2: 5.06, 3: 7.16, 4: 9.14 }; // m; 1 = XY only (approx., vehicle + 0.35 system + clearance)
+  let mode = 1,
+    L = 4,
+    S = 3,
+    busy = false,
+    cars = [],
+    ground,
+    stacks,
+    dyn,
+    nextId = 1,
+    moves = 0;
+  const items = []; // {node,key}
+  function sortDyn() {
+    items.sort((a, b) => a.key() - b.key());
+    for (const it of items) dyn.appendChild(it.node);
+  }
+  const keyOf = (c, r, l) => (r + c) * 100 + l * 10 + 5;
+  const HMS = 520;
+  const XY = (c, r, l) => [((c - r) * TW) / 2, ((c + r) * TH) / 2 - l * LH];
+  const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+  function setXY(car, x, y) {
+    car.x = x;
+    car.y = y;
+    car.g.setAttribute('transform', `translate(${x.toFixed(2)},${y.toFixed(2)})`);
+  }
+  function tween(car, pts, dur) {
+    // smooth motion along a polyline, eased over its whole length
+    const id = (car.anim = (car.anim || 0) + 1);
+    const seg = [];
+    let L = 0;
+    for (let i = 1; i < pts.length; i++) {
+      const d = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
+      seg.push(d);
+      L += d;
+    }
+    return new Promise((res) => {
+      const t0 = performance.now();
+      const step = (now) => {
+        if (car.anim !== id) return res();
+        const t = Math.min(1, (now - t0) / dur),
+          d = ease(t) * L;
+        let acc = 0,
+          i = 0;
+        while (i < seg.length - 1 && acc + seg[i] < d) {
+          acc += seg[i];
+          i++;
+        }
+        const f = seg[i] ? (d - acc) / seg[i] : 1,
+          a = pts[i],
+          b = pts[i + 1] || a;
+        setXY(car, a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f);
+        if (t < 1) requestAnimationFrame(step);
+        else res();
+      };
+      requestAnimationFrame(step);
+    });
+  }
+  function place(car, c, r, l, dur) {
+    car.c = c;
+    car.r = r;
+    car.l = l;
+    const [x, y] = XY(c, r, l);
+    car.g.style.transition = 'opacity .5s';
+    if (!dur || car.x == null) {
+      car.anim = (car.anim || 0) + 1;
+      setXY(car, x, y);
+      return Promise.resolve();
+    }
+    return tween(
+      car,
+      [
+        [car.x, car.y],
+        [x, y],
+      ],
+      dur
+    );
+  }
+  function makeCar(c, r, l) {
+    const g = el('g', { class: 'zcar' }, dyn);
+    const car = { id: nextId++, g };
+    car.hl = drawCar(g, pal[(car.id * 5 + 3) % pal.length]);
+    g.style.cursor = 'pointer';
+    g.addEventListener('click', () => {
+      if (!busy) deliver(car);
+    });
+    place(car, c, r, l, 0);
+    items.push({ node: g, key: () => (car.dk != null ? car.dk : keyOf(car.c, car.r, car.l)) });
+    cars.push(car);
+    return car;
+  }
+  function build() {
+    svg.innerHTML = '';
+    items.length = 0;
+    cars = [];
+    nextId = 1;
+    S = mode === 0 ? 0 : L - 1;
+    const st = el('g', {});
+    dyn = el('g', {});
+    // conveyors + cabin floor
+    for (let s = 0; s <= C + R; s++)
+      for (let r = 0; r < R; r++) {
+        const c = s - r;
+        if (c >= 0 && c < C) conveyor(c, r, st);
+      }
+    // transfer cabin (in front of the gate conveyor)
+    box(st, GC + 0.02, GC + 0.98, R + 0.05, R + 1.0, 0, PT, '#1e40af', '#172554', '#1e3a8a');
+    const cab = el('g', {}, dyn);
+    const H = PT + 44,
+      c0 = GC + 0.02,
+      c1 = GC + 0.98,
+      r0 = R + 0.05,
+      r1 = R + 1.0;
+    // back wall (left side, c=c0) drawn faint, then glass front/right walls + roof
+    el('polygon', { points: poly([P(c0, r0, PT), P(c0, r1, PT), P(c0, r1, H), P(c0, r0, H)]), fill: '#93c5fd14' }, cab);
+    box(cab, c0, c1, r0, r1, PT, H, '#93c5fd30', '#93c5fd26', '#93c5fd1c');
+    for (const q of [
+      [c0, r1],
+      [c1, r1],
+      [c1, r0],
+      [c0, r0],
+    ]) {
+      const a = P(q[0], q[1], PT),
+        b = P(q[0], q[1], H);
+      el('line', { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: ACC, 'stroke-width': 1.6 }, cab);
+    }
+    el(
+      'polygon',
+      {
+        points: poly([P(c0, r0, H), P(c1, r0, H), P(c1, r1, H), P(c0, r1, H)]),
+        fill: 'none',
+        stroke: ACC,
+        'stroke-width': 1.6,
+      },
+      cab
+    );
+    items.push({ node: cab, key: () => (R + GC) * 100 + 90 });
+    const lab = P(GC + 1.05, R + 1.05, 0);
+    const t = el(
+      'text',
+      {
+        x: lab[0] + 4,
+        y: lab[1] + 12,
+        'text-anchor': 'middle',
+        'font-size': 9,
+        'font-weight': 700,
+        fill: ACC,
+        'letter-spacing': '1.4',
+        'font-family': 'inherit',
+      },
+      st
+    );
+    t.textContent = 'TRANSFER CABIN';
+    ground = Array.from({ length: R }, () => Array(C).fill(null));
+    stacks = {};
+    const hasStack = (c, r) => mode === 2 || (mode === 1 && SELECTED.has(c + ',' + r));
+    for (let r = 0; r < R; r++)
+      for (let c = 0; c < C; c++) {
+        if (hasStack(c, r) && S > 0) {
+          stacks[c + ',' + r] = Array(S).fill(null);
+          // posts
+          const top = S * LH + 20;
+          const back = el('g', {}, dyn);
+          {
+            const a = P(c + 0.04, r + 0.04, 0),
+              b = P(c + 0.04, r + 0.04, top);
+            el('line', { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: '#94a3b855', 'stroke-width': 1.8 }, back);
+          }
+          items.push({ node: back, key: () => (r + c) * 100 - 2 });
+          const front = el('g', {}, dyn);
+          for (const q of [
+            [c + 0.04, r + 0.96],
+            [c + 0.96, r + 0.04],
+          ]) {
+            const a = P(q[0], q[1], 0),
+              b = P(q[0], q[1], top);
+            el(
+              'line',
+              {
+                x1: a[0],
+                y1: a[1],
+                x2: b[0],
+                y2: b[1],
+                stroke: '#94a3b8',
+                'stroke-width': 2.6,
+                'stroke-linecap': 'round',
+              },
+              front
+            );
+          }
+          items.push({ node: front, key: () => (r + c + 1) * 100 - 3 });
+          for (let j = 1; j <= S; j++) {
+            const z = j * LH + PT - 1;
+            const sh = el('g', {}, dyn);
+            el(
+              'polygon',
+              {
+                points: poly([
+                  P(c + 0.04, r + 0.04, z),
+                  P(c + 0.96, r + 0.04, z),
+                  P(c + 0.96, r + 0.96, z),
+                  P(c + 0.04, r + 0.96, z),
+                ]),
+                fill: '#0161ef22',
+                stroke: ACC,
+                'stroke-width': 1,
+              },
+              sh
+            );
+            items.push({ node: sh, key: () => (r + c) * 100 + j * 10 + 1 });
+          }
+        }
+      }
+    // cars
+    for (let r = 0; r < R; r++)
+      for (let c = 0; c < C; c++) {
+        if (!FREE.includes(c + ',' + r)) ground[r][c] = makeCar(c, r, 0);
+        const s = stacks[c + ',' + r];
+        if (s) for (let j = 0; j < S; j++) s[j] = makeCar(c, r, j + 1);
+      }
+    sortDyn();
+    stats();
+    say('Click any car on any level, and the system will deliver it to the <b>transfer cabin</b>.');
+  }
+  const ftin = (m) => {
+    let i = Math.round(m / 0.0254);
+    const f = Math.floor(i / 12);
+    i -= f * 12;
+    return `${f}′ ${i}″`;
+  };
+  const len = (m) => (unit === 'm' ? m.toFixed(2).replace(/\.?0+$/, '') + ' m' : ftin(m));
+  const area = (m2) =>
+    unit === 'm'
+      ? Math.round(m2).toLocaleString('en-US') + ' m²'
+      : Math.round(m2 * 10.7639).toLocaleString('en-US') + ' sq ft';
+  let dimG = null;
+  function dimLine(g, a, b, label, off) {
+    el('line', { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: '#94a3b8', 'stroke-width': 1 }, g);
+    for (const p of [a, b]) el('circle', { cx: p[0], cy: p[1], r: 2.2, fill: '#94a3b8' }, g);
+    const m = [(a[0] + b[0]) / 2 + off[0], (a[1] + b[1]) / 2 + off[1]];
+    const t = el(
+      'text',
+      {
+        x: m[0],
+        y: m[1],
+        'text-anchor': 'middle',
+        'font-size': 10.5,
+        'font-weight': 700,
+        fill: '#fff',
+        'font-family': 'inherit',
+      },
+      g
+    );
+    t.textContent = label;
+    const bb = t.getBBox();
+    const bg = el(
+      'rect',
+      {
+        x: bb.x - 4,
+        y: bb.y - 2,
+        width: bb.width + 8,
+        height: bb.height + 4,
+        rx: 4,
+        fill: '#0f172a',
+        stroke: '#ffffff26',
+      },
+      g
+    );
+    g.insertBefore(bg, t);
+  }
+  function stats() {
+    const cap = C * R - FREE.length + Object.keys(stacks).length * S;
+    N.textContent = cap;
+    X.textContent = (cap / (C * R)).toFixed(1) + ' cars on the footprint of one car';
+    document.getElementById('zOne').textContent = `${len(PW)} × ${len(PLEN)}`;
+    B.style.width = (cap / (C * R - FREE.length + C * R * 3)) * 100 + '%';
+    const W = C * PW + 2 * EDGE,
+      Ln = R * PLEN + 2 * EDGE,
+      A = W * Ln,
+      lv = mode === 0 ? 1 : L,
+      H = CLEAR[lv];
+    document.getElementById('zFp').textContent = `${len(W)} × ${len(Ln)}`;
+    document.getElementById('zFpA').textContent = area(A);
+    document.getElementById('zHt').textContent = (lv === 1 ? '≈ ' : '') + len(H);
+    document.getElementById('zHtN').textContent =
+      lv === 1
+        ? 'one level, depends on vehicle height'
+        : `${lv}-high stacks${mode === 1 ? ', where stackers stand' : ''}`;
+    document.getElementById('zPer').textContent = area(A / cap);
+    // dimension lines in the drawing
+    if (dimG) dimG.remove();
+    dimG = el('g', {});
+    dimLine(dimG, P(0, R + 2.4, 0), P(C, R + 2.4, 0), len(W), [12, 16]);
+    dimLine(dimG, P(C + 0.55, 0, 0), P(C + 0.55, R, 0), len(Ln), [22, 4]);
+    const topz = (mode === 0 ? 0 : S) * LH + PT + 28,
+      hb = P(C + 0.55, -0.3, 0),
+      ht = P(C + 0.55, -0.3, topz);
+    dimLine(dimG, hb, ht, len(H), [0, 0]);
+  }
+  document.querySelectorAll('.tp-zunits button').forEach(
+    (b) =>
+      (b.onclick = () => {
+        unit = b.dataset.u;
+        document.querySelectorAll('.tp-zunits button').forEach((x) => x.classList.toggle('on', x === b));
+        stats();
+      })
+  );
+  // ----- logistics -----
+  const nb = (r, c) =>
+    [
+      [r - 1, c],
+      [r + 1, c],
+      [r, c - 1],
+      [r, c + 1],
+    ].filter(([a, b]) => a >= 0 && a < R && b >= 0 && b < C);
+  function bfs(start, isGoal, avoid) {
+    const k = (r, c) => r + ',' + c,
+      q = [start],
+      prev = new Map([[k(...start), null]]);
+    while (q.length) {
+      const cur = q.shift();
+      if (isGoal(cur)) {
+        const p = [];
+        let x = k(...cur);
+        while (x) {
+          p.unshift(x.split(',').map(Number));
+          x = prev.get(x);
+        }
+        return p;
+      }
+      for (const n of shuffle(nb(...cur))) {
+        const kk = k(...n);
+        if (prev.has(kk) || (avoid && avoid(n))) continue;
+        prev.set(kk, k(...cur));
+        q.push(n);
+      }
+    }
+    return null;
+  }
+  async function slideMany(list, dur = HMS) {
+    // all cars in the list move at the same time
+    for (const [car] of list) ground[car.r][car.c] = null;
+    for (const [car, r, c] of list) {
+      car.dk = Math.max(keyOf(car.c, car.r, 0), keyOf(c, r, 0));
+      ground[r][c] = car;
+    }
+    sortDyn();
+    for (const [car, r, c] of list) place(car, c, r, 0, dur);
+    moves += list.length;
+    await sleep(dur);
+    for (const [car] of list) car.dk = null;
+    sortDyn();
+  }
+  const slide = (car, r, c) => slideMany([[car, r, c]]);
+  async function clearCell(to, protect) {
+    if (!ground[to[0]][to[1]]) return true;
+    const p = bfs(
+      to,
+      ([r, c]) => !ground[r][c],
+      (n) => protect && n[0] === protect[0] && n[1] === protect[1]
+    );
+    if (!p) return false;
+    const list = [];
+    for (let i = p.length - 1; i > 0; i--) {
+      const [fr, fc] = p[i - 1],
+        [tr, tc] = p[i];
+      list.push([ground[fr][fc], tr, tc]);
+    }
+    await slideMany(list);
+    return true;
+  }
+  async function moveTo(car, dest) {
+    for (let attempt = 0; attempt < 4; attempt++) {
+      if (await moveTo1(car, dest)) return true;
+    }
+    return false;
+  }
+  async function moveTo1(car, dest) {
+    let guard = 0;
+    while (!(car.r === dest[0] && car.c === dest[1]) && guard++ < 60) {
+      const path = bfs([car.r, car.c], ([r, c]) => r === dest[0] && c === dest[1]);
+      const run = [];
+      for (let k = 1; k < path.length; k++) {
+        const [r, c] = path[k];
+        if (ground[r][c]) break;
+        run.push(path[k]);
+      }
+      if (run.length) {
+        const pts = [[car.x, car.y], ...run.map(([r, c]) => XY(c, r, 0))];
+        ground[car.r][car.c] = null;
+        const [lr, lc] = run[run.length - 1];
+        ground[lr][lc] = car;
+        car.dk = Math.max(keyOf(car.c, car.r, 0), ...run.map(([r, c]) => keyOf(c, r, 0)));
+        sortDyn();
+        car.c = lc;
+        car.r = lr;
+        moves += run.length;
+        await tween(car, pts, Math.max(HMS, HMS * 0.62 * run.length));
+        car.dk = null;
+        sortDyn();
+        continue;
+      }
+      let ok = false;
+      if (await clearCell(path[1], [car.r, car.c])) ok = true;
+      else
+        for (const nx of shuffle(nb(car.r, car.c))) {
+          if (await clearCell(nx, [car.r, car.c])) {
+            await slide(car, nx[0], nx[1]);
+            ok = true;
+            break;
+          }
+        }
+      if (!ok) return false;
+    }
+    return true;
+  }
+  async function lower(c, r, j) {
+    // slot index j (0 = lowest storage level)
+    const s = stacks[c + ',' + r],
+      car = s[j];
+    if (!(await clearCell([r, c], null))) return null;
+    const d = 520 + j * 260;
+    car.dk = keyOf(c, r, j + 1);
+    s[j] = null;
+    ground[r][c] = car;
+    sortDyn();
+    place(car, c, r, 0, d);
+    moves++;
+    await sleep(d);
+    car.dk = null;
+    sortDyn();
+    return car;
+  }
+  async function lift(car, j) {
+    const s = stacks[car.c + ',' + car.r],
+      d = 520 + j * 260;
+    ground[car.r][car.c] = null;
+    s[j] = car;
+    car.dk = keyOf(car.c, car.r, j + 1);
+    sortDyn();
+    place(car, car.c, car.r, j + 1, d);
+    moves++;
+    await sleep(d);
+    car.dk = null;
+    sortDyn();
+  }
+  const topFree = (s) => {
+    let lo = s.findIndex((x) => x);
+    if (lo === -1) lo = s.length;
+    return lo - 1;
+  }; // highest slot reachable from below
+  function lock(b) {
+    busy = b;
+    [bRand, bPark, ...mBtns, ...lBtns].forEach((x) => (x.disabled = b));
+  }
+  async function deliver(car) {
+    lock(true);
+    moves = 0;
+    car.hl.setAttribute('display', '');
+    car.hl.marker.setAttribute('display', '');
+    const blockers = [];
+    const home = [car.c, car.r];
+    try {
+      if (car.l > 0) {
+        const j = car.l - 1;
+        if (j > 0)
+          say(
+            `Car <b>${car.id}</b> is on level ${car.l}. First the ${j} car${j > 1 ? 's' : ''} below it come down and move aside on the conveyors…`
+          );
+        else say(`Car <b>${car.id}</b> is on level 2. The stacker lowers it onto its conveyor…`);
+        for (let i = 0; i < j; i++) {
+          const b = await lower(home[0], home[1], i);
+          if (!b) throw 0;
+          if (!(await clearCell([home[1], home[0]], null))) throw 0;
+          blockers.push(b);
+        }
+        say(`Lowering car <b>${car.id}</b> onto the conveyor…`);
+        if (!(await lower(home[0], home[1], j))) throw 0;
+      }
+      say(`Car <b>${car.id}</b> is moving across the XY conveyors to the transfer cabin…`);
+      if (!(await moveTo(car, GATE))) throw 0;
+      ground[car.r][car.c] = null;
+      car.dk = keyOf(GC, R, 0);
+      sortDyn();
+      place(car, GC, R, 0, 650);
+      await sleep(650);
+      car.dk = null;
+      sortDyn();
+      await sleep(250);
+      say(
+        `Car <b>${car.id}</b> is ready in the <b>transfer cabin</b> after <b>${moves}</b> move${moves === 1 ? '' : 's'}.${blockers.length ? ' Now the moved cars go back into storage.' : ''}`
+      );
+      await sleep(1200);
+      car.g.style.opacity = '0';
+      await sleep(500);
+      car.g.remove();
+      cars = cars.filter((x) => x !== car);
+      items.splice(
+        items.findIndex((it) => it.node === car.g),
+        1
+      );
+      for (const b of blockers) {
+        const s = stacks[home[0] + ',' + home[1]];
+        const j = topFree(s);
+        if (j < 0) break;
+        if (!(await moveTo(b, [home[1], home[0]]))) throw 0;
+        await lift(b, j);
+      }
+      say(
+        `Done. Car <b>${car.id}</b> was delivered in <b>${moves}</b> move${moves === 1 ? '' : 's'}${blockers.length ? (blockers.length > 1 ? `, and the ${blockers.length} cars that made way are back in storage` : ', and the car that made way is back in storage') : ''}. Pick the next car.`
+      );
+    } catch {
+      say('This car is currently boxed in. Please select another car.');
+      car.hl.setAttribute('display', 'none');
+      car.hl.marker.setAttribute('display', 'none');
+    }
+    lock(false);
+  }
+  async function park() {
+    const freeN = ground.flat().filter((x) => !x).length;
+    if (freeN < 4) {
+      say('The transport level needs a few free conveyors to operate. Please deliver a car first.');
+      return;
+    }
+    lock(true);
+    moves = 0;
+    if (!(await clearCell(GATE, null))) {
+      lock(false);
+      return;
+    }
+    const car = makeCar(GC, R, 0);
+    car.g.style.opacity = '0';
+    sortDyn();
+    await sleep(40);
+    car.g.style.opacity = '1';
+    await sleep(450);
+    ground[GATE[0]][GATE[1]] = car;
+    car.dk = keyOf(GC, R, 0);
+    sortDyn();
+    place(car, GC, GATE[0], 0, 650);
+    await sleep(650);
+    car.dk = null;
+    sortDyn();
+    const opts = shuffle(Object.entries(stacks).filter(([, s]) => topFree(s) >= 0));
+    if (opts.length) {
+      const [k, s] = opts[0];
+      const [c, r] = k.split(',').map(Number);
+      say(`New car <b>${car.id}</b> is going to the stacker at its storage place…`);
+      if (await moveTo(car, [r, c])) {
+        await lift(car, topFree(s));
+        say(`Car <b>${car.id}</b> is parked on level ${car.l + 1}.`);
+      }
+    } else {
+      const p = bfs(GATE, ([r, c]) => !ground[r][c] && !(r === GATE[0] && c === GATE[1]));
+      if (p) await moveTo(car, p[p.length - 1]);
+      say(`Car <b>${car.id}</b> is parked on the transport level.`);
+    }
+    lock(false);
+  }
+  bRand.onclick = () => {
+    const pick = cars.filter((c) => c.r < R);
+    if (pick.length) deliver(pick[(Math.random() * pick.length) | 0]);
+  };
+  bPark.onclick = park;
+  function setUI() {
+    mBtns.forEach((b) => b.classList.toggle('on', +b.dataset.m === mode));
+    lBtns.forEach((b) => {
+      b.classList.toggle('on', +b.dataset.l === L);
+      b.style.opacity = mode === 0 ? 0.4 : 1;
+    });
+  }
+  mBtns.forEach(
+    (b) =>
+      (b.onclick = () => {
+        if (busy) return;
+        mode = +b.dataset.m;
+        setUI();
+        build();
+      })
+  );
+  lBtns.forEach(
+    (b) =>
+      (b.onclick = () => {
+        if (busy || mode === 0) return;
+        L = +b.dataset.l;
+        setUI();
+        build();
+      })
+  );
+  setUI();
+  build();
+</script>

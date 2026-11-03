@@ -1,0 +1,424 @@
+---
+// Overnight EV charging simulator plus a one-day comparison of a fixed
+// charging bay and TilePark.
+---
+
+<div class="dark tp-panel tp-demo">
+  <div><div class="tp-board" id="evBoard" aria-label="EV charging simulation"></div></div>
+  <div class="tp-demo-side">
+    <h3>Overnight charging simulator</h3>
+    <p>
+      Chargers sit along the top wall. When a car reaches its charge limit, the conveyors move it away and bring the
+      next EV in. Choose the number of chargers and the maximum charge per car.
+    </p>
+    <div class="tp-modes" id="evN" role="group" aria-label="Chargers">
+      <span class="tp-lbl">Chargers</span><button data-v="1">1</button><button data-v="2" class="on">2</button><button
+        data-v="3">3</button
+      ><button data-v="4">4</button>
+    </div>
+    <div class="tp-modes" id="evMax" role="group" aria-label="Max charge per car">
+      <span class="tp-lbl">Max per car</span><button data-v="10">10 kWh</button><button data-v="20" class="on"
+        >20 kWh</button
+      ><button data-v="30">30 kWh</button>
+    </div>
+    <div class="tp-btns">
+      <button class="btn-primary" id="evRun">Run the night</button><button class="btn" id="evReset">Reset</button>
+    </div>
+    <div class="tp-stats">
+      <div class="tp-stat"><div class="n" id="evClk">10:00 PM</div><div class="l">Time</div></div>
+      <div class="tp-stat"><div class="n" id="evServed">0</div><div class="l">EVs charged</div></div>
+      <div class="tp-stat"><div class="n" id="evKwh">0</div><div class="l">kWh delivered</div></div>
+    </div>
+    <div class="tp-status" id="evCalc" style="margin-top:1rem"></div>
+  </div>
+</div>
+
+<div class="dark tp-panel" style="margin-top:1.5rem">
+  <div class="tp-ev-head"><b>One charger, one working day</b><span id="evClock">8:00 AM</span></div>
+  <div class="tp-ev-row">
+    <div class="tp-ev-lbl">
+      <b>Fixed charging bay</b><span>Charger used 25% of the time; the full car blocks it</span>
+    </div>
+    <div class="tp-ev-track" id="evA"></div>
+    <div class="tp-ev-cnt"><b id="evCA">0</b><span>EVs charged</span></div>
+  </div>
+  <div class="tp-ev-row">
+    <div class="tp-ev-lbl"><b>TilePark</b><span>Charger used 100% of the time; charged cars are moved away</span></div>
+    <div class="tp-ev-track" id="evB"></div>
+    <div class="tp-ev-cnt hi"><b id="evCB">0</b><span>EVs charged</span></div>
+  </div>
+  <div class="tp-ev-axis"><span>8 AM</span><span>11 AM</span><span>2 PM</span><span>5 PM</span><span>8 PM</span></div>
+  <div class="tp-ev-leg">
+    <span><i class="c"></i>Charging</span><span><i class="b"></i>Fully charged, charger blocked</span><span
+      ><i class="f"></i>Charger free for the next car</span
+    >
+  </div>
+</div>
+
+<script>
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- demo scripts ported from plain JavaScript
+  // @ts-nocheck
+  // ---------- EV overnight charging simulator ----------
+  {
+    const COLS = 7,
+      ROWS = 4,
+      TR = ROWS + 1,
+      KW = 10,
+      NIGHT = 10;
+    const board = document.getElementById('evBoard');
+    if (board) {
+      board.style.aspectRatio = COLS + ' / ' + TR;
+      const LAYOUT = { 1: [3], 2: [1, 5], 3: [1, 3, 5], 4: [0, 2, 4, 6] };
+      const pct = (v, n) => (v * 100) / n + '%';
+      const place = (el, r, c) => {
+        el.style.left = pct(c, COLS);
+        el.style.top = pct(r + 1, TR);
+        el.style.width = pct(1, COLS);
+        el.style.height = pct(1, TR);
+      };
+      const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+      const carSvg = (c) =>
+        `<svg viewBox="0 0 40 70" aria-hidden="true"><rect x="3" y="2" width="34" height="66" rx="11" fill="${c}"/><rect x="7" y="14" width="26" height="13" rx="4" fill="#020617" opacity=".55"/><rect x="7" y="48" width="26" height="9" rx="3" fill="#020617" opacity=".45"/></svg>`;
+      const pal = ['#cbd5e1', '#94a3b8', '#e2e8f0', '#64748b', '#a5b4c3', '#d4dbe3', '#7b8a9c', '#b8c2ce'];
+      let N = 2,
+        MAX = 20,
+        grid,
+        cars,
+        chg,
+        t,
+        running = false,
+        moving = false,
+        served = 0,
+        kwh = 0,
+        gen = 0;
+      const $ = (id) => document.getElementById(id);
+      const calc = () => {
+        const per = Math.floor((KW * NIGHT) / MAX),
+          tot = per * N;
+        $('evCalc').innerHTML =
+          `Each charger delivers ${KW} kW × ${NIGHT} h = <b>${KW * NIGHT} kWh</b> per night. At up to ${MAX} kWh per car, that is <b>${per} cars per charger</b>, so <b>${tot} EVs</b> overnight with ${N} charger${N > 1 ? 's' : ''}. With fixed charging bays, each charger serves just one car per night: <b>${N}</b>.${tot > 26 ? ' <span style="color:#94a3b8">This example grid holds 26 cars, so the simulation stops once all of them are charged.</span>' : ''}`;
+      };
+      const build = () => {
+        gen++;
+        running = false;
+        moving = false;
+        t = 0;
+        served = 0;
+        kwh = 0;
+        board.innerHTML = '';
+        const band = document.createElement('div');
+        band.className = 'tp-wall-band';
+        band.style.height = pct(1, TR);
+        board.appendChild(band);
+        for (let r = 0; r < ROWS; r++)
+          for (let c = 0; c < COLS; c++) {
+            const d = document.createElement('div');
+            d.className = 'tp-cell';
+            place(d, r, c);
+            board.appendChild(d);
+          }
+        chg = LAYOUT[N].map((c) => {
+          const w = document.createElement('div');
+          w.className = 'tp-chg-wall';
+          w.style.left = pct(c, COLS);
+          w.style.top = '0';
+          w.style.width = pct(1, COLS);
+          w.style.height = pct(1, TR);
+          w.innerHTML = `<div class="tp-chg-box"><svg viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z" fill="currentColor"/></svg>${KW} kW</div>`;
+          board.appendChild(w);
+          return { c, box: w.firstChild };
+        });
+        grid = Array.from({ length: ROWS }, () => Array(COLS).fill(null));
+        cars = {};
+        const empt = new Set(['3,3', '2,1']);
+        let id = 1;
+        for (let r = 0; r < ROWS; r++)
+          for (let c = 0; c < COLS; c++) {
+            if (empt.has(r + ',' + c)) continue;
+            const el = document.createElement('div');
+            el.className = 'tp-car';
+            el.style.setProperty('--mv', '.18s');
+            el.innerHTML = `<div class="tile">${carSvg(pal[id % pal.length])}<span class="bolt">⚡</span><div class="batt"><i></i></div></div>`;
+            place(el, r, c);
+            board.appendChild(el);
+            cars[id] = { id, r, c, el, k: 0, done: false };
+            grid[r][c] = id;
+            id++;
+          }
+        update();
+        calc();
+      };
+      const inside = (r, c) => r >= 0 && r < ROWS && c >= 0 && c < COLS;
+      const nb = (r, c) =>
+        [
+          [r - 1, c],
+          [r + 1, c],
+          [r, c - 1],
+          [r, c + 1],
+        ].filter(([a, b]) => inside(a, b));
+      const charging = (r, c) => {
+        if (r !== 0) return false;
+        const ch = chg.find((x) => x.c === c);
+        if (!ch) return false;
+        const id = grid[0][c];
+        return id && !cars[id].done;
+      };
+      const bfs = (start, isGoal, avoid) => {
+        const K = (r, c) => r + ',' + c,
+          q = [start],
+          prev = new Map([[K(...start), null]]);
+        while (q.length) {
+          const cur = q.shift();
+          if (isGoal(cur)) {
+            const p = [];
+            let k = K(...cur);
+            while (k) {
+              p.unshift(k.split(',').map(Number));
+              k = prev.get(k);
+            }
+            return p;
+          }
+          for (const n of nb(...cur)) {
+            const k = K(...n);
+            if (prev.has(k) || (avoid && avoid(n))) continue;
+            prev.set(k, K(...cur));
+            q.push(n);
+          }
+        }
+        return null;
+      };
+      const slide = async (id, r, c, g) => {
+        const car = cars[id];
+        grid[car.r][car.c] = null;
+        grid[r][c] = id;
+        car.r = r;
+        car.c = c;
+        place(car.el, r, c);
+        await sleep(190);
+        if (g !== gen) throw 0;
+      };
+      const clearCell = async (to, protect, dest, g) => {
+        if (grid[to[0]][to[1]] === null) return true;
+        const block = (n) =>
+          (protect && n[0] === protect[0] && n[1] === protect[1]) ||
+          (charging(...n) && !(dest && n[0] === dest[0] && n[1] === dest[1]));
+        const p = bfs(to, ([r, c]) => grid[r][c] === null, block);
+        if (!p) return false;
+        for (let i = p.length - 1; i > 0; i--) {
+          const [fr, fc] = p[i - 1],
+            [tr, tc] = p[i];
+          await slide(grid[fr][fc], tr, tc, g);
+        }
+        return true;
+      };
+      const moveTo = async (id, dest, g) => {
+        const car = cars[id];
+        let guard = 0;
+        while (!(car.r === dest[0] && car.c === dest[1]) && guard++ < 40) {
+          const path = bfs(
+            [car.r, car.c],
+            ([r, c]) => r === dest[0] && c === dest[1],
+            (n) => charging(...n) && !(n[0] === dest[0] && n[1] === dest[1])
+          );
+          if (!path) return false;
+          let ok = false;
+          for (const nx of [path[1], ...nb(car.r, car.c)]) {
+            if (charging(...nx) && !(nx[0] === dest[0] && nx[1] === dest[1])) continue;
+            if (await clearCell(nx, [car.r, car.c], dest, g)) {
+              await slide(id, nx[0], nx[1], g);
+              ok = true;
+              break;
+            }
+          }
+          if (!ok) return false;
+        }
+        return true;
+      };
+      const service = async (g) => {
+        // fill any charger whose car is done or missing
+        for (const ch of chg) {
+          const cur = grid[0][ch.c];
+          if (cur && !cars[cur].done) continue;
+          const cand = Object.values(cars)
+            .filter((x) => !x.done && !x.skip && !(x.r === 0 && chg.some((k) => k.c === x.c)))
+            .sort((a, b) => Math.abs(a.r) + Math.abs(a.c - ch.c) - (Math.abs(b.r) + Math.abs(b.c - ch.c)));
+          if (!cand.length) continue;
+          moving = true;
+          try {
+            if (!(await moveTo(cand[0].id, [0, ch.c], g))) cand[0].skip = true;
+            else Object.values(cars).forEach((x) => (x.skip = false));
+          } catch {
+            return;
+          }
+          moving = false;
+        }
+      };
+      const update = () => {
+        const h = 22 + t;
+        const hh = Math.floor(h) % 24,
+          mm = Math.floor(((h % 1) * 60) / 15) * 15;
+        $('evClk').textContent =
+          `${((hh + 11) % 12) + 1}:${String(mm).padStart(2, '0')} ${hh >= 12 && hh < 24 ? 'PM' : 'AM'}`;
+        $('evServed').textContent = served;
+        $('evKwh').textContent = Math.round(kwh);
+        for (const x of Object.values(cars)) {
+          x.el.querySelector('.batt i').style.width = Math.min(100, (x.k / MAX) * 100) + '%';
+          x.el.classList.toggle('full', x.done);
+          x.el.classList.toggle('charging', !x.done && x.r === 0 && chg.some((k) => k.c === x.c));
+        }
+        chg.forEach((ch) => {
+          const id = grid[0][ch.c];
+          ch.box.classList.toggle('on', running && !!id && !cars[id].done);
+        });
+      };
+      let last = performance.now();
+      const loop = async (g) => {
+        last = performance.now();
+        while (running && g === gen && t < NIGHT) {
+          await new Promise((r) => requestAnimationFrame(r));
+          const now = performance.now(),
+            dt = Math.min(0.1, (now - last) / 1000);
+          last = now;
+          if (moving) continue;
+          const dh = dt * 0.28;
+          t = Math.min(NIGHT, t + dh);
+          for (const ch of chg) {
+            const id = grid[0][ch.c];
+            if (!id) continue;
+            const x = cars[id];
+            if (x.done) continue;
+            const add = Math.min(KW * dh, MAX - x.k);
+            x.k += add;
+            kwh += add;
+            if (x.k >= MAX - 0.05) {
+              x.k = MAX;
+              x.done = true;
+              served++;
+            }
+          }
+          update();
+          if (
+            t < NIGHT &&
+            chg.some((ch) => {
+              const id = grid[0][ch.c];
+              return !id || cars[id].done;
+            }) &&
+            Object.values(cars).some((x) => !x.done && !x.skip)
+          ) {
+            await service(g);
+            last = performance.now();
+            update();
+          }
+        }
+        if (g === gen) {
+          running = false;
+          update();
+          $('evRun').textContent = 'Run again';
+        }
+      };
+      $('evRun').onclick = () => {
+        if (t >= NIGHT || served) build();
+        running = true;
+        $('evRun').textContent = 'Running…';
+        const g = gen;
+        service(g).then(() => loop(g));
+      };
+      $('evReset').onclick = () => {
+        build();
+        $('evRun').textContent = 'Run the night';
+      };
+      const grp = (id, set) =>
+        document.querySelectorAll('#' + id + ' button').forEach(
+          (b) =>
+            (b.onclick = () => {
+              document.querySelectorAll('#' + id + ' button').forEach((x) => x.classList.toggle('on', x === b));
+              set(+b.dataset.v);
+              build();
+              $('evRun').textContent = 'Run the night';
+            })
+        );
+      grp('evN', (v) => (N = v));
+      grp('evMax', (v) => (MAX = v));
+      build();
+    }
+  }
+
+  // ---------- EV charger timeline: 8 AM to 8 PM, 3 h per charge ----------
+  {
+    const A = document.getElementById('evA'),
+      B = document.getElementById('evB');
+    if (A) {
+      const H = 12,
+        CH = 3;
+      const plan = {
+        A: [
+          ['c', 0, CH, 'Car 1'],
+          ['b', CH, H, 'Car 1 full, still plugged in'],
+        ],
+        B: [
+          ['c', 0, 3, 'Car 1'],
+          ['c', 3, 6, 'Car 2'],
+          ['c', 6, 9, 'Car 3'],
+          ['c', 9, 12, 'Car 4'],
+        ],
+      };
+      const mk = (track, segs) =>
+        segs.map(([k, a, b, t]) => {
+          const d = document.createElement('div');
+          d.className = 'tp-ev-seg ' + k;
+          d.style.left = (a / H) * 100 + '%';
+          d.dataset.a = a;
+          d.dataset.b = b;
+          d.textContent = t;
+          if (k === 'c' && track === B) d.style.marginLeft = a ? '2px' : '0';
+          track.appendChild(d);
+          return d;
+        });
+      const sa = mk(A, plan.A),
+        sb = mk(B, plan.B);
+      const clock = document.getElementById('evClock'),
+        ca = document.getElementById('evCA'),
+        cb = document.getElementById('evCB');
+      let t = 0,
+        vis = false;
+      new IntersectionObserver((e) => (vis = e[0].isIntersecting)).observe(A);
+      const fmt = (h) => {
+        const x = 8 + h,
+          hh = Math.floor(x),
+          mm = Math.floor(((x - hh) * 60) / 15) * 15;
+        const ap = hh >= 12 ? 'PM' : 'AM';
+        return `${((hh + 11) % 12) + 1}:${String(mm).padStart(2, '0')} ${ap}`;
+      };
+      const draw = () => {
+        for (const d of [...sa, ...sb]) {
+          const a = +d.dataset.a,
+            b = +d.dataset.b;
+          d.style.width = (Math.max(0, Math.min(t, b) - a) / H) * 100 + '%';
+        }
+        clock.textContent = fmt(Math.min(t, H));
+        ca.textContent = t >= CH ? 1 : 0;
+        cb.textContent = Math.min(4, Math.floor(t / 3 + 1e-9));
+      };
+      let last = performance.now(),
+        hold = 0;
+      const tick = (now) => {
+        const dt = (now - last) / 1000;
+        last = now;
+        if (vis && !document.hidden) {
+          if (t < H) {
+            t = Math.min(H, t + dt * 1.1);
+          } else {
+            hold += dt;
+            if (hold > 3.5) {
+              t = 0;
+              hold = 0;
+            }
+          }
+          draw();
+        }
+        requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }
+  }
+</script>

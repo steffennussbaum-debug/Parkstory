@@ -1,0 +1,61 @@
+---
+// Real footage of TilePark in Munich, with step captions synced to the video.
+---
+
+<figure class="tp-realvid">
+  <video
+    id="realVid"
+    src="/videos/realvid.mp4"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="auto"
+    aria-label="TilePark in operation: a car is parked and retrieved"></video>
+  <div class="tp-rv-tag">Real footage · TilePark in operation, Munich</div>
+  <div class="tp-rv-cap">
+    <span class="tp-rv-n" id="rvN">1</span><span id="rvT">Driving into the transfer cabin</span>
+  </div>
+  <div class="tp-rv-bar"><i id="rvBar"></i></div>
+</figure>
+
+<script>
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- demo scripts ported from plain JavaScript
+  // @ts-nocheck
+  const v = document.getElementById('realVid');
+  if (v) {
+    const steps = [
+      [0, 'Driving into the transfer cabin'],
+      [5, 'Confirming at the terminal'],
+      [8, 'The lift lowers the car onto the conveyors'],
+      [13, 'XY conveyors move the car'],
+      [16.5, 'On its way to the storage position'],
+      [20.5, 'Cars slide across the XY grid'],
+      [25.5, 'Ready in the transfer cabin'],
+    ];
+    const N = document.getElementById('rvN'),
+      T = document.getElementById('rvT'),
+      B = document.getElementById('rvBar');
+    let cur = -1;
+    const tick = () => {
+      const t = v.currentTime || 0;
+      let i = 0;
+      for (let k = 0; k < steps.length; k++) if (t >= steps[k][0]) i = k;
+      if (i !== cur) {
+        cur = i;
+        N.textContent = i + 1;
+        T.textContent = steps[i][1];
+      }
+      B.style.width = (t / (v.duration || 30)) * 100 + '%';
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+    new IntersectionObserver(
+      (es) => {
+        if (es[0].isIntersecting) v.play().catch(() => {});
+        else v.pause();
+      },
+      { threshold: 0.2 }
+    ).observe(v);
+  }
+</script>

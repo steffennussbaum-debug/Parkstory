@@ -1,0 +1,394 @@
+---
+// Interactive "sliding puzzle" demo: click a car and watch the others make way
+// as it travels to the transfer cabin.
+---
+
+<div class="dark tp-panel tp-demo">
+  <div>
+    <div
+      class="tp-board"
+      id="board"
+      aria-label="Animated TilePark grid. Click a car to deliver it to the transfer cabin."
+    >
+    </div>
+  </div>
+  <div class="tp-demo-side">
+    <h3>Try it: pick a car</h3>
+    <p>
+      Click any car in the grid or use the buttons below, and watch the other cars make way as your car travels to the
+      transfer cabin.
+    </p>
+    <div class="tp-btns">
+      <button class="btn-primary" id="bRetrieve">Retrieve a car</button>
+      <button class="btn" id="bPark">Park a car</button>
+      <button class="btn" id="bFault" title="Take one conveyor offline">Simulate conveyor fault</button>
+    </div>
+    <div class="tp-modes" id="emptyPick" role="group" aria-label="Empty spaces">
+      <span class="tp-lbl">Empty spaces</span>
+      <button data-e="1" class="on">1</button><button data-e="2">2</button><button data-e="3">3</button><button
+        data-e="4">4</button
+      >
+    </div>
+    <div class="tp-status" id="status" aria-live="polite">
+      Each square represents one TilePark conveyor. The highlighted square at the bottom is the transfer cabin, where
+      drivers drop off and collect their cars.
+    </div>
+    <div class="tp-stats">
+      <div class="tp-stat"><div class="n" id="sCars">–</div><div class="l">Cars parked</div></div>
+      <div class="tp-stat"><div class="n" id="sUse">–</div><div class="l">Floor used for cars</div></div>
+      <div class="tp-stat"><div class="n" id="sMoves">0</div><div class="l">Moves</div></div>
+    </div>
+    <div class="tp-legend">
+      <span><i style="background:#334155;border:1px solid #ffffff30"></i>Parked car</span>
+      <span><i style="background:var(--tp-accent)"></i>Requested car</span>
+      <span><i style="background:#f5a52450;border:1px solid var(--tp-warn)"></i>Conveyor offline</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- demo scripts ported from plain JavaScript
+  // @ts-nocheck
+  const COLS = 7,
+    ROWS = 4; // storage grid
+  const GC = 3; // column of the gate (bottom row) above the bay
+  const GATE = [ROWS - 1, GC];
+  const TOTAL_ROWS = ROWS + 1; // + street row with the bay
+  const board = document.getElementById('board');
+  const statusEl = document.getElementById('status');
+  const bR = document.getElementById('bRetrieve'),
+    bP = document.getElementById('bPark'),
+    bF = document.getElementById('bFault');
+  board.style.aspectRatio = COLS + ' / ' + TOTAL_ROWS;
+
+  let grid = [],
+    cars = {},
+    nextId = 1,
+    moves = 0,
+    busy = false,
+    fault = null,
+    cabin = null,
+    EMPTY = 1;
+  const EMPTY_SPOTS = ['3,' + GC, '0,5', '2,1', '1,4', '0,1', '2,6'];
+  const MV = 280;
+  const carSvg = (c) =>
+    `<svg viewBox="0 0 40 70" aria-hidden="true"><rect x="3" y="2" width="34" height="66" rx="11" fill="${c}"/><rect x="7" y="14" width="26" height="13" rx="4" fill="#020617" opacity=".55"/><rect x="7" y="48" width="26" height="9" rx="3" fill="#020617" opacity=".45"/><rect x="9" y="29" width="22" height="17" rx="3" fill="#fff" opacity=".12"/></svg>`;
+  const palette = ['#cbd5e1', '#94a3b8', '#e2e8f0', '#64748b', '#a5b4c3', '#d4dbe3', '#7b8a9c', '#b8c2ce'];
+
+  const pct = (v, n) => (v * 100) / n + '%';
+  function place(el, r, c) {
+    el.style.left = pct(c, COLS);
+    el.style.top = pct(r, TOTAL_ROWS);
+    el.style.width = pct(1, COLS);
+    el.style.height = pct(1, TOTAL_ROWS);
+  }
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+  function build() {
+    board.innerHTML = '';
+    for (let r = 0; r < TOTAL_ROWS; r++)
+      for (let c = 0; c < COLS; c++) {
+        const d = document.createElement('div');
+        d.className = 'tp-cell' + (r === ROWS ? (c === GC ? ' bay' : ' street') : '');
+        d.dataset.rc = r + ',' + c;
+        place(d, r, c);
+        board.appendChild(d);
+      }
+    const lbl = document.createElement('div');
+    lbl.className = 'tp-bay-label';
+    lbl.textContent = 'Cabin';
+    place(lbl, ROWS, GC);
+    board.appendChild(lbl);
+    grid = Array.from({ length: ROWS }, () => Array(COLS).fill(null));
+    cars = {};
+    nextId = 1;
+    cabin = null;
+    fault = null;
+    moves = 0;
+    bF.classList.remove('tp-on');
+    bF.textContent = 'Simulate conveyor fault';
+    const empties = new Set(EMPTY_SPOTS.slice(0, EMPTY));
+    for (let r = 0; r < ROWS; r++)
+      for (let c = 0; c < COLS; c++) {
+        if (!empties.has(r + ',' + c)) addCar(r, c);
+      }
+    update();
+  }
+  function addCar(r, c) {
+    const id = nextId++;
+    const el = document.createElement('div');
+    el.className = 'tp-car';
+    el.innerHTML = `<div class="tile">${carSvg(palette[id % palette.length])}<span class="id">${id}</span></div>`;
+    place(el, r, c);
+    el.addEventListener('click', () => {
+      if (busy) return;
+      if (cabin === id) park();
+      else retrieve(id);
+    });
+    board.appendChild(el);
+    cars[id] = { r, c, el };
+    if (r < ROWS) grid[r][c] = id;
+    return id;
+  }
+  function cellEl(r, c) {
+    return board.querySelector(`.tp-cell[data-rc="${r},${c}"]`);
+  }
+  const inside = (r, c) => r >= 0 && r < ROWS && c >= 0 && c < COLS;
+  const isFault = (r, c) => fault && fault[0] === r && fault[1] === c;
+  const nb = (r, c) =>
+    [
+      [r - 1, c],
+      [r + 1, c],
+      [r, c - 1],
+      [r, c + 1],
+    ].filter(([a, b]) => inside(a, b) && !isFault(a, b));
+  const key = (r, c) => r + ',' + c;
+
+  function bfs(start, isGoal, avoid) {
+    const q = [start],
+      prev = new Map([[key(...start), null]]);
+    while (q.length) {
+      const cur = q.shift();
+      if (isGoal(cur)) {
+        const p = [];
+        let k = key(...cur);
+        while (k) {
+          p.unshift(k.split(',').map(Number));
+          k = prev.get(k);
+        }
+        return p;
+      }
+      for (const n of nb(...cur)) {
+        const k = key(...n);
+        if (prev.has(k) || (avoid && avoid(n))) continue;
+        prev.set(k, key(...cur));
+        q.push(n);
+      }
+    }
+    return null;
+  }
+  async function slide(id, r, c) {
+    const car = cars[id];
+    grid[car.r][car.c] = null;
+    grid[r][c] = id;
+    car.r = r;
+    car.c = c;
+    car.el.classList.add('moving');
+    place(car.el, r, c);
+    moves++;
+    update();
+    await sleep(MV);
+    car.el.classList.remove('moving');
+  }
+  // bring an empty into cell `to`, never touching cell `protect`
+  async function clearCell(to, protect) {
+    if (grid[to[0]][to[1]] === null) return true;
+    const path = bfs(
+      to,
+      ([r, c]) => grid[r][c] === null,
+      (n) => protect && n[0] === protect[0] && n[1] === protect[1]
+    );
+    if (!path) return false;
+    for (let i = path.length - 1; i > 0; i--) {
+      const [fr, fc] = path[i - 1],
+        [tr, tc] = path[i];
+      await slide(grid[fr][fc], tr, tc);
+    }
+    return true;
+  }
+  // the car waiting in the transfer cabin goes back onto the grid (onto the gate tile)
+  async function returnCabin() {
+    if (cabin == null) return true;
+    const id = cabin,
+      car = cars[id];
+    if (!(await clearCell(GATE, null))) return false;
+    grid[GATE[0]][GATE[1]] = id;
+    car.r = GATE[0];
+    car.c = GATE[1];
+    car.el.classList.remove('target');
+    car.el.style.setProperty('--mv', '.4s');
+    place(car.el, GATE[0], GATE[1]);
+    moves++;
+    update();
+    await sleep(420);
+    car.el.style.removeProperty('--mv');
+    cabin = null;
+    return true;
+  }
+  async function retrieve(id) {
+    const car = cars[id];
+    if (!car || busy) return;
+    if (cabin === id) return park();
+    if (isFault(car.r, car.c)) {
+      say(
+        `Car <b>${id}</b> is on the offline conveyor and will be released as soon as the conveyor has been serviced. Every other car remains accessible.`
+      );
+      return;
+    }
+    lock(true);
+    moves = 0;
+    if (cabin != null) {
+      say(`First, car <b>${cabin}</b> goes back from the transfer cabin onto the grid…`);
+      if (!(await returnCabin())) {
+        say('No free conveyor to take the car back.');
+        lock(false);
+        return;
+      }
+    }
+    car.el.classList.add('target');
+    say(`Getting car <b>${id}</b>…`);
+    let guard = 0;
+    while (!(car.r === GATE[0] && car.c === GATE[1]) && guard++ < 60) {
+      const path = bfs([car.r, car.c], ([r, c]) => r === GATE[0] && c === GATE[1]);
+      if (!path) {
+        say('No path available.');
+        break;
+      }
+      let ok = false;
+      for (const next of [path[1], ...nb(car.r, car.c)]) {
+        // fall back to any neighbour if the shortest step is boxed in
+        if (await clearCell(next, [car.r, car.c])) {
+          await slide(id, next[0], next[1]);
+          ok = true;
+          break;
+        }
+      }
+      if (!ok) {
+        say('This layout is boxed in. Add another empty space.');
+        break;
+      }
+    }
+    // into the transfer cabin, where it waits for its driver
+    grid[car.r][car.c] = null;
+    car.r = ROWS;
+    car.c = GC;
+    cabin = id;
+    car.el.style.setProperty('--mv', '.45s');
+    place(car.el, ROWS, GC);
+    await sleep(500);
+    car.el.style.removeProperty('--mv');
+    say(
+      `Car <b>${id}</b> is waiting in the transfer cabin after <b>${moves}</b> moves. It returns to the grid when the next sequence starts. In a real garage, several conveyors move simultaneously, so retrieval is faster than in this demo.`
+    );
+    update();
+    lock(false);
+  }
+  async function park() {
+    if (busy) return;
+    let id;
+    if (cabin != null) {
+      lock(true);
+      moves = 0;
+      id = cabin;
+      say(`Car <b>${id}</b> moves from the transfer cabin onto the grid…`);
+      if (!(await returnCabin())) {
+        say('No free conveyor to take the car.');
+        lock(false);
+        return;
+      }
+    } else {
+      const empties = countEmpty();
+      if (empties < 2) {
+        say('The garage is full. Please retrieve a car first; one space always remains free.');
+        return;
+      }
+      lock(true);
+      moves = 0;
+      say('A car arrives in the transfer cabin…');
+      if (!(await clearCell(GATE, null))) {
+        say('Could not clear the gate.');
+        lock(false);
+        return;
+      }
+      id = addCar(ROWS, GC);
+      const el = cars[id].el;
+      el.style.opacity = '0';
+      el.style.top = pct(ROWS + 1, TOTAL_ROWS);
+      await sleep(30);
+      el.style.opacity = '1';
+      place(el, ROWS, GC);
+      await sleep(450);
+      cars[id].r = GATE[0];
+      cars[id].c = GATE[1];
+      grid[GATE[0]][GATE[1]] = id;
+      place(el, GATE[0], GATE[1]);
+      await sleep(MV);
+    }
+    // tuck it away so the gate is free again
+    const path = bfs(GATE, ([r, c]) => grid[r][c] === null);
+    if (path)
+      for (let i = path.length - 1; i > 0; i--) {
+        const [fr, fc] = path[i - 1],
+          [tr, tc] = path[i];
+        await slide(grid[fr][fc], tr, tc);
+      }
+    say(`Car <b>${id}</b> is parked, and the gate is clear for the next car.`);
+    update();
+    lock(false);
+  }
+  function toggleFault() {
+    if (busy) return;
+    if (fault) {
+      cellEl(...fault).classList.remove('fault');
+      const id = grid[fault[0]][fault[1]];
+      if (id) cars[id].el.classList.remove('stuck');
+      fault = null;
+      bF.classList.remove('tp-on');
+      bF.textContent = 'Simulate conveyor fault';
+      say('Conveyor is back online.');
+      return;
+    }
+    const opts = [];
+    for (let r = 0; r < ROWS; r++)
+      for (let c = 0; c < COLS; c++) {
+        if (!(r === GATE[0] && c === GATE[1]) && !(r === GATE[0] - 1 && c === GC)) opts.push([r, c]);
+      }
+    fault = opts[Math.floor(Math.random() * opts.length)];
+    cellEl(...fault).classList.add('fault');
+    const id = grid[fault[0]][fault[1]];
+    if (id) cars[id].el.classList.add('stuck');
+    bF.classList.add('tp-on');
+    bF.textContent = 'Repair conveyor';
+    say('One conveyor is now <b>offline</b> (amber). Retrieve a car and watch the system route around it.');
+  }
+  const countEmpty = () => {
+    let n = 0;
+    for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) if (grid[r][c] === null && !isFault(r, c)) n++;
+    return n;
+  };
+  function update() {
+    const n = Object.keys(cars).filter((id) => cars[id].r < ROWS).length;
+    document.getElementById('sCars').textContent = n;
+    document.getElementById('sUse').textContent = Math.round((n * 100) / (ROWS * COLS)) + '%';
+    document.getElementById('sMoves').textContent = moves;
+  }
+  function say(h) {
+    statusEl.innerHTML = h;
+  }
+  function lock(b) {
+    busy = b;
+    board.classList.toggle('busy', b);
+    bR.disabled = bP.disabled = bF.disabled = b;
+    document.querySelectorAll('#emptyPick button').forEach((x) => (x.disabled = b));
+  }
+  bR.onclick = () => {
+    const ids = Object.keys(cars)
+      .map(Number)
+      .filter((id) => id !== cabin && !isFault(cars[id].r, cars[id].c));
+    if (ids.length) retrieve(ids[Math.floor(Math.random() * ids.length)]);
+  };
+  const eBtns = [...document.querySelectorAll('#emptyPick button')];
+  eBtns.forEach(
+    (b) =>
+      (b.onclick = () => {
+        if (busy) return;
+        EMPTY = +b.dataset.e;
+        eBtns.forEach((x) => x.classList.toggle('on', x === b));
+        build();
+        say(`Grid reset with <b>${EMPTY}</b> empty space${EMPTY > 1 ? 's' : ''}. Pick a car.`);
+      })
+  );
+  bP.onclick = park;
+  bF.onclick = toggleFault;
+  build();
+</script>
