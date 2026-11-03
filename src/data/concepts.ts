@@ -222,3 +222,71 @@ export const decision = {
   secondaryHref: 'https://www.youtube.com/@parkstory2332',
   audience: ['Architects', 'Developers', 'Investors', 'Owners & operators'],
 };
+
+export const nature = {
+  eyebrow: 'Inspired by nature',
+  title: 'We asked the bees how to park.',
+  body: 'Bees have been solving our problem for millions of years: storing as much as possible in as little space as possible, and getting everywhere fast. Here are their five rules, and how TilePark follows each one.',
+  rules: [
+    {
+      q: 'Don’t waste a single cell.',
+      bees: 'A honeycomb stores the most in the least space. No other shape divides an area into equal cells with less wall, a fact proven mathematically in 1999.',
+      tp: 'Every position is a conveyor. No ramps, no driving lanes, no wasted floor.',
+    },
+    {
+      q: 'Take the shortest way.',
+      bees: 'Bees learn the shortest route between flowers, even when they found them in a different order.',
+      tp: 'For every request, the system calculates the fastest route for the grid’s current layout.',
+    },
+    {
+      q: 'Nobody is in charge.',
+      bees: 'A hive has no boss and no master plan. Thousands of bees follow simple rules, and order emerges on its own.',
+      tp: 'Each conveyor has its own controller and hands cars to its neighbours. No central computer.',
+    },
+    {
+      q: 'If a cell breaks, go around it.',
+      bees: 'Bees simply work around a damaged cell. The colony keeps going.',
+      tp: 'If a conveyor goes offline, the others route around it, and every car stays accessible.',
+    },
+    {
+      q: 'Keep getting better.',
+      bees: 'Bees refine their route with every flight and keep whatever is shorter.',
+      tp: 'Every sequence teaches the system which routes and positions work best.',
+    },
+  ],
+};
+
+export const ev = {
+  eyebrow: 'Integrated EV charging',
+  title: 'Every space can charge.',
+  titleAccent: 'Every charger keeps working.',
+  body: 'With fixed charging bays, a fully charged car blocks the charger until its driver returns. TilePark moves each EV to a charger, charges it to the level requested in the app, and then moves it away so the next vehicle can charge. Chargers never sit idle.',
+  features: [
+    {
+      k: 'Every pallet is EV-ready',
+      v: 'No dedicated charging bays and no wasted spaces. Park on the pallet, plug in your own cable at the Level 2 socket, and start charging from the app.',
+    },
+    {
+      k: 'Fewer chargers, higher utilisation',
+      v: 'Because chargers never sit blocked, a small number of charging points can serve every EV in the garage. Fewer chargers to buy, more revenue per charger.',
+    },
+    {
+      k: 'Metered and billed in the app',
+      v: 'Live kWh, stop at any time, and pay in the same app that manages your arrival and pickup. Automated re-parking means no idle fees.',
+    },
+    {
+      k: 'Smart load management',
+      v: 'Charging power is managed intelligently across the whole system, and capacity can grow with demand without rebuilding the garage.',
+    },
+  ],
+  driver: [
+    'No waiting for a free charging station',
+    'Automated re-parking after charging, so no idle fees',
+    'One seamless journey, from arrival to pickup, in one app',
+  ],
+  owner: [
+    'Fewer dedicated charging points needed',
+    'Expandable as demand grows',
+    'Intelligent load management across the whole system',
+  ],
+};

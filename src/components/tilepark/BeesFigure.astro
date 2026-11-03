@@ -23,6 +23,8 @@
   const rootStyle = getComputedStyle(document.documentElement);
   const ACC = rootStyle.getPropertyValue('--tp-accent-soft').trim() || '#93c5fd'; // highlight colour
   const ACC_STRONG = rootStyle.getPropertyValue('--tp-accent').trim() || '#0161ef';
+  const TILE = rootStyle.getPropertyValue('--tp-panel-2').trim() || '#1e293b'; // conveyor module
+  const CAR_BASE = rootStyle.getPropertyValue('--cx-tile').trim() || '#334155'; // pallet under a car
   const svg = document.getElementById('bioSvg'),
     NS = 'http://www.w3.org/2000/svg';
   let P = svg;
@@ -350,7 +352,7 @@
         width: S - 4,
         height: S - 4,
         rx: 6,
-        fill: f ? '#f5a52422' : '#1e293b',
+        fill: f ? '#f5a52422' : TILE,
         stroke: f ? '#f5a524' : ex ? ACC : '#ffffff26',
         'stroke-width': f || ex ? 2 : 1,
         'stroke-dasharray': f ? '5 4' : '',
@@ -413,7 +415,7 @@
         g = el('g', {}, carLayer),
         base = el(
           'rect',
-          { x: -S / 2 + 7, y: -S / 2 + 7, width: S - 14, height: S - 14, rx: 5, fill: '#334155', stroke: '#ffffff24' },
+          { x: -S / 2 + 7, y: -S / 2 + 7, width: S - 14, height: S - 14, rx: 5, fill: CAR_BASE, stroke: '#ffffff24' },
           g
         );
       carIcon(g, ['#cbd5e1', '#94a3b8', '#e2e8f0', '#a5b4c3'][id % 4]);
@@ -492,7 +494,7 @@
       ttrail.setAttribute('d', '');
       seqLbl.textContent = `Sequence #${seq}: ${moves} moves, route calculated for this layout`;
       await sleep(1400);
-      k.base.setAttribute('fill', '#334155');
+      k.base.setAttribute('fill', CAR_BASE);
       k.base.setAttribute('stroke', '#ffffff24');
       await sleep(500);
     }
