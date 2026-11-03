@@ -58,12 +58,15 @@ const still = `<circle cx="110.0" cy="666.7" r="41.4" fill="#f5a524"/><circle cx
     color: var(--pk-ink, #fff);
     white-space: nowrap;
   }
+  /* The dotted P reads lighter than a solid letter, so it is set a little
+     taller than Outfit's cap height (0.7em) to read clearly as a capital,
+     level with the ascender of the "k". */
   .pk-P {
-    height: 0.706em;
-    width: 0.628em;
+    height: 0.78em;
+    width: 0.694em;
     flex: none;
     overflow: visible;
-    margin-right: -0.03em;
+    margin-right: -0.02em;
   }
   /* --- swarm animation (Parkstory artwork) --- */
   .pk--swarm .bs-solid {
