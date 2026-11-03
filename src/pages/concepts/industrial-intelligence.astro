@@ -9,7 +9,6 @@ import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import ConceptLayout from '~/layouts/ConceptLayout.astro';
 import TileField from '~/components/concepts/TileField.astro';
-import SectionDrawing from '~/components/concepts/SectionDrawing.astro';
 import DecadeTimeline from '~/components/concepts/DecadeTimeline.astro';
 import RealVideo from '~/components/tilepark/RealVideo.astro';
 import GridDemo from '~/components/tilepark/GridDemo.astro';
@@ -154,12 +153,8 @@ const stations = [
             }
           </tbody>
         </table>
-        <div class="cc-drawing" data-reveal>
-          <p class="cc-fig">FIG. 02 — SECTION COMPARISON</p>
-          <SectionDrawing />
-        </div>
         <div class="cc-timeline">
-          <p class="cc-fig">FIG. 03 — A DECISION MEASURED IN DECADES</p>
+          <p class="cc-fig">FIG. 02 — A DECISION MEASURED IN DECADES</p>
           <DecadeTimeline />
           <p class="cc-note">{question.timeline.note}</p>
         </div>
@@ -814,15 +809,6 @@ const stations = [
   .cc-table td:first-child .cc-code {
     display: inline-block;
     width: 3.2rem;
-  }
-  .cc-drawing {
-    margin-top: clamp(80px, 10vw, 150px);
-    --sd-ink: #141618;
-    --sd-muted: #6b6f73;
-    --sd-accent: #ff5b1f;
-    --sd-car: #8d9297;
-    --sd-fill: #141618;
-    --sd-font: var(--mono);
   }
   .cc-timeline {
     margin-top: clamp(80px, 10vw, 140px);

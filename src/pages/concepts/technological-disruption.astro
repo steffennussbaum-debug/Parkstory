@@ -10,7 +10,6 @@ import type { ImageMetadata } from 'astro';
 import ConceptLayout from '~/layouts/ConceptLayout.astro';
 import TileField from '~/components/concepts/TileField.astro';
 import ParkstoryMark from '~/components/concepts/ParkstoryMark.astro';
-import SectionDrawing from '~/components/concepts/SectionDrawing.astro';
 import DecadeTimeline from '~/components/concepts/DecadeTimeline.astro';
 import GridDemo from '~/components/tilepark/GridDemo.astro';
 import StackerDemo from '~/components/tilepark/StackerDemo.astro';
@@ -114,7 +113,6 @@ const ex = economics.example.rows;
             ))
           }
         </ol>
-        <div class="cb-drawing" data-reveal><SectionDrawing /></div>
         <div class="cb-timeline">
           <p class="cb-kicker">A decision measured in decades</p>
           <DecadeTimeline />
@@ -727,14 +725,6 @@ const ex = economics.example.rows;
     font-size: 1.15rem;
     margin-top: 0.4rem;
     max-width: 38ch;
-  }
-  .cb-drawing {
-    margin-top: clamp(96px, 12vw, 180px);
-    --sd-ink: #ffffff;
-    --sd-muted: #7f9d8e;
-    --sd-accent: #b8f03c;
-    --sd-car: #5a7668;
-    --sd-fill: #ffffff;
   }
   .cb-timeline {
     margin-top: clamp(96px, 12vw, 160px);
