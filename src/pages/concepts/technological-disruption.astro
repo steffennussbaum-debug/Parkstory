@@ -1,0 +1,1123 @@
+---
+/**
+ * Concept B — Technological Disruption.
+ * Bold, cinematic, high contrast. Black canvas, condensed display type, one
+ * signal colour (Parkstory lime). A new category announced with full-screen
+ * statements, a live TilePark field and scroll-driven motion.
+ */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import ConceptLayout from '~/layouts/ConceptLayout.astro';
+import TileField from '~/components/concepts/TileField.astro';
+import SectionDrawing from '~/components/concepts/SectionDrawing.astro';
+import DecadeTimeline from '~/components/concepts/DecadeTimeline.astro';
+import GridDemo from '~/components/tilepark/GridDemo.astro';
+import StackerDemo from '~/components/tilepark/StackerDemo.astro';
+import EvDemo from '~/components/tilepark/EvDemo.astro';
+import { shift, question, breakthrough, economics, next, heritage, decision } from '~/data/concepts';
+
+import drives from '~/assets/images/tilepark/gastonia-drive-assembly.webp';
+import welding from '~/assets/images/tilepark/kehl-welding.webp';
+import cnc from '~/assets/images/tilepark/gastonia-cnc.webp';
+import bending from '~/assets/images/tilepark/kehl-bending.webp';
+
+import '@fontsource-variable/archivo/wdth.css';
+import '~/assets/styles/tilepark.css';
+import '~/assets/styles/concept-demos.css';
+
+const questionWords = question.title.split(' ');
+const constraintWord: Record<string, string> = {
+  'Building design': 'Design',
+  Space: 'Space',
+  Flexibility: 'Change',
+  Operations: 'Uptime',
+};
+const ex = economics.example.rows;
+---
+
+<ConceptLayout
+  title="Parkstory — Concept B · Technological Disruption"
+  description={shift.lead}
+  bodyClass="cb"
+  current="technological-disruption"
+>
+  <header class="cb-nav">
+    <a href="#top" class="cb-mark">Parkstory</a>
+    <p>TilePark · A new architecture for automated parking</p>
+    <a href="#decision" class="cb-nav-cta">Briefing</a>
+  </header>
+
+  <main id="top">
+    <!-- 01 THE SHIFT -->
+    <section class="cb-hero" id="shift">
+      <div class="cb-field" aria-hidden="true">
+        <div class="cb-field-plane"><TileField cell={58} density={0.84} rate={9} accentShare={0.16} /></div>
+      </div>
+      <div class="cb-hero-shade" aria-hidden="true"></div>
+      <div class="cb-wrap cb-hero-in">
+        <p class="cb-kicker cb-rise">{shift.eyebrow}</p>
+        <h1 class="cb-rise" style="--d:.1s">
+          <span>Tomorrow’s infrastructure</span>
+          <span>cannot run on</span>
+          <span><span class="cb-outline">yesterday’s</span> technology.</span>
+        </h1>
+        <div class="cb-hero-foot cb-rise" style="--d:.3s">
+          <p class="cb-lead">{shift.lead}</p>
+          <a href="#question" class="cb-scroll">Scroll<i></i></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="cb-points">
+      <div class="cb-wrap">
+        <p class="cb-intro" data-reveal>{shift.intro}</p>
+        <ol>
+          {
+            shift.points.map((p, i) => (
+              <li data-reveal style={`--reveal-delay:${0.1 * i}s`}>
+                <span>{p.n}</span>
+                <p>{p.text}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <!-- 02 THE QUESTION -->
+    <section class="cb-question" id="question">
+      <div class="cb-sticky">
+        <div class="cb-wrap">
+          <p class="cb-kicker">02 / {question.eyebrow}</p>
+          <h2 class="cb-q" data-words>
+            {questionWords.map((w) => <span>{w} </span>)}
+          </h2>
+        </div>
+      </div>
+    </section>
+
+    <section class="cb-sec cb-tight">
+      <div class="cb-wrap">
+        <p class="cb-body" data-reveal>{question.body}</p>
+        <ol class="cb-rows">
+          {
+            question.constraints.map((c) => (
+              <li data-reveal>
+                <b>{constraintWord[c.k] ?? c.k}</b>
+                <div>
+                  <span>{c.k}</span>
+                  <p>{c.v}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+        <div class="cb-drawing" data-reveal><SectionDrawing /></div>
+        <div class="cb-timeline">
+          <p class="cb-kicker">A decision measured in decades</p>
+          <DecadeTimeline />
+          <p class="cb-note">{question.timeline.note}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 THE BREAKTHROUGH -->
+    <section class="cb-cinema" id="breakthrough">
+      <video src="/videos/realvid.mp4" autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>
+      <div class="cb-cinema-shade" aria-hidden="true"></div>
+      <div class="cb-wrap cb-cinema-in">
+        <p class="cb-kicker" data-reveal>03 / {breakthrough.eyebrow}</p>
+        <h2 class="cb-h2" data-reveal>
+          Not a better machine.<br /><span class="cb-lime">A different architecture.</span>
+        </h2>
+        <p class="cb-tag">Real footage · TilePark in operation, Munich</p>
+      </div>
+    </section>
+
+    <section class="cb-sec">
+      <div class="cb-wrap">
+        <p class="cb-body" data-reveal>{breakthrough.body}</p>
+        <ol class="cb-principles">
+          {
+            breakthrough.principles.map((p, i) => (
+              <li data-reveal style={`--reveal-delay:${0.08 * i}s`}>
+                <span>{p.n}</span>
+                <h3>{p.k}</h3>
+                <p>{p.v}</p>
+              </li>
+            ))
+          }
+        </ol>
+        <div class="cx-demos"><GridDemo /></div>
+        <p class="cb-note">{breakthrough.patent}</p>
+      </div>
+    </section>
+
+    <!-- 04 THE ECONOMICS OF CHANGE -->
+    <section class="cb-sec cb-econ" id="economics">
+      <div class="cb-wrap">
+        <p class="cb-kicker" data-reveal>04 / {economics.eyebrow}</p>
+        <h2 class="cb-h2" data-reveal>{economics.title}</h2>
+
+        <div class="cb-big" data-reveal>
+          <p class="cb-big-cap">Same grid. Same 297 m². {economics.example.caption}</p>
+          <div class="cb-big-row">
+            {
+              ex.map((r, i) => (
+                <div class:list={['cb-big-cell', { hi: i === ex.length - 1 }]}>
+                  <b>{r.cars}</b>
+                  <span>cars</span>
+                  <p>{r.config}</p>
+                  <em>{r.perCar} per car</em>
+                </div>
+              ))
+            }
+          </div>
+          <details class="cb-assume">
+            <summary>Assumptions behind these numbers</summary>
+            <ol>{economics.example.assumptions.map((a) => <li>{a}</li>)}</ol>
+          </details>
+        </div>
+
+        <ul class="cb-levers">
+          {
+            economics.levers.map((l, i) => (
+              <li data-reveal style={`--reveal-delay:${0.05 * i}s`}>
+                <h3>{l.k}</h3>
+                <p>{l.v}</p>
+              </li>
+            ))
+          }
+        </ul>
+        <div class="cx-demos"><StackerDemo /></div>
+      </div>
+    </section>
+
+    <!-- 05 BUILT FOR WHAT COMES NEXT -->
+    <section class="cb-sec" id="next">
+      <div class="cb-wrap">
+        <p class="cb-kicker" data-reveal>05 / {next.eyebrow}</p>
+        <h2 class="cb-h2" data-reveal>{next.title}</h2>
+        <p class="cb-body" data-reveal>{next.body}</p>
+        <div class="cb-lanes">
+          {
+            [
+              ['Today', next.today, 'today'],
+              ['In development', next.developing, 'dev'],
+              ['Future direction', next.future, 'future'],
+            ].map(([label, items, cls], i) => (
+              <div class:list={['cb-lane', `is-${cls}`]} data-reveal style={`--reveal-delay:${0.1 * i}s`}>
+                <p class="cb-badge">{label as string}</p>
+                {(items as { k: string; v: string }[]).map((it) => (
+                  <div class="cb-lane-item">
+                    <h3>{it.k}</h3>
+                    <p>{it.v}</p>
+                  </div>
+                ))}
+              </div>
+            ))
+          }
+        </div>
+        <div class="cx-demos cb-ev"><EvDemo /></div>
+      </div>
+    </section>
+
+    <!-- 06 ENGINEERING HERITAGE -->
+    <section class="cb-sec cb-heritage" id="heritage">
+      <div class="cb-wrap">
+        <p class="cb-kicker" data-reveal>06 / {heritage.eyebrow}</p>
+        <h2 class="cb-h2" data-reveal>
+          We design what we build.<br /><span class="cb-lime">We build what we develop.</span>
+        </h2>
+        <div class="cb-collage">
+          {
+            [
+              [drives, 'TilePark conveyor drive assembly, Gastonia', 'big'],
+              [welding, 'Robotic welding, Kehl', ''],
+              [bending, 'CNC bending, Kehl', ''],
+              [cnc, 'CNC machining, Gastonia', ''],
+            ].map(([img, cap, cls], i) => (
+              <figure class={cls as string} data-reveal style={`--reveal-delay:${0.08 * i}s`}>
+                <Image
+                  src={img as ImageMetadata}
+                  alt={cap as string}
+                  widths={[500, 900]}
+                  sizes="(max-width: 760px) 100vw, 50vw"
+                />
+                <figcaption>{cap as string}</figcaption>
+              </figure>
+            ))
+          }
+        </div>
+        <div class="cb-her-copy">
+          {heritage.body.map((b) => <p data-reveal>{b}</p>)}
+        </div>
+        <dl class="cb-facts">
+          {
+            heritage.facts.map((f, i) => (
+              <div data-reveal style={`--reveal-delay:${0.05 * i}s`}>
+                <dt>{f.k}</dt>
+                <dd>{f.v}</dd>
+              </div>
+            ))
+          }
+        </dl>
+        <p class="cb-flow" data-reveal>
+          {
+            heritage.flow.map((s, i) => (
+              <span>
+                {s}
+                {i < heritage.flow.length - 1 && <i>→</i>}
+              </span>
+            ))
+          }
+        </p>
+      </div>
+    </section>
+
+    <!-- 07 THE DECISION -->
+    <section class="cb-decision" id="decision">
+      <div class="cb-wrap">
+        <p class="cb-kicker">07 / The decision</p>
+        <h2 data-reveal>{decision.title}</h2>
+        <div class="cb-decision-row">
+          <p data-reveal>{decision.body}</p>
+          <div class="cb-ctas" data-reveal>
+            <a href={decision.ctaHref} class="cb-btn">{decision.cta}</a>
+            <a href={decision.secondaryHref} target="_blank" rel="noopener" class="cb-btn cb-btn--ghost"
+              >{decision.secondary}</a
+            >
+          </div>
+        </div>
+        <p class="cb-aud">For {decision.audience.join(' · ')}</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="cb-foot">
+    <div class="cb-wrap">
+      <span class="cb-mark">Parkstory</span>
+      <p>Designed, programmed and built by Parkstory in Kehl, Germany, and Gastonia, USA.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll-driven word highlight for the central question.
+    const q = document.querySelector<HTMLElement>('[data-words]');
+    const sec = document.querySelector<HTMLElement>('.cb-question');
+    if (q && sec) {
+      const words = [...q.querySelectorAll('span')];
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const update = () => {
+        const r = sec.getBoundingClientRect();
+        const total = r.height - innerHeight;
+        const p = reduce ? 1 : Math.min(1, Math.max(0, -r.top / Math.max(1, total * 0.8)));
+        const n = Math.round(p * words.length);
+        words.forEach((w, i) => w.classList.toggle('lit', i < n));
+      };
+      update();
+      addEventListener('scroll', update, { passive: true });
+      addEventListener('resize', update);
+    }
+  </script>
+</ConceptLayout>
+
+<style is:global>
+  html:root {
+    --black: #050505;
+    --ink-2: #0e0e0e;
+    --line: #232323;
+    --white: #f4f4f1;
+    --grey: #8b8b88;
+    --lime: #b8f03c;
+    --cond: 'Archivo Variable', 'Arial Narrow', sans-serif;
+    /* demo theme */
+    --tp-accent: #b8f03c;
+    --tp-accent-soft: #b8f03c;
+    --tp-accent-wash: rgb(184 240 60 / 15%);
+    --tp-panel: #0c0c0c;
+    --tp-panel-2: #161616;
+    --tp-board: #000;
+    --tp-line: rgb(255 255 255 / 8%);
+    --tp-line-2: rgb(255 255 255 / 18%);
+    --tp-text-dim: #8b8b88;
+    --tp-text-soft: #c9c9c4;
+    --cx-radius: 0;
+    --cx-radius-sm: 0;
+    --cx-btn-radius: 0;
+    --cx-btn-bg: #b8f03c;
+    --cx-btn-fg: #050505;
+    --cx-font: var(--cond);
+    --cx-font-display: var(--cond);
+    --cx-font-mono: var(--cond);
+    --cx-tile: #2c2c2a;
+  }
+  .cb {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--cond);
+    font-stretch: 100%;
+    font-size: 17px;
+    line-height: 1.55;
+  }
+  .cb ::selection {
+    background: var(--lime);
+    color: var(--black);
+  }
+  .cb-wrap {
+    max-width: 1520px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 4vw, 64px);
+  }
+  .cb-lime {
+    color: var(--lime);
+  }
+  .cb-kicker {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--grey);
+  }
+  .cb h1,
+  .cb-h2,
+  .cb-q,
+  .cb-decision h2,
+  .cb-rows b,
+  .cb-big-cell b,
+  .cb-principles span {
+    font-stretch: 68%;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+  }
+
+  /* nav */
+  .cb-nav {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 18px clamp(20px, 4vw, 64px);
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    background: linear-gradient(rgb(5 5 5 / 85%), transparent);
+  }
+  .cb-mark {
+    font-stretch: 125%;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+  .cb-nav p {
+    color: var(--grey);
+  }
+  .cb-nav-cta {
+    text-decoration: none;
+    border: 1px solid var(--white);
+    padding: 0.55rem 1rem;
+  }
+  .cb-nav-cta:hover {
+    background: var(--lime);
+    border-color: var(--lime);
+    color: var(--black);
+  }
+  @media (max-width: 760px) {
+    .cb-nav p {
+      display: none;
+    }
+  }
+
+  /* hero */
+  .cb-hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+  }
+  .cb-field {
+    position: absolute;
+    inset: 0;
+    perspective: 1100px;
+    perspective-origin: 50% 0%;
+  }
+  .cb-field-plane {
+    position: absolute;
+    left: -30%;
+    right: -30%;
+    top: 18%;
+    height: 140%;
+    transform: rotateX(58deg);
+    transform-origin: 50% 0%;
+    --tf-bg: #050505;
+    --tf-line: rgb(255 255 255 / 9%);
+    --tf-car: #3a3a38;
+    --tf-car-2: #252524;
+    --tf-glass: rgb(0 0 0 / 55%);
+    --tf-accent: #b8f03c;
+  }
+  .cb-hero-shade {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, #050505 0%, rgb(5 5 5 / 70%) 28%, rgb(5 5 5 / 15%) 55%, rgb(5 5 5 / 85%) 100%),
+      radial-gradient(80% 60% at 50% 70%, transparent, rgb(5 5 5 / 60%));
+  }
+  .cb-hero-in {
+    position: relative;
+    width: 100%;
+    padding-top: 120px;
+    padding-bottom: clamp(32px, 6vh, 64px);
+  }
+  .cb h1 {
+    font-size: clamp(3rem, min(8.6vw, 13.5vh), 11rem);
+    line-height: 0.86;
+    margin: 1.25rem 0 2.5rem;
+  }
+  .cb h1 > span {
+    display: block;
+  }
+  .cb-outline {
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--white);
+  }
+  .cb-hero-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 2rem;
+  }
+  .cb-lead {
+    font-size: clamp(1.15rem, 1.7vw, 1.5rem);
+    max-width: 36ch;
+    line-height: 1.35;
+    color: #d7d7d2;
+  }
+  .cb-scroll {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    font-size: 0.75rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--grey);
+  }
+  .cb-scroll i {
+    width: 1px;
+    height: 48px;
+    background: linear-gradient(var(--lime), transparent);
+    animation: cbDrop 2s ease-in-out infinite;
+  }
+  @keyframes cbDrop {
+    0% {
+      transform: scaleY(0);
+      transform-origin: top;
+    }
+    50% {
+      transform: scaleY(1);
+      transform-origin: top;
+    }
+    51% {
+      transform-origin: bottom;
+    }
+    100% {
+      transform: scaleY(0);
+      transform-origin: bottom;
+    }
+  }
+  .cb-rise {
+    animation: cbRise 1.2s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: var(--d, 0s);
+  }
+  @keyframes cbRise {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+  }
+
+  /* points */
+  .cb-points {
+    padding: clamp(80px, 10vw, 160px) 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .cb-intro {
+    font-size: clamp(1.4rem, 2.6vw, 2.4rem);
+    line-height: 1.2;
+    max-width: 34ch;
+    letter-spacing: -0.01em;
+  }
+  .cb-points ol {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: clamp(56px, 7vw, 112px);
+  }
+  .cb-points li {
+    border-top: 1px solid var(--line);
+    padding-top: 1.25rem;
+  }
+  .cb-points span {
+    color: var(--lime);
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+  }
+  .cb-points li p {
+    margin-top: 0.75rem;
+    font-size: 1.3rem;
+    line-height: 1.25;
+    max-width: 22ch;
+  }
+
+  /* question */
+  .cb-question {
+    height: 170vh;
+    position: relative;
+  }
+  .cb-sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+  }
+  .cb-q {
+    font-size: clamp(2.8rem, 8vw, 9rem);
+    line-height: 0.9;
+    margin-top: 1.5rem;
+    max-width: 16ch;
+  }
+  .cb-q span {
+    color: #262626;
+    transition: color 0.35s;
+  }
+  .cb-q span.lit {
+    color: var(--white);
+  }
+  .cb-q span.lit:nth-last-child(-n + 2) {
+    color: var(--lime);
+  }
+
+  /* generic sections */
+  .cb-sec {
+    padding: clamp(96px, 12vw, 200px) 0;
+  }
+  .cb-tight {
+    padding-top: 0;
+  }
+  .cb-h2 {
+    font-size: clamp(2.6rem, 7vw, 7.5rem);
+    line-height: 0.9;
+    margin-top: 1.25rem;
+    max-width: 16ch;
+  }
+  .cb-body {
+    font-size: clamp(1.15rem, 1.6vw, 1.45rem);
+    line-height: 1.4;
+    max-width: 46ch;
+    color: #d7d7d2;
+    margin-top: 2rem;
+  }
+  .cb-note {
+    margin-top: 1.5rem;
+    font-size: 0.82rem;
+    color: var(--grey);
+    max-width: 72ch;
+  }
+  .cb-rows {
+    margin-top: clamp(64px, 8vw, 120px);
+    border-top: 1px solid var(--line);
+  }
+  .cb-rows li {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 2rem;
+    align-items: center;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .cb-rows b {
+    font-size: clamp(3rem, 9vw, 8.5rem);
+    line-height: 0.85;
+    color: #1d1d1d;
+    -webkit-text-stroke: 1px #3a3a3a;
+    transition: color 0.4s;
+  }
+  .cb-rows li:hover b {
+    color: var(--lime);
+    -webkit-text-stroke-color: var(--lime);
+  }
+  .cb-rows span {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lime);
+  }
+  .cb-rows p {
+    font-size: 1.15rem;
+    margin-top: 0.4rem;
+    max-width: 38ch;
+  }
+  .cb-drawing {
+    margin-top: clamp(96px, 12vw, 180px);
+    --sd-ink: #f4f4f1;
+    --sd-muted: #7a7a77;
+    --sd-accent: #b8f03c;
+    --sd-car: #6a6a67;
+    --sd-fill: #f4f4f1;
+  }
+  .cb-timeline {
+    margin-top: clamp(96px, 12vw, 160px);
+    --dt-ink: #f4f4f1;
+    --dt-muted: #8b8b88;
+    --dt-line: #2a2a2a;
+    --dt-old: #5d5d5b;
+    --dt-accent: #b8f03c;
+  }
+  .cb-timeline .cb-kicker {
+    margin-bottom: 2.5rem;
+  }
+
+  /* cinema */
+  .cb-cinema {
+    position: relative;
+    height: 100svh;
+    min-height: 560px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+  }
+  .cb-cinema video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(1) contrast(1.15) brightness(0.75);
+  }
+  .cb-cinema-shade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, #050505 0%, transparent 30%, rgb(5 5 5 / 35%) 50%, #050505 100%);
+  }
+  .cb-cinema-in {
+    position: relative;
+    width: 100%;
+    padding-bottom: clamp(48px, 8vh, 96px);
+  }
+  .cb-tag {
+    margin-top: 2rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--grey);
+  }
+  .cb-principles {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    margin: clamp(64px, 8vw, 120px) 0;
+  }
+  .cb-principles li {
+    border-top: 2px solid var(--lime);
+    padding-top: 1.25rem;
+  }
+  .cb-principles span {
+    font-size: clamp(3.5rem, 6vw, 6rem);
+    line-height: 0.9;
+    color: var(--lime);
+  }
+  .cb-principles h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 1rem 0 0.5rem;
+    text-transform: uppercase;
+    font-stretch: 85%;
+  }
+  .cb-principles p {
+    color: #c9c9c4;
+    font-size: 0.98rem;
+  }
+
+  /* economics */
+  .cb-econ {
+    border-top: 1px solid var(--line);
+  }
+  .cb-big {
+    margin: clamp(64px, 8vw, 120px) 0;
+  }
+  .cb-big-cap {
+    font-size: 0.85rem;
+    color: var(--grey);
+    margin-bottom: 1.5rem;
+  }
+  .cb-big-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--line);
+  }
+  .cb-big-cell {
+    padding: 2rem 2rem 2rem 0;
+    border-right: 1px solid var(--line);
+  }
+  .cb-big-cell + .cb-big-cell {
+    padding-left: 2rem;
+  }
+  .cb-big-cell:last-child {
+    border-right: 0;
+  }
+  .cb-big-cell b {
+    display: block;
+    font-size: clamp(5rem, 13vw, 13rem);
+    line-height: 0.8;
+    color: #3a3a38;
+  }
+  .cb-big-cell.hi b {
+    color: var(--lime);
+  }
+  .cb-big-cell span {
+    font-size: 0.78rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--grey);
+  }
+  .cb-big-cell p {
+    margin-top: 1.25rem;
+    font-size: 1.05rem;
+  }
+  .cb-big-cell em {
+    font-style: normal;
+    color: var(--grey);
+    font-size: 0.9rem;
+  }
+  .cb-assume {
+    margin-top: 1.5rem;
+    border-top: 1px solid var(--line);
+    padding-top: 1rem;
+    font-size: 0.85rem;
+    color: var(--grey);
+  }
+  .cb-assume summary {
+    cursor: pointer;
+    color: var(--white);
+    letter-spacing: 0.08em;
+  }
+  .cb-assume ol {
+    list-style: decimal;
+    padding-left: 1.2rem;
+    margin-top: 0.75rem;
+    columns: 2;
+    column-gap: 3rem;
+  }
+  .cb-levers {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1.5rem;
+    margin-bottom: clamp(64px, 8vw, 120px);
+  }
+  .cb-levers li {
+    border-left: 1px solid var(--line);
+    padding-left: 1.25rem;
+  }
+  .cb-levers h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-stretch: 85%;
+    margin-bottom: 0.5rem;
+  }
+  .cb-levers p {
+    color: #c9c9c4;
+    font-size: 0.92rem;
+  }
+
+  /* next */
+  .cb-lanes {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: 2px;
+    margin: clamp(64px, 8vw, 120px) 0;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .cb-lane {
+    background: var(--black);
+    padding: 2rem;
+  }
+  .cb-badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.45rem 0.8rem;
+    margin-bottom: 1.5rem;
+  }
+  .is-today .cb-badge {
+    background: var(--lime);
+    color: var(--black);
+  }
+  .is-dev .cb-badge {
+    border: 1px solid var(--lime);
+    color: var(--lime);
+  }
+  .is-future .cb-badge {
+    border: 1px dashed var(--grey);
+    color: var(--grey);
+  }
+  .cb-lane-item + .cb-lane-item {
+    margin-top: 1.5rem;
+  }
+  .cb-lane-item h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+  .cb-lane-item p {
+    font-size: 0.92rem;
+    color: #c9c9c4;
+    margin-top: 0.3rem;
+  }
+  .is-future .cb-lane-item h3,
+  .is-future .cb-lane-item p {
+    color: var(--grey);
+  }
+
+  /* heritage */
+  .cb-heritage {
+    border-top: 1px solid var(--line);
+  }
+  .cb-collage {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 8px;
+    height: clamp(420px, 70vh, 820px);
+    margin: clamp(64px, 8vw, 120px) 0;
+  }
+  .cb-collage figure {
+    position: relative;
+    overflow: hidden;
+  }
+  .cb-collage .big {
+    grid-row: span 2;
+  }
+  .cb-collage figure:nth-child(4) {
+    grid-column: span 2;
+  }
+  .cb-collage img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(1) contrast(1.1);
+    transition:
+      filter 0.6s,
+      transform 1.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .cb-collage figure:hover img {
+    filter: grayscale(0);
+    transform: scale(1.03);
+  }
+  .cb-collage figcaption {
+    position: absolute;
+    left: 12px;
+    bottom: 10px;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    background: rgb(5 5 5 / 80%);
+    padding: 0.35rem 0.6rem;
+  }
+  .cb-her-copy {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    font-size: 1.2rem;
+    line-height: 1.45;
+    color: #d7d7d2;
+    max-width: 1100px;
+  }
+  .cb-facts {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1.5rem;
+    margin-top: clamp(56px, 7vw, 104px);
+  }
+  .cb-facts > div {
+    border-top: 1px solid var(--lime);
+    padding-top: 1rem;
+  }
+  .cb-facts dt {
+    font-weight: 700;
+    text-transform: uppercase;
+    font-stretch: 80%;
+    font-size: 1.1rem;
+  }
+  .cb-facts dd {
+    color: var(--grey);
+    font-size: 0.85rem;
+    margin-top: 0.4rem;
+  }
+  .cb-flow {
+    margin-top: clamp(56px, 7vw, 104px);
+    font-stretch: 68%;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: clamp(1.4rem, 3vw, 2.6rem);
+    line-height: 1.15;
+    color: #3d3d3b;
+  }
+  .cb-flow > span {
+    white-space: nowrap;
+  }
+  .cb-flow span:last-child {
+    color: var(--lime);
+  }
+  .cb-flow i {
+    font-style: normal;
+    margin: 0 0.4em;
+    color: #2a2a2a;
+  }
+
+  /* decision */
+  .cb-decision {
+    background: var(--lime);
+    color: var(--black);
+    padding: clamp(120px, 16vw, 240px) 0 clamp(100px, 12vw, 180px);
+  }
+  .cb-decision .cb-kicker {
+    color: rgb(5 5 5 / 60%);
+  }
+  .cb-decision h2 {
+    font-size: clamp(3rem, 8.6vw, 9.5rem);
+    line-height: 0.86;
+    margin-top: 1.5rem;
+    max-width: 15ch;
+  }
+  .cb-decision-row {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 3rem;
+    align-items: end;
+    margin-top: clamp(48px, 6vw, 96px);
+  }
+  .cb-decision-row p {
+    font-size: 1.25rem;
+    line-height: 1.4;
+    max-width: 44ch;
+  }
+  .cb-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: flex-end;
+  }
+  .cb-btn {
+    text-decoration: none;
+    background: var(--black);
+    color: var(--white);
+    padding: 1.1rem 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    transition: transform 0.2s;
+  }
+  .cb-btn:hover {
+    transform: translateY(-2px);
+  }
+  .cb-btn--ghost {
+    background: transparent;
+    color: var(--black);
+    border: 1.5px solid var(--black);
+  }
+  .cb-aud {
+    margin-top: 4rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .cb-foot {
+    padding: 2.5rem 0 6rem;
+    font-size: 0.85rem;
+    color: var(--grey);
+  }
+  .cb-foot .cb-wrap {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .cb-foot .cb-mark {
+    color: var(--white);
+  }
+  .cb-ev {
+    display: grid;
+    gap: 0;
+  }
+
+  /* responsive */
+  @media (max-width: 1100px) {
+    .cb-levers {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .cb-facts {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (max-width: 960px) {
+    .cb-principles {
+      grid-template-columns: 1fr 1fr;
+    }
+    .cb-lanes,
+    .cb-decision-row,
+    .cb-her-copy {
+      grid-template-columns: 1fr;
+    }
+    .cb-ctas {
+      justify-content: flex-start;
+    }
+  }
+  @media (max-width: 640px) {
+    .cb-points ol,
+    .cb-principles,
+    .cb-big-row,
+    .cb-levers,
+    .cb-facts {
+      grid-template-columns: 1fr;
+    }
+    .cb-big-cell,
+    .cb-big-cell + .cb-big-cell {
+      padding: 1.5rem 0;
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .cb-rows li {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+    .cb-collage {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 240px 160px 160px;
+      height: auto;
+    }
+    .cb-collage .big {
+      grid-row: auto;
+      grid-column: span 2;
+    }
+    .cb-assume ol {
+      columns: 1;
+    }
+    .cb-hero-foot {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

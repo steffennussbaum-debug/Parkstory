@@ -1,0 +1,108 @@
+---
+// Small floating bar to jump between the three design concepts and the
+// current site while comparing them. Only rendered on the concept pages.
+import { concepts } from '~/data/concepts';
+
+export interface Props {
+  current: string;
+  theme?: 'light' | 'dark';
+}
+const { current, theme = 'dark' } = Astro.props;
+---
+
+<nav class:list={['cs', `cs--${theme}`]} aria-label="Design concepts">
+  <a href="/concepts" class="cs-home" title="Compare all concepts">Concepts</a>
+  {
+    concepts.map((c) => (
+      <a href={`/concepts/${c.slug}`} class:list={['cs-link', { on: c.slug === current }]} title={c.name}>
+        <b>{c.letter}</b>
+        <span>{c.name}</span>
+      </a>
+    ))
+  }
+  <a href="/" class="cs-link" title="Current website"><span>Current site</span></a>
+</nav>
+
+<script>
+  // Hide the switcher inside the scaled previews on /concepts.
+  if (window.self !== window.top) document.querySelector('nav.cs')?.remove();
+</script>
+
+<style>
+  .cs {
+    position: fixed;
+    left: 50%;
+    bottom: 16px;
+    transform: translateX(-50%);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 4px;
+    border-radius: 999px;
+    font:
+      500 12px/1 ui-sans-serif,
+      system-ui,
+      -apple-system,
+      'Segoe UI',
+      sans-serif;
+    letter-spacing: 0.01em;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    max-width: calc(100vw - 24px);
+  }
+  .cs--dark {
+    background: rgb(20 20 20 / 82%);
+    color: #e8e8e8;
+    box-shadow: 0 10px 30px -10px rgb(0 0 0 / 50%);
+  }
+  .cs--light {
+    background: rgb(255 255 255 / 85%);
+    color: #222;
+    box-shadow:
+      0 0 0 1px rgb(0 0 0 / 8%),
+      0 10px 30px -12px rgb(0 0 0 / 25%);
+  }
+  a {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    white-space: nowrap;
+    opacity: 0.75;
+    transition:
+      opacity 0.2s,
+      background 0.2s;
+  }
+  a:hover {
+    opacity: 1;
+  }
+  .cs-home {
+    opacity: 0.55;
+    padding-right: 10px;
+  }
+  .cs-link.on {
+    opacity: 1;
+  }
+  .cs--dark .cs-link.on {
+    background: #fff;
+    color: #111;
+  }
+  .cs--light .cs-link.on {
+    background: #111;
+    color: #fff;
+  }
+  b {
+    font-weight: 700;
+  }
+  @media (max-width: 720px) {
+    .cs-link span {
+      display: none;
+    }
+    .cs-link:last-child span {
+      display: inline;
+    }
+  }
+</style>

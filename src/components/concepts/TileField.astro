@@ -1,0 +1,238 @@
+---
+/**
+ * Generative TilePark visualisation: a top-down grid of conveyors in which
+ * cars continuously slide into free positions, several at once, the way the
+ * real system moves. Colours come from CSS custom properties so each concept
+ * can theme it:
+ *   --tf-bg, --tf-line, --tf-car, --tf-car-2, --tf-glass, --tf-accent
+ * It pauses when off-screen and renders a still frame for reduced motion.
+ */
+export interface Props {
+  /** Target cell width in CSS px (cells are 1 : 2.2, like a car pallet). */
+  cell?: number;
+  /** Share of positions holding a car (0–1). */
+  density?: number;
+  /** Moves started per second. */
+  rate?: number;
+  /** Share of moving cars drawn in the accent colour. */
+  accentShare?: number;
+  class?: string;
+  label?: string;
+}
+const {
+  cell = 46,
+  density = 0.86,
+  rate = 5,
+  accentShare = 0.12,
+  class: cls = '',
+  label = 'Animated illustration of TilePark: cars slide across a grid of conveyors into free positions.',
+} = Astro.props;
+---
+
+<canvas
+  class:list={['tilefield', cls]}
+  data-tilefield
+  data-cell={cell}
+  data-density={density}
+  data-rate={rate}
+  data-accent={accentShare}
+  role="img"
+  aria-label={label}></canvas>
+
+<style>
+  .tilefield {
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<script>
+  type Car = { r: number; c: number; fr: number; fc: number; t: number; dur: number; accent: number; tone: number };
+
+  const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function setup(canvas: HTMLCanvasElement) {
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    const cellW0 = Number(canvas.dataset.cell) || 46;
+    const density = Number(canvas.dataset.density) || 0.86;
+    const rate = Number(canvas.dataset.rate) || 5;
+    const accentShare = Number(canvas.dataset.accent) || 0;
+
+    let W = 0,
+      H = 0,
+      cols = 0,
+      rows = 0,
+      cw = 0,
+      ch = 0,
+      ox = 0,
+      oy = 0;
+    let grid: (Car | null)[][] = [];
+    let cars: Car[] = [];
+    let colors = { bg: '#000', line: '#222', car: '#888', car2: '#666', glass: '#000', accent: '#fff' };
+    let visible = true;
+    let acc = 0;
+    let last = performance.now();
+
+    const readColors = () => {
+      const s = getComputedStyle(canvas);
+      const v = (n: string, d: string) => s.getPropertyValue(n).trim() || d;
+      colors = {
+        bg: v('--tf-bg', 'transparent'),
+        line: v('--tf-line', 'rgba(255,255,255,.08)'),
+        car: v('--tf-car', '#9aa0a6'),
+        car2: v('--tf-car-2', '#6b7176'),
+        glass: v('--tf-glass', 'rgba(0,0,0,.45)'),
+        accent: v('--tf-accent', '#ffffff'),
+      };
+    };
+
+    const build = () => {
+      // layout size, unaffected by CSS 3D transforms on ancestors
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      W = Math.max(1, canvas.clientWidth);
+      H = Math.max(1, canvas.clientHeight);
+      canvas.width = Math.round(W * dpr);
+      canvas.height = Math.round(H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      cols = Math.max(3, Math.ceil(W / cellW0) + 1);
+      cw = cellW0;
+      ch = cellW0 * 2.2;
+      rows = Math.max(2, Math.ceil(H / ch) + 1);
+      ox = (W - cols * cw) / 2;
+      oy = (H - rows * ch) / 2;
+      grid = Array.from({ length: rows }, () => Array(cols).fill(null));
+      cars = [];
+      for (let r = 0; r < rows; r++)
+        for (let c = 0; c < cols; c++) {
+          if (Math.random() < density) {
+            const car: Car = { r, c, fr: r, fc: c, t: 1, dur: 1, accent: 0, tone: Math.random() };
+            grid[r][c] = car;
+            cars.push(car);
+          }
+        }
+      readColors();
+      draw();
+    };
+
+    const startMove = () => {
+      // pick a free position and pull a neighbouring, resting car into it
+      for (let tries = 0; tries < 12; tries++) {
+        const r = (Math.random() * rows) | 0,
+          c = (Math.random() * cols) | 0;
+        if (grid[r][c]) continue;
+        const nbs = [
+          [r - 1, c],
+          [r + 1, c],
+          [r, c - 1],
+          [r, c + 1],
+        ].filter(([a, b]) => a >= 0 && a < rows && b >= 0 && b < cols && grid[a][b] && grid[a][b]!.t >= 1);
+        if (!nbs.length) continue;
+        const [a, b] = nbs[(Math.random() * nbs.length) | 0];
+        const car = grid[a][b]!;
+        grid[a][b] = null;
+        grid[r][c] = car;
+        car.fr = car.r;
+        car.fc = car.c;
+        car.r = r;
+        car.c = c;
+        car.t = 0;
+        car.dur = 0.55 + Math.random() * 0.35;
+        if (Math.random() < accentShare) car.accent = 1;
+        return;
+      }
+    };
+
+    const roundRect = (x: number, y: number, w: number, h: number, rad: number) => {
+      ctx.beginPath();
+      ctx.moveTo(x + rad, y);
+      ctx.arcTo(x + w, y, x + w, y + h, rad);
+      ctx.arcTo(x + w, y + h, x, y + h, rad);
+      ctx.arcTo(x, y + h, x, y, rad);
+      ctx.arcTo(x, y, x + w, y, rad);
+      ctx.closePath();
+    };
+
+    const draw = () => {
+      ctx.clearRect(0, 0, W, H);
+      if (colors.bg !== 'transparent') {
+        ctx.fillStyle = colors.bg;
+        ctx.fillRect(0, 0, W, H);
+      }
+      // conveyor outlines
+      ctx.strokeStyle = colors.line;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let c = 0; c <= cols; c++) {
+        const x = Math.round(ox + c * cw) + 0.5;
+        ctx.moveTo(x, oy);
+        ctx.lineTo(x, oy + rows * ch);
+      }
+      for (let r = 0; r <= rows; r++) {
+        const y = Math.round(oy + r * ch) + 0.5;
+        ctx.moveTo(ox, y);
+        ctx.lineTo(ox + cols * cw, y);
+      }
+      ctx.stroke();
+      // cars
+      const pw = cw * 0.62,
+        ph = ch * 0.78;
+      for (const car of cars) {
+        const k = ease(Math.min(1, car.t));
+        const r = car.fr + (car.r - car.fr) * k,
+          c = car.fc + (car.c - car.fc) * k;
+        const x = ox + c * cw + (cw - pw) / 2,
+          y = oy + r * ch + (ch - ph) / 2;
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = car.accent > 0.02 ? colors.accent : car.tone > 0.5 ? colors.car : colors.car2;
+        if (car.accent > 0.02 && car.accent < 1) {
+          // fade the accent out after the move
+          ctx.fillStyle = car.tone > 0.5 ? colors.car : colors.car2;
+          roundRect(x, y, pw, ph, pw * 0.3);
+          ctx.fill();
+          ctx.globalAlpha = car.accent;
+          ctx.fillStyle = colors.accent;
+        }
+        roundRect(x, y, pw, ph, pw * 0.3);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = colors.glass;
+        roundRect(x + pw * 0.14, y + ph * 0.2, pw * 0.72, ph * 0.18, pw * 0.1);
+        ctx.fill();
+        roundRect(x + pw * 0.16, y + ph * 0.7, pw * 0.68, ph * 0.1, pw * 0.08);
+        ctx.fill();
+      }
+    };
+
+    const tick = (now: number) => {
+      const dt = Math.min(0.05, (now - last) / 1000);
+      last = now;
+      if (visible && !document.hidden) {
+        acc += (dt * rate * (W * H)) / (1280 * 720);
+        while (acc >= 1) {
+          startMove();
+          acc -= 1;
+        }
+        for (const car of cars) {
+          if (car.t < 1) car.t = Math.min(1, car.t + dt / car.dur);
+          else if (car.accent > 0) car.accent = car.accent >= 1 ? 0.999 : Math.max(0, car.accent - dt * 0.5);
+        }
+        draw();
+      }
+      requestAnimationFrame(tick);
+    };
+
+    build();
+    new ResizeObserver(() => build()).observe(canvas);
+    new IntersectionObserver((es) => (visible = es[0].isIntersecting)).observe(canvas);
+    // re-read colours if the theme class changes
+    new MutationObserver(() => {
+      readColors();
+      draw();
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    if (!reduce) requestAnimationFrame(tick);
+  }
+
+  document.querySelectorAll<HTMLCanvasElement>('canvas[data-tilefield]').forEach(setup);
+</script>

@@ -1,0 +1,972 @@
+---
+/**
+ * Concept A — Architectural Future.
+ * Bright, restrained, elegant. Warm paper, ink, hairline rules and a single
+ * oxide accent. The building is the protagonist; technology is drawn like an
+ * architect's section rather than advertised.
+ */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import ConceptLayout from '~/layouts/ConceptLayout.astro';
+import SectionDrawing from '~/components/concepts/SectionDrawing.astro';
+import DecadeTimeline from '~/components/concepts/DecadeTimeline.astro';
+import RealVideo from '~/components/tilepark/RealVideo.astro';
+import GridDemo from '~/components/tilepark/GridDemo.astro';
+import StackerDemo from '~/components/tilepark/StackerDemo.astro';
+import { shift, question, breakthrough, economics, next, heritage, decision } from '~/data/concepts';
+
+import conveyors from '~/assets/images/tilepark/conveyors-installed.webp';
+import evCharging from '~/assets/images/tilepark/ev-charging.webp';
+import kehlPlant from '~/assets/images/tilepark/kehl-plant.webp';
+import welding from '~/assets/images/tilepark/kehl-welding.webp';
+import wheels from '~/assets/images/tilepark/gastonia-wheels.webp';
+import steel from '~/assets/images/tilepark/kehl-steel.webp';
+
+import '@fontsource-variable/inter-tight';
+import '@fontsource-variable/newsreader';
+import '@fontsource-variable/newsreader/wght-italic.css';
+import '~/assets/styles/tilepark.css';
+import '~/assets/styles/concept-demos.css';
+
+const nav = [
+  ['Technology', '#breakthrough'],
+  ['Economics', '#economics'],
+  ['Next', '#next'],
+  ['Heritage', '#heritage'],
+];
+---
+
+<ConceptLayout
+  title="Parkstory — Concept A · Architectural Future"
+  description={shift.lead}
+  bodyClass="ca"
+  current="architectural-future"
+  switcherTheme="light"
+>
+  <header class="ca-nav">
+    <a href="#top" class="ca-mark">Parkstory</a>
+    <nav aria-label="Sections">
+      {nav.map(([t, h]) => <a href={h}>{t}</a>)}
+      <a href="#decision" class="ca-nav-cta">Contact</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- 01 THE SHIFT -->
+    <section class="ca-hero" id="shift">
+      <div class="ca-wrap">
+        <p class="ca-eyebrow" data-reveal>{shift.eyebrow}</p>
+        <h1 data-reveal style="--reveal-delay:.08s">
+          Tomorrow’s infrastructure cannot run on <em>yesterday’s</em> technology.
+        </h1>
+        <div class="ca-hero-row">
+          <p class="ca-lead" data-reveal style="--reveal-delay:.18s">{shift.lead}</p>
+          <p class="ca-intro" data-reveal style="--reveal-delay:.26s">{shift.intro}</p>
+        </div>
+      </div>
+      <figure class="ca-hero-fig" data-reveal style="--reveal-delay:.3s;--reveal-y:0">
+        <Image
+          src={conveyors}
+          alt="TilePark conveyors with their drives, installed in an underground garage"
+          widths={[800]}
+          sizes="100vw"
+          loading="eager"
+          fetchpriority="high"
+        />
+        <figcaption><span>Fig. 01</span> TilePark conveyors installed in an underground garage</figcaption>
+      </figure>
+      <div class="ca-wrap">
+        <ol class="ca-points">
+          {
+            shift.points.map((p, i) => (
+              <li data-reveal style={`--reveal-delay:${0.08 * i}s`}>
+                <span>{p.n}</span>
+                <p>{p.text}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <!-- 02 THE QUESTION -->
+    <section class="ca-sec" id="question">
+      <div class="ca-wrap ca-split">
+        <p class="ca-label" data-reveal>02 — {question.eyebrow}</p>
+        <div>
+          <h2 class="ca-statement" data-reveal>{question.title}</h2>
+          <p class="ca-body" data-reveal>{question.body}</p>
+          <dl class="ca-defs">
+            {
+              question.constraints.map((c, i) => (
+                <div data-reveal style={`--reveal-delay:${0.06 * i}s`}>
+                  <dt>{c.k}</dt>
+                  <dd>{c.v}</dd>
+                </div>
+              ))
+            }
+          </dl>
+        </div>
+      </div>
+      <div class="ca-wrap ca-drawing" data-reveal>
+        <SectionDrawing />
+      </div>
+      <div class="ca-wrap ca-timeline">
+        <p class="ca-label">A decision measured in decades</p>
+        <DecadeTimeline />
+        <p class="ca-note">{question.timeline.note}</p>
+      </div>
+    </section>
+
+    <!-- 03 THE BREAKTHROUGH -->
+    <section class="ca-sec ca-ink" id="breakthrough">
+      <div class="ca-wrap ca-split">
+        <p class="ca-label" data-reveal>03 — {breakthrough.eyebrow}</p>
+        <div>
+          <h2 class="ca-h2" data-reveal>{breakthrough.title}</h2>
+          <p class="ca-body" data-reveal>{breakthrough.body}</p>
+        </div>
+      </div>
+      <div class="ca-wrap">
+        <ol class="ca-principles">
+          {
+            breakthrough.principles.map((p, i) => (
+              <li data-reveal style={`--reveal-delay:${0.08 * i}s`}>
+                <span class="ca-num">{p.n}</span>
+                <h3>{p.k}</h3>
+                <p>{p.v}</p>
+              </li>
+            ))
+          }
+        </ol>
+        <div class="cx-demos ca-demos">
+          <RealVideo />
+          <GridDemo />
+        </div>
+        <p class="ca-footnote">{breakthrough.patent}</p>
+      </div>
+    </section>
+
+    <!-- 04 THE ECONOMICS OF CHANGE -->
+    <section class="ca-sec" id="economics">
+      <div class="ca-wrap ca-split">
+        <p class="ca-label" data-reveal>04 — {economics.eyebrow}</p>
+        <div>
+          <h2 class="ca-h2" data-reveal>{economics.title}</h2>
+          <p class="ca-body" data-reveal>{economics.body}</p>
+          <dl class="ca-defs ca-defs--two">
+            {
+              economics.levers.map((l, i) => (
+                <div data-reveal style={`--reveal-delay:${0.05 * i}s`}>
+                  <dt>{l.k}</dt>
+                  <dd>{l.v}</dd>
+                </div>
+              ))
+            }
+          </dl>
+        </div>
+      </div>
+
+      <div class="ca-wrap ca-split">
+        <p class="ca-label">{economics.example.title}</p>
+        <div data-reveal>
+          <table class="ca-table">
+            <caption>{economics.example.caption}</caption>
+            <thead>
+              <tr><th>Configuration</th><th>Cars</th><th>Floor area per car</th><th>Clear height</th></tr>
+            </thead>
+            <tbody>
+              {
+                economics.example.rows.map((r) => (
+                  <tr>
+                    <td>{r.config}</td>
+                    <td>{r.cars}</td>
+                    <td>{r.perCar}</td>
+                    <td>{r.height}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+          <ol class="ca-assumptions">
+            {economics.example.assumptions.map((a) => <li>{a}</li>)}
+          </ol>
+        </div>
+      </div>
+      <div class="ca-wrap cx-demos ca-demos">
+        <StackerDemo />
+      </div>
+    </section>
+
+    <!-- 05 BUILT FOR WHAT COMES NEXT -->
+    <section class="ca-sec ca-sand" id="next">
+      <div class="ca-wrap ca-split">
+        <p class="ca-label" data-reveal>05 — {next.eyebrow}</p>
+        <div>
+          <h2 class="ca-h2" data-reveal>{next.title}</h2>
+          <p class="ca-body" data-reveal>{next.body}</p>
+        </div>
+      </div>
+      <div class="ca-wrap ca-next">
+        <figure class="ca-next-fig" data-reveal>
+          <Image
+            src={evCharging}
+            alt="Electric car charging on a TilePark pallet"
+            widths={[600, 900]}
+            sizes="(max-width: 900px) 100vw, 40vw"
+          />
+          <figcaption><span>Fig. 02</span> An EV charging on its pallet</figcaption>
+        </figure>
+        <div class="ca-status">
+          {
+            [
+              ['Available today', next.today, 'today'],
+              ['In development', next.developing, 'dev'],
+              ['Future direction', next.future, 'future'],
+            ].map(([label, items, cls]) => (
+              <div class:list={['ca-status-col', `is-${cls}`]} data-reveal>
+                <p class="ca-status-h">
+                  <i />
+                  {label as string}
+                </p>
+                <dl>
+                  {(items as { k: string; v: string }[]).map((it) => (
+                    <div>
+                      <dt>{it.k}</dt>
+                      <dd>{it.v}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 ENGINEERING HERITAGE -->
+    <section class="ca-sec" id="heritage">
+      <figure class="ca-wide" data-reveal style="--reveal-y:0">
+        <Image
+          src={kehlPlant}
+          alt="Aerial view of the Parkstory Manufacturing plant in Kehl"
+          widths={[800]}
+          sizes="100vw"
+        />
+        <figcaption><span>Fig. 03</span> Parkstory Manufacturing, Kehl</figcaption>
+      </figure>
+      <div class="ca-wrap ca-split">
+        <p class="ca-label" data-reveal>06 — {heritage.eyebrow}</p>
+        <div>
+          <h2 class="ca-statement" data-reveal>{heritage.title}</h2>
+          <div class="ca-cols">
+            {heritage.body.map((b) => <p data-reveal>{b}</p>)}
+          </div>
+          <dl class="ca-facts">
+            {
+              heritage.facts.map((f, i) => (
+                <div data-reveal style={`--reveal-delay:${0.05 * i}s`}>
+                  <dt>{f.k}</dt>
+                  <dd>{f.v}</dd>
+                </div>
+              ))
+            }
+          </dl>
+        </div>
+      </div>
+      <div class="ca-wrap">
+        <ol class="ca-flow" aria-label="From design to service">
+          {
+            heritage.flow.map((s, i) => (
+              <li data-reveal style={`--reveal-delay:${0.05 * i}s`}>
+                {s}
+              </li>
+            ))
+          }
+        </ol>
+        <div class="ca-strip">
+          {
+            [
+              [welding, 'Robotic welding, Kehl'],
+              [steel, 'Galvanised steel frames, Kehl'],
+              [wheels, 'Drive wheel units, Gastonia'],
+            ].map(([img, cap], i) => (
+              <figure data-reveal style={`--reveal-delay:${0.08 * i}s`}>
+                <Image
+                  src={img as ImageMetadata}
+                  alt={cap as string}
+                  widths={[400, 700]}
+                  sizes="(max-width: 760px) 100vw, 33vw"
+                />
+                <figcaption>{cap as string}</figcaption>
+              </figure>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- 07 THE DECISION -->
+    <section class="ca-decision" id="decision">
+      <div class="ca-wrap">
+        <p class="ca-label" data-reveal>07 — The decision</p>
+        <h2 data-reveal>
+          The most expensive parking system may be the one you <em>cannot adapt.</em>
+        </h2>
+        <div class="ca-decision-row">
+          <p class="ca-body" data-reveal>{decision.body}</p>
+          <div class="ca-ctas" data-reveal>
+            <a class="ca-btn" href={decision.ctaHref}>{decision.cta}<span aria-hidden="true">→</span></a>
+            <a class="ca-link" href={decision.secondaryHref} target="_blank" rel="noopener">{decision.secondary}</a>
+          </div>
+        </div>
+        <ul class="ca-audience">{decision.audience.map((a) => <li>{a}</li>)}</ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="ca-foot">
+    <div class="ca-wrap">
+      <span class="ca-mark">Parkstory</span>
+      <p>Designed, programmed and built by Parkstory in Kehl, Germany, and Gastonia, USA.</p>
+    </div>
+  </footer>
+</ConceptLayout>
+
+<style is:global>
+  html:root {
+    --paper: #f3f1ec;
+    --paper-2: #e9e5dc;
+    --ink: #121212;
+    --mid: #6b6862;
+    --rule: rgb(18 18 18 / 14%);
+    --oxide: #a8442b;
+    --display: 'Inter Tight Variable', 'Helvetica Neue', Arial, sans-serif;
+    --serif: 'Newsreader Variable', Georgia, serif;
+    /* demo theme */
+    --tp-accent: #a8442b;
+    --tp-accent-soft: #e3a58f;
+    --tp-accent-wash: rgb(168 68 43 / 20%);
+    --tp-panel: #161615;
+    --tp-panel-2: #22211f;
+    --tp-board: #0e0e0d;
+    --tp-line: rgb(255 255 255 / 8%);
+    --tp-line-2: rgb(255 255 255 / 18%);
+    --tp-text-dim: #9b968e;
+    --tp-text-soft: #d3cec5;
+    --cx-radius: 2px;
+    --cx-radius-sm: 2px;
+    --cx-btn-radius: 0;
+    --cx-btn-bg: #f3f1ec;
+    --cx-btn-fg: #121212;
+    --cx-font: var(--display);
+    --cx-font-display: var(--display);
+    --cx-font-mono: var(--display);
+    --cx-tile: #34322f;
+  }
+  .ca {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--display);
+    font-size: 17px;
+    line-height: 1.6;
+    font-weight: 400;
+  }
+  .ca ::selection {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .ca-wrap {
+    max-width: 1360px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 4vw, 56px);
+  }
+
+  /* nav */
+  .ca-nav {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 50;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px clamp(20px, 4vw, 56px);
+    mix-blend-mode: difference;
+    color: #fff;
+  }
+  .ca-mark {
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    font-size: 1.15rem;
+    text-decoration: none;
+  }
+  .ca-nav nav {
+    display: flex;
+    gap: clamp(14px, 2.4vw, 36px);
+    font-size: 0.85rem;
+  }
+  .ca-nav nav a {
+    text-decoration: none;
+    opacity: 0.85;
+  }
+  .ca-nav nav a:hover {
+    opacity: 1;
+  }
+  @media (max-width: 760px) {
+    .ca-nav nav a:not(.ca-nav-cta) {
+      display: none;
+    }
+  }
+
+  /* type */
+  .ca-eyebrow,
+  .ca-label {
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--mid);
+  }
+  .ca h1 {
+    font-weight: 300;
+    font-size: clamp(2.9rem, 7.4vw, 8rem);
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+    max-width: 14ch;
+    margin: 1.5rem 0 3rem;
+  }
+  .ca h1 em,
+  .ca-decision h2 em {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    color: var(--oxide);
+  }
+  .ca-statement {
+    font-family: var(--serif);
+    font-weight: 350;
+    font-size: clamp(2rem, 3.9vw, 3.6rem);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    max-width: 20ch;
+  }
+  .ca-h2 {
+    font-weight: 300;
+    font-size: clamp(2.2rem, 4.6vw, 4.4rem);
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+    max-width: 16ch;
+  }
+  .ca-body {
+    margin-top: 2rem;
+    max-width: 60ch;
+    font-size: 1.12rem;
+    color: #3a3835;
+  }
+  .ca-lead {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(1.35rem, 2vw, 1.8rem);
+    line-height: 1.3;
+    max-width: 30ch;
+  }
+  .ca-intro {
+    max-width: 52ch;
+    color: #3a3835;
+  }
+  .ca-note,
+  .ca-footnote {
+    font-size: 0.85rem;
+    color: var(--mid);
+    max-width: 70ch;
+    margin-top: 1.5rem;
+  }
+
+  /* hero */
+  .ca-hero {
+    padding-top: clamp(120px, 16vh, 180px);
+  }
+  .ca-hero-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(24px, 5vw, 96px);
+    align-items: end;
+    padding-bottom: clamp(48px, 7vw, 96px);
+  }
+  .ca-hero-fig {
+    position: relative;
+  }
+  .ca-hero-fig img {
+    width: 100%;
+    height: clamp(320px, 62vh, 760px);
+    object-fit: cover;
+    object-position: 50% 62%;
+    filter: saturate(0.55) contrast(1.04);
+  }
+  .ca figcaption {
+    font-size: 0.78rem;
+    color: var(--mid);
+    padding: 0.8rem clamp(20px, 4vw, 56px) 0;
+  }
+  .ca figcaption span {
+    color: var(--ink);
+    margin-right: 0.75rem;
+  }
+  .ca-points {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--rule);
+    margin-top: clamp(48px, 7vw, 96px);
+  }
+  .ca-points li {
+    padding: 1.75rem 2rem 0 0;
+    border-right: 1px solid var(--rule);
+    margin-right: 2rem;
+  }
+  .ca-points li:last-child {
+    border-right: 0;
+  }
+  .ca-points span {
+    font-size: 0.78rem;
+    color: var(--oxide);
+    letter-spacing: 0.1em;
+  }
+  .ca-points p {
+    font-size: 1.3rem;
+    line-height: 1.3;
+    letter-spacing: -0.015em;
+    margin-top: 0.75rem;
+    max-width: 22ch;
+  }
+
+  /* sections */
+  .ca-sec {
+    padding: clamp(96px, 13vw, 200px) 0;
+  }
+  .ca-split {
+    display: grid;
+    grid-template-columns: minmax(160px, 1fr) 3fr;
+    gap: clamp(24px, 4vw, 64px);
+  }
+  .ca-split + .ca-split {
+    margin-top: clamp(64px, 8vw, 120px);
+  }
+  .ca-split .ca-label {
+    padding-top: 0.6rem;
+    border-top: 1px solid var(--ink);
+    align-self: start;
+  }
+  .ca-defs {
+    margin-top: 3rem;
+    border-top: 1px solid var(--rule);
+  }
+  .ca-defs > div {
+    display: grid;
+    grid-template-columns: 14rem 1fr;
+    gap: 2rem;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .ca-defs dt {
+    font-weight: 500;
+  }
+  .ca-defs dd {
+    color: #3a3835;
+    max-width: 56ch;
+  }
+  .ca-drawing {
+    margin-top: clamp(80px, 10vw, 160px);
+    --sd-ink: var(--ink);
+    --sd-muted: var(--mid);
+    --sd-accent: var(--oxide);
+    --sd-car: var(--mid);
+    --sd-fill: var(--ink);
+  }
+  .ca-timeline {
+    margin-top: clamp(80px, 10vw, 140px);
+    --dt-ink: var(--ink);
+    --dt-muted: var(--mid);
+    --dt-line: var(--rule);
+    --dt-old: #9d9890;
+    --dt-accent: var(--oxide);
+  }
+  .ca-timeline .ca-label {
+    margin-bottom: 2.5rem;
+  }
+
+  /* ink section */
+  .ca-ink {
+    background: #121212;
+    color: #f3f1ec;
+  }
+  .ca-ink .ca-label {
+    color: #9b968e;
+    border-color: #f3f1ec !important;
+  }
+  .ca-ink .ca-body {
+    color: #cfcac2;
+  }
+  .ca-ink .ca-footnote {
+    color: #9b968e;
+  }
+  .ca-principles {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin: clamp(64px, 8vw, 120px) 0;
+    border-top: 1px solid rgb(255 255 255 / 18%);
+  }
+  .ca-principles li {
+    padding: 2rem 2rem 0 0;
+  }
+  .ca-num {
+    display: block;
+    font-weight: 200;
+    font-size: clamp(2.6rem, 4vw, 4rem);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--tp-accent-soft);
+  }
+  .ca-principles h3 {
+    font-weight: 500;
+    font-size: 1.15rem;
+    margin: 1.5rem 0 0.6rem;
+  }
+  .ca-principles p {
+    color: #cfcac2;
+    font-size: 0.98rem;
+    max-width: 34ch;
+  }
+  .ca-demos {
+    display: grid;
+    gap: 24px;
+  }
+  .ca-demos .tp-realvid {
+    margin: 0;
+  }
+
+  /* economics */
+  .ca-defs--two {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 3rem;
+    border-top: 0;
+  }
+  .ca-defs--two > div {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+    border-top: 1px solid var(--rule);
+    border-bottom: 0;
+  }
+  .ca-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+  }
+  .ca-table caption {
+    text-align: left;
+    font-size: 0.85rem;
+    color: var(--mid);
+    padding-bottom: 1.25rem;
+  }
+  .ca-table th {
+    text-align: left;
+    font-weight: 500;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mid);
+    border-bottom: 1px solid var(--ink);
+    padding: 0 1rem 0.75rem 0;
+  }
+  .ca-table td {
+    padding: 1.1rem 1rem 1.1rem 0;
+    border-bottom: 1px solid var(--rule);
+    font-size: 1.05rem;
+  }
+  .ca-table td:nth-child(2),
+  .ca-table td:nth-child(3) {
+    font-size: 1.6rem;
+    font-weight: 300;
+    letter-spacing: -0.03em;
+  }
+  .ca-assumptions {
+    margin-top: 1.5rem;
+    list-style: decimal;
+    padding-left: 1.2rem;
+    font-size: 0.82rem;
+    color: var(--mid);
+    columns: 2;
+    column-gap: 3rem;
+  }
+  .ca-assumptions li {
+    break-inside: avoid;
+    margin-bottom: 0.3rem;
+  }
+  #economics .ca-demos {
+    margin-top: clamp(64px, 8vw, 120px);
+  }
+
+  /* next */
+  .ca-sand {
+    background: var(--paper-2);
+  }
+  .ca-next {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: clamp(32px, 5vw, 80px);
+    margin-top: clamp(64px, 8vw, 120px);
+    align-items: start;
+  }
+  .ca-next-fig img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    filter: saturate(0.6);
+  }
+  .ca-next-fig figcaption {
+    padding-left: 0;
+  }
+  .ca-status {
+    display: grid;
+    gap: 3rem;
+  }
+  .ca-status-h {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--ink);
+  }
+  .ca-status-h i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+  }
+  .is-today .ca-status-h i {
+    background: var(--ink);
+  }
+  .is-dev .ca-status-h i {
+    border: 1px solid var(--ink);
+    background: linear-gradient(90deg, var(--ink) 50%, transparent 50%);
+  }
+  .is-future .ca-status-h i {
+    border: 1px solid var(--ink);
+  }
+  .ca-status dl > div {
+    display: grid;
+    grid-template-columns: 13rem 1fr;
+    gap: 1.5rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .ca-status dt {
+    font-weight: 500;
+  }
+  .ca-status dd {
+    color: #3a3835;
+    font-size: 0.98rem;
+  }
+  .is-future dd,
+  .is-future dt {
+    color: var(--mid);
+  }
+
+  /* heritage */
+  #heritage {
+    padding-top: 0;
+  }
+  .ca-wide img {
+    width: 100%;
+    height: clamp(300px, 70vh, 820px);
+    object-fit: cover;
+    object-position: 50% 55%;
+    filter: saturate(0.5);
+  }
+  #heritage .ca-split {
+    margin-top: clamp(80px, 10vw, 160px);
+  }
+  .ca-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+    margin-top: 2.5rem;
+    color: #3a3835;
+  }
+  .ca-facts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 4rem;
+    border-top: 1px solid var(--rule);
+  }
+  .ca-facts > div {
+    padding: 1.5rem 1.5rem 1.5rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .ca-facts dt {
+    font-size: 1.5rem;
+    font-weight: 300;
+    letter-spacing: -0.03em;
+  }
+  .ca-facts dd {
+    font-size: 0.92rem;
+    color: var(--mid);
+    margin-top: 0.4rem;
+    max-width: 30ch;
+  }
+  .ca-flow {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: clamp(64px, 8vw, 120px);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--ink);
+  }
+  .ca-flow li {
+    flex: 1 1 0;
+    min-width: 120px;
+    padding: 1rem 1rem 0 0;
+    counter-increment: flow;
+  }
+  .ca-flow li::before {
+    content: counter(flow, decimal-leading-zero);
+    display: block;
+    color: var(--oxide);
+    font-size: 0.72rem;
+    margin-bottom: 0.3rem;
+  }
+  .ca-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: clamp(48px, 6vw, 96px);
+  }
+  .ca-strip img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    filter: saturate(0.5);
+  }
+  .ca-strip figcaption {
+    padding-left: 0;
+  }
+
+  /* decision */
+  .ca-decision {
+    padding: clamp(120px, 16vw, 240px) 0;
+    border-top: 1px solid var(--rule);
+  }
+  .ca-decision h2 {
+    font-weight: 300;
+    font-size: clamp(2.6rem, 6.4vw, 7rem);
+    line-height: 1;
+    letter-spacing: -0.045em;
+    max-width: 15ch;
+    margin: 2rem 0 0;
+  }
+  .ca-decision-row {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 3rem;
+    align-items: end;
+  }
+  .ca-ctas {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+  .ca-btn {
+    display: inline-flex;
+    gap: 1.5rem;
+    align-items: center;
+    background: var(--ink);
+    color: var(--paper);
+    text-decoration: none;
+    padding: 1.1rem 1.6rem;
+    font-weight: 500;
+    transition: background 0.25s;
+  }
+  .ca-btn:hover {
+    background: var(--oxide);
+  }
+  .ca-link {
+    text-decoration: none;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 2px;
+  }
+  .ca-audience {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 2.5rem;
+    margin-top: 5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+    font-size: 0.85rem;
+    color: var(--mid);
+  }
+  .ca-foot {
+    background: var(--ink);
+    color: #bdb8b0;
+    padding: 3rem 0 6rem;
+    font-size: 0.85rem;
+  }
+  .ca-foot .ca-wrap {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  .ca-foot .ca-mark {
+    color: #fff;
+  }
+
+  /* responsive */
+  @media (max-width: 960px) {
+    .ca-hero-row,
+    .ca-split,
+    .ca-next,
+    .ca-decision-row,
+    .ca-cols {
+      grid-template-columns: 1fr;
+    }
+    .ca-principles {
+      grid-template-columns: 1fr 1fr;
+    }
+    .ca-facts {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 640px) {
+    .ca-points,
+    .ca-principles,
+    .ca-facts,
+    .ca-defs--two,
+    .ca-strip {
+      grid-template-columns: 1fr;
+    }
+    .ca-points li {
+      border-right: 0;
+      margin-right: 0;
+    }
+    .ca-defs > div,
+    .ca-status dl > div {
+      grid-template-columns: 1fr;
+      gap: 0.3rem;
+    }
+    .ca-assumptions {
+      columns: 1;
+    }
+    .ca-table th:nth-child(4),
+    .ca-table td:nth-child(4) {
+      display: none;
+    }
+    .ca-table td:nth-child(2),
+    .ca-table td:nth-child(3) {
+      font-size: 1.2rem;
+    }
+  }
+</style>

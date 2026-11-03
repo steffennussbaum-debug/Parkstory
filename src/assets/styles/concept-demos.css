@@ -1,0 +1,137 @@
+/*
+ * Re-skins the interactive TilePark demos (tilepark.css) inside the design
+ * concepts. Each concept sets these on `html:root`:
+ *   --tp-*            colours used by tilepark.css and the demo scripts
+ *   --cx-radius       panel radius        --cx-radius-sm  inner radius
+ *   --cx-font         demo text font      --cx-font-mono  numbers / labels
+ *   --cx-btn-bg/-fg   primary button      --cx-btn-line   secondary button border
+ *   --cx-btn-radius   button radius
+ */
+
+.cx-demos .tp-panel,
+.cx-demos .tp-realvid {
+  border-radius: var(--cx-radius, 0.75rem);
+  font-family: var(--cx-font, inherit);
+  box-shadow: none;
+}
+.cx-demos .tp-panel {
+  border: 1px solid var(--tp-line);
+}
+.cx-demos .tp-board,
+.cx-demos .tp-status,
+.cx-demos .tp-stat,
+.cx-demos .tp-znote,
+.cx-demos .tp-zdims div {
+  border-radius: var(--cx-radius-sm, 0.5rem);
+}
+.cx-demos .tp-stat .n,
+.cx-demos .tp-zbig .n,
+.cx-demos .tp-zdims b,
+.cx-demos .tp-ev-head span,
+.cx-demos .tp-ev-cnt b {
+  font-family: var(--cx-font-mono, inherit);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.cx-demos .tp-stat .l,
+.cx-demos .tp-modes .tp-lbl,
+.cx-demos .tp-zdims span,
+.cx-demos .tp-rv-tag {
+  font-family: var(--cx-font-mono, inherit);
+}
+.cx-demos .tp-demo-side h3 {
+  font-family: var(--cx-font-display, inherit);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* Buttons (the demos use AstroWind's .btn / .btn-primary class names). */
+.cx-demos .tp-btns button {
+  appearance: none;
+  cursor: pointer;
+  font-family: var(--cx-font, inherit);
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1;
+  padding: 0.8rem 1.1rem;
+  border-radius: var(--cx-btn-radius, 999px);
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+}
+.cx-demos .tp-btns .btn-primary {
+  background: var(--cx-btn-bg, #fff);
+  color: var(--cx-btn-fg, #000);
+  border: 1px solid var(--cx-btn-bg, #fff);
+}
+.cx-demos .tp-btns .btn-primary:hover {
+  filter: brightness(1.08);
+}
+.cx-demos .tp-btns .btn {
+  background: transparent;
+  color: #fff;
+  border: 1px solid var(--cx-btn-line, rgb(255 255 255 / 30%));
+}
+.cx-demos .tp-btns .btn:hover {
+  border-color: #fff;
+}
+.cx-demos .tp-btns .btn.tp-on {
+  color: var(--tp-warn);
+  border-color: var(--tp-warn);
+  background: transparent;
+}
+.cx-demos .tp-modes button {
+  border-radius: var(--cx-btn-radius, 999px);
+  font-family: var(--cx-font-mono, inherit);
+  font-weight: 500;
+}
+.cx-demos .tp-modes button.on {
+  background: var(--cx-btn-bg, var(--tp-accent));
+  border-color: var(--cx-btn-bg, var(--tp-accent));
+  color: var(--cx-btn-fg, #fff);
+}
+.cx-demos .tp-zunits {
+  border-radius: var(--cx-btn-radius, 999px);
+}
+.cx-demos .tp-zunits button {
+  border-radius: var(--cx-btn-radius, 999px);
+}
+.cx-demos .tp-rv-tag,
+.cx-demos .tp-rv-cap {
+  border-radius: var(--cx-btn-radius, 999px);
+}
+.cx-demos .tp-rv-n {
+  background: var(--tp-accent);
+  color: var(--cx-btn-fg, #fff);
+  border-radius: var(--cx-btn-radius, 999px);
+}
+.cx-demos .tp-car .tile {
+  border-radius: calc(var(--cx-radius-sm, 0.5rem) * 0.6);
+}
+.cx-demos .tp-car.target .tile {
+  background: var(--tp-accent);
+}
+.cx-demos .tp-car.target .id {
+  color: var(--cx-btn-fg, #fff);
+}
+.cx-demos .tp-ev-seg.c,
+.cx-demos .tp-ev-leg .c {
+  background: var(--tp-accent);
+  color: var(--cx-btn-fg, #fff);
+}
+.cx-demos .tp-zbar i {
+  background: var(--tp-accent);
+}
+
+/* Neutral (or concept-tinted) tiles instead of the default slate-blue. */
+.cx-demos .tp-car .tile {
+  background: var(--cx-tile, #333);
+}
+.cx-demos .tp-wall-band {
+  background: repeating-linear-gradient(90deg, var(--tp-panel-2) 0 10px, var(--tp-panel) 10px 20px);
+  border-bottom-color: var(--tp-line-2);
+}
+.cx-demos .tp-chg-box {
+  background: var(--tp-panel-2);
+}

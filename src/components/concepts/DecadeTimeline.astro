@@ -1,0 +1,180 @@
+---
+/**
+ * "A decision measured in decades": a conventional system that is frozen on
+ * the day it is chosen versus TilePark, which keeps receiving updates.
+ * Themed with --dt-ink, --dt-muted, --dt-line, --dt-old, --dt-accent, --dt-label-font.
+ */
+import { question } from '~/data/concepts';
+
+const { stages, conventional, tilepark } = question.timeline;
+// positions (in %) of the stage markers along the bar
+const pos = [0, 13, 28, 42, 100];
+const OPEN = 42;
+---
+
+<div class="dt" data-reveal>
+  <div class="dt-axis" aria-hidden="true">
+    {
+      stages.map((s, i) => (
+        <span class:list={{ open: i === 3, end: i === 4 }} style={`left:${pos[i]}%`}>
+          {s}
+        </span>
+      ))
+    }
+  </div>
+  <div class="dt-row">
+    <div class="dt-lbl"><b>Conventional technology</b><span>{conventional}</span></div>
+    <div class="dt-track">
+      <i class="dt-open" style={`left:${OPEN}%`}></i>
+      <div class="dt-bar dt-old" style={`width:${OPEN}%`}></div>
+      <div class="dt-bar dt-fade" style={`left:${OPEN}%;width:${100 - OPEN}%`}></div>
+      <em style={`left:${OPEN + 2}%`}>Ageing from opening day</em>
+    </div>
+  </div>
+  <div class="dt-row">
+    <div class="dt-lbl"><b>TilePark</b><span>{tilepark}</span></div>
+    <div class="dt-track">
+      <i class="dt-open" style={`left:${OPEN}%`}></i>
+      <div class="dt-bar dt-new"></div>
+      {
+        [54, 68, 84].map((x, i) => (
+          <u style={`left:${x}%`} title={['Update', 'New capabilities', 'New services'][i]}>
+            <span>{['Update', 'New capabilities', 'New services'][i]}</span>
+          </u>
+        ))
+      }
+    </div>
+  </div>
+</div>
+
+<style>
+  .dt {
+    --dt-ink: currentColor;
+    color: var(--dt-ink);
+    font-size: 0.85rem;
+  }
+  .dt-axis {
+    position: relative;
+    height: 2rem;
+    margin-left: var(--dt-label-w, 15rem);
+    border-bottom: 1px solid var(--dt-line, currentColor);
+    margin-bottom: 1.5rem;
+  }
+  .dt-axis span {
+    position: absolute;
+    top: 0;
+    white-space: nowrap;
+    font-family: var(--dt-label-font, inherit);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--dt-muted, currentColor);
+  }
+  .dt-axis span.open {
+    color: var(--dt-accent, currentColor);
+    transform: translateX(-50%);
+  }
+  .dt-axis span.end {
+    transform: translateX(-100%);
+  }
+  .dt-row {
+    display: grid;
+    grid-template-columns: var(--dt-label-w, 15rem) 1fr;
+    align-items: center;
+    margin-bottom: 1.25rem;
+  }
+  .dt-lbl b {
+    display: block;
+    font-weight: 600;
+  }
+  .dt-lbl span {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--dt-muted, currentColor);
+    padding-right: 1.5rem;
+  }
+  .dt-track {
+    position: relative;
+    height: 2.75rem;
+  }
+  .dt-bar {
+    position: absolute;
+    top: 50%;
+    height: 2px;
+    transform: translateY(-50%);
+    left: 0;
+    width: 100%;
+    transform-origin: left;
+  }
+  .dt-old {
+    background: var(--dt-old, currentColor);
+  }
+  .dt-fade {
+    background: linear-gradient(90deg, var(--dt-old, currentColor), transparent);
+    opacity: 0.6;
+  }
+  .dt-new {
+    background: var(--dt-accent, currentColor);
+    height: 3px;
+  }
+  .dt-open {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--dt-accent, currentColor);
+  }
+  .dt-track em {
+    position: absolute;
+    top: 0;
+    font-style: normal;
+    font-size: 0.75rem;
+    color: var(--dt-muted, currentColor);
+  }
+  .dt-track u {
+    position: absolute;
+    top: 50%;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--dt-accent, currentColor);
+    transform: translate(-50%, -50%);
+    text-decoration: none;
+  }
+  .dt-track u span {
+    position: absolute;
+    top: -1.6rem;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: 0.72rem;
+    color: var(--dt-muted, currentColor);
+  }
+  /* draw the bars when revealed */
+  .dt .dt-bar {
+    transform: translateY(-50%) scaleX(0);
+    transition: transform 1.6s cubic-bezier(0.2, 0.7, 0.2, 1) 0.2s;
+  }
+  .dt.is-in .dt-bar {
+    transform: translateY(-50%) scaleX(1);
+  }
+  .dt .dt-fade {
+    transition-delay: 1.2s;
+  }
+  @media (max-width: 760px) {
+    .dt-axis {
+      margin-left: 0;
+    }
+    .dt-axis span:nth-child(2),
+    .dt-axis span:nth-child(3) {
+      display: none;
+    }
+    .dt-row {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+    .dt-track u:nth-of-type(2) span {
+      display: none;
+    }
+  }
+</style>

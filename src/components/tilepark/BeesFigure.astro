@@ -20,7 +20,9 @@
 <script>
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- demo scripts ported from plain JavaScript
   // @ts-nocheck
-  const ACC = '#93c5fd'; // highlight colour (AstroWind blue-300)
+  const rootStyle = getComputedStyle(document.documentElement);
+  const ACC = rootStyle.getPropertyValue('--tp-accent-soft').trim() || '#93c5fd'; // highlight colour
+  const ACC_STRONG = rootStyle.getPropertyValue('--tp-accent').trim() || '#0161ef';
   const svg = document.getElementById('bioSvg'),
     NS = 'http://www.w3.org/2000/svg';
   let P = svg;
@@ -470,7 +472,7 @@
         k = cars[id];
       seq++;
       moves = 0;
-      k.base.setAttribute('fill', '#0161ef');
+      k.base.setAttribute('fill', ACC_STRONG);
       k.base.setAttribute('stroke', ACC);
       carLayer.appendChild(k.g);
       let guard = 0;

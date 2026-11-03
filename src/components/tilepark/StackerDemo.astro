@@ -45,7 +45,7 @@
 <script>
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- demo scripts ported from plain JavaScript
   // @ts-nocheck
-  const ACC = '#93c5fd';
+  const ACC = getComputedStyle(document.documentElement).getPropertyValue('--tp-accent-soft').trim() || '#93c5fd';
   const svg = document.getElementById('zSvg'),
     NS = 'http://www.w3.org/2000/svg';
   const el = (t, a, p = svg) => {
@@ -137,7 +137,8 @@
           P(c + 0.96, r + 0.96, z + 0.5),
           P(c + 0.04, r + 0.96, z + 0.5),
         ]),
-        fill: '#93c5fd33',
+        fill: ACC,
+        'fill-opacity': 0.2,
         stroke: ACC,
         'stroke-width': 2.2,
         display: 'none',
@@ -316,7 +317,7 @@
         if (c >= 0 && c < C) conveyor(c, r, st);
       }
     // transfer cabin (in front of the gate conveyor)
-    box(st, GC + 0.02, GC + 0.98, R + 0.05, R + 1.0, 0, PT, '#1e40af', '#172554', '#1e3a8a');
+    box(st, GC + 0.02, GC + 0.98, R + 0.05, R + 1.0, 0, PT, ACC, ACC, ACC, 0.45);
     const cab = el('g', {}, dyn);
     const H = PT + 44,
       c0 = GC + 0.02,
@@ -324,8 +325,12 @@
       r0 = R + 0.05,
       r1 = R + 1.0;
     // back wall (left side, c=c0) drawn faint, then glass front/right walls + roof
-    el('polygon', { points: poly([P(c0, r0, PT), P(c0, r1, PT), P(c0, r1, H), P(c0, r0, H)]), fill: '#93c5fd14' }, cab);
-    box(cab, c0, c1, r0, r1, PT, H, '#93c5fd30', '#93c5fd26', '#93c5fd1c');
+    el(
+      'polygon',
+      { points: poly([P(c0, r0, PT), P(c0, r1, PT), P(c0, r1, H), P(c0, r0, H)]), fill: ACC, 'fill-opacity': 0.08 },
+      cab
+    );
+    box(cab, c0, c1, r0, r1, PT, H, ACC, ACC, ACC, 0.14);
     for (const q of [
       [c0, r1],
       [c1, r1],
@@ -413,7 +418,8 @@
                   P(c + 0.96, r + 0.96, z),
                   P(c + 0.04, r + 0.96, z),
                 ]),
-                fill: '#0161ef22',
+                fill: ACC,
+                'fill-opacity': 0.13,
                 stroke: ACC,
                 'stroke-width': 1,
               },
@@ -441,9 +447,9 @@
     return `${f}′ ${i}″`;
   };
   const len = (m) => (unit === 'm' ? m.toFixed(2).replace(/\.?0+$/, '') + ' m' : ftin(m));
-  const area = (m2) =>
+  const area = (m2, dec = 0) =>
     unit === 'm'
-      ? Math.round(m2).toLocaleString('en-US') + ' m²'
+      ? m2.toLocaleString('en-US', { maximumFractionDigits: dec, minimumFractionDigits: dec }) + ' m²'
       : Math.round(m2 * 10.7639).toLocaleString('en-US') + ' sq ft';
   let dimG = null;
   function dimLine(g, a, b, label, off) {
@@ -498,7 +504,7 @@
       lv === 1
         ? 'one level, depends on vehicle height'
         : `${lv}-high stacks${mode === 1 ? ', where stackers stand' : ''}`;
-    document.getElementById('zPer').textContent = area(A / cap);
+    document.getElementById('zPer').textContent = area(A / cap, 1);
     // dimension lines in the drawing
     if (dimG) dimG.remove();
     dimG = el('g', {});

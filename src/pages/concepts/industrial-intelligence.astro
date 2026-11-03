@@ -1,0 +1,1258 @@
+---
+/**
+ * Concept C — Industrial Intelligence.
+ * Premium European engineering: graphite and paper, IBM Plex Sans with Plex
+ * Mono technical labels, specification-sheet layouts, crop-marked figures and
+ * one safety-orange signal colour. Precision manufacturing meets software.
+ */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import ConceptLayout from '~/layouts/ConceptLayout.astro';
+import TileField from '~/components/concepts/TileField.astro';
+import SectionDrawing from '~/components/concepts/SectionDrawing.astro';
+import DecadeTimeline from '~/components/concepts/DecadeTimeline.astro';
+import RealVideo from '~/components/tilepark/RealVideo.astro';
+import GridDemo from '~/components/tilepark/GridDemo.astro';
+import StackerDemo from '~/components/tilepark/StackerDemo.astro';
+import { shift, question, breakthrough, economics, next, heritage, decision } from '~/data/concepts';
+
+import conveyors from '~/assets/images/tilepark/conveyors-installed.webp';
+import kehlPlant from '~/assets/images/tilepark/kehl-plant.webp';
+import gastPlant from '~/assets/images/tilepark/gastonia-plant.webp';
+import welding from '~/assets/images/tilepark/kehl-welding.webp';
+import steel from '~/assets/images/tilepark/kehl-steel.webp';
+import drives from '~/assets/images/tilepark/gastonia-drive-assembly.webp';
+
+import '@fontsource/ibm-plex-sans/300.css';
+import '@fontsource/ibm-plex-sans/400.css';
+import '@fontsource/ibm-plex-sans/500.css';
+import '@fontsource/ibm-plex-sans/600.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
+import '~/assets/styles/tilepark.css';
+import '~/assets/styles/concept-demos.css';
+
+const sec = (n: number, label: string) => ({ n: String(n).padStart(2, '0'), label });
+const S = [
+  sec(1, 'System shift'),
+  sec(2, 'The question'),
+  sec(3, 'Architecture'),
+  sec(4, 'Economics'),
+  sec(5, 'Roadmap'),
+  sec(6, 'Manufacturing'),
+  sec(7, 'Decision'),
+];
+const status = [
+  ...next.today.map((i) => ({ ...i, code: 'LIVE', cls: 'live' })),
+  ...next.developing.map((i) => ({ ...i, code: 'DEV', cls: 'dev' })),
+  ...next.future.map((i) => ({ ...i, code: 'DIRECTION', cls: 'dir' })),
+];
+const stations = [
+  { s: heritage.flow[0], img: null },
+  { s: heritage.flow[1], img: null },
+  { s: heritage.flow[2], img: steel },
+  { s: heritage.flow[3], img: welding },
+  { s: heritage.flow[4], img: drives },
+  { s: heritage.flow[5], img: null },
+  { s: heritage.flow[6], img: null },
+  { s: heritage.flow[7], img: null },
+];
+---
+
+<ConceptLayout
+  title="Parkstory — Concept C · Industrial Intelligence"
+  description={shift.lead}
+  bodyClass="cc"
+  current="industrial-intelligence"
+>
+  <header class="cc-nav">
+    <a href="#top" class="cc-mark"><span class="cc-sq"></span>Parkstory</a>
+    <nav aria-label="Sections">
+      {
+        S.slice(2, 6).map((s, i) => (
+          <a href={['#breakthrough', '#economics', '#next', '#heritage'][i]}>
+            <i>{s.n}</i>
+            {s.label}
+          </a>
+        ))
+      }
+    </nav>
+    <a href="#decision" class="cc-nav-cta">Technology briefing</a>
+  </header>
+
+  <main id="top">
+    <!-- 01 SYSTEM SHIFT -->
+    <section class="cc-hero" id="shift">
+      <div class="cc-hero-text">
+        <p class="cc-tag" data-reveal>[{S[0].n}] {S[0].label} — {shift.eyebrow}</p>
+        <h1 data-reveal style="--reveal-delay:.08s">
+          Tomorrow’s infrastructure cannot run on yesterday’s technology<span class="cc-o">.</span>
+        </h1>
+        <p class="cc-lead" data-reveal style="--reveal-delay:.16s">{shift.lead}</p>
+        <div class="cc-hero-ctas" data-reveal style="--reveal-delay:.24s">
+          <a href="#breakthrough" class="cc-btn">Examine the architecture</a>
+          <a href="#decision" class="cc-btn cc-btn--line">Request a briefing</a>
+        </div>
+      </div>
+      <figure class="cc-hero-fig">
+        <Image
+          src={conveyors}
+          alt="TilePark conveyors with their drives, installed in an underground garage"
+          widths={[800]}
+          sizes="(max-width: 960px) 100vw, 50vw"
+          loading="eager"
+          fetchpriority="high"
+        />
+        <div class="cc-grid-overlay" aria-hidden="true"></div>
+        <span class="cc-crop tl"></span><span class="cc-crop tr"></span><span class="cc-crop bl"></span><span
+          class="cc-crop br"></span>
+        <figcaption>FIG. 01 — TILEPARK XY TRANSPORT LEVEL, INSTALLED</figcaption>
+        <div class="cc-live">
+          <div class="cc-live-head"><i></i>Live model · decentralised routing</div>
+          <div class="cc-live-field"><TileField cell={22} density={0.82} rate={14} accentShare={0.25} /></div>
+        </div>
+      </figure>
+    </section>
+
+    <section class="cc-spec">
+      <div class="cc-wrap">
+        <p class="cc-intro" data-reveal>{shift.intro}</p>
+        <ol>
+          {
+            shift.points.map((p, i) => (
+              <li data-reveal style={`--reveal-delay:${0.08 * i}s`}>
+                <span>{p.n}</span>
+                <p>{p.text}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <!-- 02 THE QUESTION -->
+    <section class="cc-sec cc-paper" id="question">
+      <div class="cc-wrap">
+        <div class="cc-head" data-reveal><span>[{S[1].n}]</span>{S[1].label}<em>SEC {S[1].n} / 07</em></div>
+        <div class="cc-two">
+          <h2 class="cc-h2" data-reveal>{question.title}</h2>
+          <p class="cc-body" data-reveal>{question.body}</p>
+        </div>
+        <table class="cc-table" data-reveal>
+          <thead><tr><th>Parameter</th><th>Constraint in conventional layouts</th></tr></thead>
+          <tbody>
+            {
+              question.constraints.map((c, i) => (
+                <tr>
+                  <td>
+                    <span class="cc-code">P{String(i + 1).padStart(2, '0')}</span>
+                    {c.k}
+                  </td>
+                  <td>{c.v}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+        <div class="cc-drawing" data-reveal>
+          <p class="cc-fig">FIG. 02 — SECTION COMPARISON</p>
+          <SectionDrawing />
+        </div>
+        <div class="cc-timeline">
+          <p class="cc-fig">FIG. 03 — A DECISION MEASURED IN DECADES</p>
+          <DecadeTimeline />
+          <p class="cc-note">{question.timeline.note}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 ARCHITECTURE -->
+    <section class="cc-sec" id="breakthrough">
+      <div class="cc-wrap">
+        <div class="cc-head" data-reveal><span>[{S[2].n}]</span>{S[2].label}<em>SEC {S[2].n} / 07</em></div>
+        <div class="cc-two">
+          <h2 class="cc-h2" data-reveal>{breakthrough.title}</h2>
+          <p class="cc-body" data-reveal>{breakthrough.body}</p>
+        </div>
+        <ol class="cc-modules">
+          {
+            breakthrough.principles.map((p, i) => (
+              <li data-reveal style={`--reveal-delay:${0.07 * i}s`}>
+                <span class="cc-code">PRINCIPLE {p.n}</span>
+                <h3>{p.k}</h3>
+                <p>{p.v}</p>
+              </li>
+            ))
+          }
+        </ol>
+        <div class="cx-demos cc-demos">
+          <RealVideo />
+          <GridDemo />
+        </div>
+        <p class="cc-note">{breakthrough.patent}</p>
+      </div>
+    </section>
+
+    <!-- 04 ECONOMICS -->
+    <section class="cc-sec cc-paper" id="economics">
+      <div class="cc-wrap">
+        <div class="cc-head" data-reveal><span>[{S[3].n}]</span>{S[3].label}<em>SEC {S[3].n} / 07</em></div>
+        <div class="cc-two">
+          <h2 class="cc-h2" data-reveal>{economics.title}</h2>
+          <p class="cc-body" data-reveal>{economics.body}</p>
+        </div>
+        <ol class="cc-levers">
+          {
+            economics.levers.map((l, i) => (
+              <li data-reveal style={`--reveal-delay:${0.05 * i}s`}>
+                <span class="cc-code">E{String(i + 1).padStart(2, '0')}</span>
+                <h3>{l.k}</h3>
+                <p>{l.v}</p>
+              </li>
+            ))
+          }
+        </ol>
+        <div class="cc-sheet" data-reveal>
+          <div class="cc-sheet-head">
+            <span>DATA SHEET — {economics.example.title.toUpperCase()}</span>
+            <span>{economics.example.caption}</span>
+          </div>
+          <table class="cc-table cc-table--num">
+            <thead>
+              <tr><th>Configuration</th><th>Cars</th><th>m² / car</th><th>Clear height</th></tr>
+            </thead>
+            <tbody>
+              {
+                economics.example.rows.map((r) => (
+                  <tr>
+                    <td>{r.config}</td>
+                    <td>{r.cars}</td>
+                    <td>{r.perCar.replace(' m²', '')}</td>
+                    <td>{r.height}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+          <ol class="cc-assume">
+            {
+              economics.example.assumptions.map((a, i) => (
+                <li>
+                  <span>A{i + 1}</span>
+                  {a}
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+        <div class="cx-demos cc-demos"><StackerDemo /></div>
+      </div>
+    </section>
+
+    <!-- 05 ROADMAP -->
+    <section class="cc-sec" id="next">
+      <div class="cc-wrap">
+        <div class="cc-head" data-reveal><span>[{S[4].n}]</span>{next.eyebrow}<em>SEC {S[4].n} / 07</em></div>
+        <div class="cc-two">
+          <h2 class="cc-h2" data-reveal>{next.title}</h2>
+          <p class="cc-body" data-reveal>{next.body}</p>
+        </div>
+        <div class="cc-legend" data-reveal>
+          <span class="live">LIVE — available today</span><span class="dev">DEV — in development</span><span class="dir"
+            >DIRECTION — not a current feature</span
+          >
+        </div>
+        <table class="cc-matrix" data-reveal>
+          <tbody>
+            {
+              status.map((s) => (
+                <tr class={s.cls}>
+                  <td>
+                    <span class="cc-status">{s.code}</span>
+                  </td>
+                  <th>{s.k}</th>
+                  <td>{s.v}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 06 MANUFACTURING -->
+    <section class="cc-sec cc-paper" id="heritage">
+      <div class="cc-wrap">
+        <div class="cc-head" data-reveal><span>[{S[5].n}]</span>{heritage.eyebrow}<em>SEC {S[5].n} / 07</em></div>
+        <div class="cc-two">
+          <h2 class="cc-h2" data-reveal>{heritage.title}</h2>
+          <div class="cc-body">{heritage.body.map((b) => <p data-reveal>{b}</p>)}</div>
+        </div>
+        <ol class="cc-line" aria-label="From design to service">
+          {
+            stations.map((st, i) => (
+              <li data-reveal style={`--reveal-delay:${0.05 * i}s`}>
+                <div class="cc-line-img">
+                  {st.img ? (
+                    <Image src={st.img} alt={st.s} widths={[300]} sizes="160px" />
+                  ) : (
+                    <span>{['ENG', 'CODE', '', '', '', 'LOAD RIG', 'SITE', '30+ YRS'][i]}</span>
+                  )}
+                </div>
+                <span class="cc-code">ST {String(i + 1).padStart(2, '0')}</span>
+                <b>{st.s}</b>
+              </li>
+            ))
+          }
+        </ol>
+        <dl class="cc-facts">
+          {
+            heritage.facts.map((f, i) => (
+              <div data-reveal style={`--reveal-delay:${0.05 * i}s`}>
+                <dt>{f.k}</dt>
+                <dd>{f.v}</dd>
+              </div>
+            ))
+          }
+        </dl>
+        <div class="cc-plants">
+          {
+            [
+              [kehlPlant, 'PLANT DE — KEHL, GERMANY'],
+              [gastPlant, 'PLANT US — GASTONIA, NORTH CAROLINA'],
+            ].map(([img, cap]) => (
+              <figure data-reveal>
+                <Image
+                  src={img as ImageMetadata}
+                  alt={cap as string}
+                  widths={[600, 1000]}
+                  sizes="(max-width: 760px) 100vw, 50vw"
+                />
+                <span class="cc-crop tl" />
+                <span class="cc-crop br" />
+                <figcaption>{cap as string}</figcaption>
+              </figure>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- 07 DECISION -->
+    <section class="cc-decision" id="decision">
+      <div class="cc-wrap">
+        <div class="cc-head"><span>[{S[6].n}]</span>{S[6].label}<em>SEC {S[6].n} / 07</em></div>
+        <h2 data-reveal>{decision.title}</h2>
+        <div class="cc-two">
+          <p class="cc-body" data-reveal>{decision.body}</p>
+          <div class="cc-hero-ctas" data-reveal>
+            <a href={decision.ctaHref} class="cc-btn">{decision.cta}</a>
+            <a href={decision.secondaryHref} target="_blank" rel="noopener" class="cc-btn cc-btn--line"
+              >{decision.secondary}</a
+            >
+          </div>
+        </div>
+        <p class="cc-aud">{decision.audience.map((a) => <span>{a}</span>)}</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="cc-foot">
+    <div class="cc-wrap">
+      <span class="cc-mark"><span class="cc-sq"></span>Parkstory</span>
+      <p>Designed, programmed and built by Parkstory in Kehl, Germany, and Gastonia, USA.</p>
+      <p class="cc-code">EP 3924576 B1</p>
+    </div>
+  </footer>
+</ConceptLayout>
+
+<style is:global>
+  html:root {
+    --graphite: #141618;
+    --graphite-2: #1d2023;
+    --graphite-3: #2a2e32;
+    --paper: #e9e8e4;
+    --paper-2: #dfdeda;
+    --white: #fafaf8;
+    --steel: #8d9297;
+    --orange: #ff5b1f;
+    --cc-line-d: rgb(255 255 255 / 10%);
+    --cc-line-l: rgb(20 22 24 / 14%);
+    --sans: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+    --mono: 'IBM Plex Mono', ui-monospace, monospace;
+    /* demo theme */
+    --tp-accent: #ff5b1f;
+    --tp-accent-soft: #ff8a5c;
+    --tp-accent-wash: rgb(255 91 31 / 16%);
+    --tp-panel: #1d2023;
+    --tp-panel-2: #26292d;
+    --tp-board: #111315;
+    --tp-line: rgb(255 255 255 / 9%);
+    --tp-line-2: rgb(255 255 255 / 18%);
+    --tp-text-dim: #8d9297;
+    --tp-text-soft: #c9ccd0;
+    --cx-radius: 0;
+    --cx-radius-sm: 0;
+    --cx-btn-radius: 0;
+    --cx-btn-bg: #ff5b1f;
+    --cx-btn-fg: #141618;
+    --cx-font: var(--sans);
+    --cx-font-display: var(--sans);
+    --cx-font-mono: var(--mono);
+    --cx-tile: #33383d;
+  }
+  .cc {
+    background: var(--graphite);
+    color: var(--white);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  .cc ::selection {
+    background: var(--orange);
+    color: var(--graphite);
+  }
+  .cc-wrap {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 3.5vw, 56px);
+  }
+  .cc-o {
+    color: var(--orange);
+  }
+  .cc-code,
+  .cc-tag,
+  .cc-fig {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .cc-code {
+    color: var(--orange);
+  }
+
+  /* nav */
+  .cc-nav {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    height: 60px;
+    padding: 0 clamp(20px, 3.5vw, 56px);
+    background: rgb(20 22 24 / 88%);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--cc-line-d);
+    font-size: 0.85rem;
+  }
+  .cc-mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    font-size: 1.05rem;
+    text-decoration: none;
+  }
+  .cc-sq {
+    width: 12px;
+    height: 12px;
+    background: var(--orange);
+  }
+  .cc-nav nav {
+    display: flex;
+    gap: 1.75rem;
+  }
+  .cc-nav nav a {
+    text-decoration: none;
+    color: #c9ccd0;
+  }
+  .cc-nav nav a:hover {
+    color: #fff;
+  }
+  .cc-nav nav i {
+    font-style: normal;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--steel);
+    margin-right: 0.4rem;
+  }
+  .cc-nav-cta {
+    text-decoration: none;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border: 1px solid var(--orange);
+    color: var(--orange);
+    padding: 0.5rem 0.9rem;
+  }
+  .cc-nav-cta:hover {
+    background: var(--orange);
+    color: var(--graphite);
+  }
+  @media (max-width: 1000px) {
+    .cc-nav nav {
+      display: none;
+    }
+  }
+
+  /* hero */
+  .cc-hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 100svh;
+    padding-top: 60px;
+    border-bottom: 1px solid var(--cc-line-d);
+  }
+  .cc-hero-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(48px, 7vw, 112px) clamp(20px, 3.5vw, 56px);
+    background-image:
+      linear-gradient(var(--cc-line-d) 1px, transparent 1px),
+      linear-gradient(90deg, var(--cc-line-d) 1px, transparent 1px);
+    background-size: 80px 80px;
+    background-position: -1px -1px;
+  }
+  .cc-tag {
+    color: var(--steel);
+  }
+  .cc h1 {
+    font-weight: 500;
+    font-size: clamp(2.5rem, 4.9vw, 5.4rem);
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+    margin: 1.5rem 0 1.75rem;
+    max-width: 15ch;
+  }
+  .cc-lead {
+    font-size: clamp(1.1rem, 1.4vw, 1.3rem);
+    font-weight: 300;
+    color: #c9ccd0;
+    max-width: 40ch;
+    line-height: 1.45;
+  }
+  .cc-hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2.5rem;
+  }
+  .cc-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    background: var(--orange);
+    color: var(--graphite);
+    font-weight: 500;
+    padding: 0.95rem 1.4rem;
+    font-size: 0.95rem;
+    transition: background 0.2s;
+  }
+  .cc-btn::after {
+    content: '→';
+    font-family: var(--mono);
+  }
+  .cc-btn:hover {
+    background: #ff7a45;
+  }
+  .cc-btn--line {
+    background: transparent;
+    color: inherit;
+    border: 1px solid currentColor;
+  }
+  .cc-btn--line:hover {
+    background: transparent;
+    color: var(--orange);
+  }
+  .cc-hero-fig {
+    position: relative;
+    overflow: hidden;
+    background: #000;
+    min-height: 420px;
+  }
+  .cc-hero-fig img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 55% 60%;
+    filter: grayscale(0.85) contrast(1.08) brightness(0.85);
+  }
+  .cc-grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgb(255 255 255 / 9%) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(255 255 255 / 9%) 1px, transparent 1px);
+    background-size: 80px 80px;
+    background-position: -1px -1px;
+  }
+  .cc-crop {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border: 0 solid var(--orange);
+  }
+  .cc-crop.tl {
+    top: 20px;
+    left: 20px;
+    border-top-width: 1.5px;
+    border-left-width: 1.5px;
+  }
+  .cc-crop.tr {
+    top: 20px;
+    right: 20px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+  }
+  .cc-crop.bl {
+    bottom: 20px;
+    left: 20px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+  }
+  .cc-crop.br {
+    bottom: 20px;
+    right: 20px;
+    border-bottom-width: 1.5px;
+    border-right-width: 1.5px;
+  }
+  .cc-hero-fig figcaption {
+    position: absolute;
+    left: 52px;
+    top: 24px;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: #fff;
+  }
+  .cc-live {
+    position: absolute;
+    right: 52px;
+    bottom: 52px;
+    width: min(300px, 60%);
+    background: rgb(20 22 24 / 92%);
+    border: 1px solid var(--cc-line-d);
+  }
+  .cc-live-head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.55rem 0.75rem;
+    border-bottom: 1px solid var(--cc-line-d);
+    color: #c9ccd0;
+  }
+  .cc-live-head i {
+    width: 7px;
+    height: 7px;
+    background: var(--orange);
+    border-radius: 50%;
+    animation: ccBlink 1.6s infinite;
+  }
+  @keyframes ccBlink {
+    50% {
+      opacity: 0.25;
+    }
+  }
+  .cc-live-field {
+    height: 170px;
+    --tf-bg: #141618;
+    --tf-line: rgb(255 255 255 / 9%);
+    --tf-car: #5b6167;
+    --tf-car-2: #41464b;
+    --tf-glass: rgb(0 0 0 / 45%);
+    --tf-accent: #ff5b1f;
+  }
+
+  /* spec strip */
+  .cc-spec {
+    padding: clamp(72px, 9vw, 136px) 0;
+  }
+  .cc-intro {
+    font-size: clamp(1.3rem, 2.2vw, 2rem);
+    font-weight: 300;
+    line-height: 1.3;
+    letter-spacing: -0.015em;
+    max-width: 44ch;
+  }
+  .cc-spec ol {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: clamp(48px, 6vw, 88px);
+    border-top: 1px solid var(--cc-line-d);
+  }
+  .cc-spec li {
+    padding: 1.25rem 1.5rem 0 0;
+  }
+  .cc-spec li + li {
+    padding-left: 1.5rem;
+    border-left: 1px solid var(--cc-line-d);
+  }
+  .cc-spec li span {
+    font-family: var(--mono);
+    color: var(--orange);
+    font-size: 0.8rem;
+  }
+  .cc-spec li p {
+    margin-top: 0.6rem;
+    font-size: 1.15rem;
+    line-height: 1.35;
+    max-width: 26ch;
+  }
+
+  /* sections */
+  .cc-sec {
+    padding: clamp(88px, 11vw, 176px) 0;
+    border-top: 1px solid var(--cc-line-d);
+  }
+  .cc-paper {
+    background: var(--paper);
+    color: var(--graphite);
+    border-top-color: var(--cc-line-l);
+  }
+  .cc-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid currentColor;
+    margin-bottom: clamp(40px, 5vw, 72px);
+  }
+  .cc-head span {
+    color: var(--orange);
+  }
+  .cc-head em {
+    margin-left: auto;
+    font-style: normal;
+    opacity: 0.55;
+  }
+  .cc-two {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: clamp(32px, 5vw, 96px);
+    align-items: end;
+  }
+  .cc-h2 {
+    font-weight: 500;
+    font-size: clamp(2rem, 3.6vw, 3.6rem);
+    line-height: 1.06;
+    letter-spacing: -0.03em;
+    max-width: 18ch;
+  }
+  .cc-body {
+    font-size: 1.08rem;
+    font-weight: 300;
+    line-height: 1.6;
+    max-width: 52ch;
+  }
+  .cc-body p + p {
+    margin-top: 1rem;
+  }
+  .cc-paper .cc-body {
+    color: #3a3d40;
+  }
+  .cc-sec:not(.cc-paper) .cc-body {
+    color: #c9ccd0;
+  }
+  .cc-note {
+    margin-top: 1.25rem;
+    font-size: 0.82rem;
+    color: var(--steel);
+    max-width: 72ch;
+  }
+  .cc-paper .cc-note {
+    color: #6b6f73;
+  }
+  .cc-fig {
+    margin-bottom: 1.5rem;
+    color: #6b6f73;
+  }
+
+  /* tables */
+  .cc-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: clamp(56px, 7vw, 104px);
+  }
+  .cc-table th {
+    text-align: left;
+    font-family: var(--mono);
+    font-weight: 400;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #6b6f73;
+    padding: 0 1.5rem 0.75rem 0;
+    border-bottom: 1px solid currentColor;
+  }
+  .cc-table td {
+    padding: 1.1rem 1.5rem 1.1rem 0;
+    border-bottom: 1px solid var(--cc-line-l);
+    vertical-align: top;
+  }
+  .cc-table td:first-child {
+    width: 32%;
+    font-weight: 500;
+  }
+  .cc-table td:first-child .cc-code {
+    display: inline-block;
+    width: 3.2rem;
+  }
+  .cc-drawing {
+    margin-top: clamp(80px, 10vw, 150px);
+    --sd-ink: #141618;
+    --sd-muted: #6b6f73;
+    --sd-accent: #ff5b1f;
+    --sd-car: #8d9297;
+    --sd-fill: #141618;
+    --sd-font: var(--mono);
+  }
+  .cc-timeline {
+    margin-top: clamp(80px, 10vw, 140px);
+    --dt-ink: #141618;
+    --dt-muted: #6b6f73;
+    --dt-line: rgb(20 22 24 / 20%);
+    --dt-old: #8d9297;
+    --dt-accent: #ff5b1f;
+    --dt-label-font: var(--mono);
+  }
+
+  /* modules */
+  .cc-modules {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--cc-line-d);
+    border: 1px solid var(--cc-line-d);
+    margin: clamp(56px, 7vw, 104px) 0;
+  }
+  .cc-modules li {
+    background: var(--graphite);
+    padding: 1.75rem 1.5rem 2rem;
+    transition: background 0.3s;
+  }
+  .cc-modules li:hover {
+    background: var(--graphite-2);
+  }
+  .cc-modules h3 {
+    font-weight: 500;
+    font-size: 1.3rem;
+    letter-spacing: -0.015em;
+    margin: 2.5rem 0 0.6rem;
+  }
+  .cc-modules p {
+    color: #b9bdc1;
+    font-size: 0.95rem;
+    font-weight: 300;
+  }
+  .cc-demos {
+    display: grid;
+    gap: 20px;
+  }
+  .cc-demos .tp-realvid {
+    margin: 0;
+  }
+
+  /* economics */
+  .cc-levers {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    margin-top: clamp(56px, 7vw, 104px);
+    border-top: 1px solid var(--graphite);
+  }
+  .cc-levers li {
+    padding: 1.25rem 1.25rem 0 0;
+  }
+  .cc-levers li + li {
+    padding-left: 1.25rem;
+    border-left: 1px solid var(--cc-line-l);
+  }
+  .cc-levers h3 {
+    font-weight: 500;
+    font-size: 1.05rem;
+    margin: 0.75rem 0 0.4rem;
+  }
+  .cc-levers p {
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: #3a3d40;
+  }
+  .cc-sheet {
+    margin: clamp(64px, 8vw, 120px) 0;
+    background: var(--white);
+    border: 1px solid var(--cc-line-l);
+    padding: clamp(20px, 3vw, 40px);
+  }
+  .cc-sheet-head {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    color: #6b6f73;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--graphite);
+  }
+  .cc-sheet-head span:first-child {
+    color: var(--graphite);
+  }
+  .cc-sheet .cc-table {
+    margin-top: 0;
+  }
+  .cc-table--num th {
+    padding-top: 1rem;
+  }
+  .cc-table--num td:not(:first-child) {
+    font-family: var(--mono);
+    font-size: 1.5rem;
+    letter-spacing: -0.03em;
+  }
+  .cc-table--num tr:last-child td:nth-child(2),
+  .cc-table--num tr:last-child td:nth-child(3) {
+    color: var(--orange);
+  }
+  .cc-assume {
+    margin-top: 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem 2.5rem;
+    font-size: 0.82rem;
+    color: #55595d;
+  }
+  .cc-assume span {
+    font-family: var(--mono);
+    color: var(--orange);
+    margin-right: 0.6rem;
+  }
+
+  /* roadmap */
+  .cc-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+    margin-top: clamp(48px, 6vw, 88px);
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--steel);
+  }
+  .cc-legend span::before {
+    content: '';
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    margin-right: 0.5rem;
+    vertical-align: 0;
+  }
+  .cc-legend .live::before {
+    background: var(--orange);
+  }
+  .cc-legend .dev::before {
+    border: 1px solid var(--orange);
+  }
+  .cc-legend .dir::before {
+    border: 1px dashed var(--steel);
+  }
+  .cc-matrix {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.25rem;
+    border-top: 1px solid var(--white);
+  }
+  .cc-matrix td,
+  .cc-matrix th {
+    text-align: left;
+    vertical-align: top;
+    padding: 1.25rem 1.5rem 1.25rem 0;
+    border-bottom: 1px solid var(--cc-line-d);
+  }
+  .cc-matrix td:first-child {
+    width: 9.5rem;
+  }
+  .cc-matrix th {
+    width: 28%;
+    font-weight: 500;
+    font-size: 1.1rem;
+  }
+  .cc-matrix td:last-child {
+    color: #b9bdc1;
+    font-weight: 300;
+  }
+  .cc-status {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    padding: 0.3rem 0.55rem;
+  }
+  .live .cc-status {
+    background: var(--orange);
+    color: var(--graphite);
+  }
+  .dev .cc-status {
+    border: 1px solid var(--orange);
+    color: var(--orange);
+  }
+  .dir .cc-status {
+    border: 1px dashed var(--steel);
+    color: var(--steel);
+  }
+  .dir th,
+  .dir td:last-child {
+    color: var(--steel);
+  }
+
+  /* manufacturing */
+  .cc-line {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 10px;
+    margin-top: clamp(64px, 8vw, 120px);
+    position: relative;
+  }
+  .cc-line::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(50% - 30px);
+    height: 1px;
+    background: var(--orange);
+    opacity: 0.6;
+  }
+  .cc-line li {
+    position: relative;
+  }
+  .cc-line-img {
+    aspect-ratio: 3 / 4;
+    background: var(--graphite);
+    color: var(--steel);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.75rem;
+  }
+  .cc-line-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(0.85) contrast(1.05);
+    transition: filter 0.4s;
+  }
+  .cc-line li:hover img {
+    filter: none;
+  }
+  .cc-line b {
+    display: block;
+    font-weight: 500;
+    font-size: 0.95rem;
+    margin-top: 0.2rem;
+  }
+  .cc-facts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--cc-line-l);
+    border: 1px solid var(--cc-line-l);
+    margin-top: clamp(64px, 8vw, 120px);
+  }
+  .cc-facts > div {
+    background: var(--paper);
+    padding: 1.5rem;
+  }
+  .cc-facts dt {
+    font-weight: 500;
+    font-size: 1.25rem;
+    letter-spacing: -0.015em;
+  }
+  .cc-facts dd {
+    margin-top: 0.4rem;
+    color: #4a4e52;
+    font-weight: 300;
+    font-size: 0.92rem;
+  }
+  .cc-plants {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .cc-plants figure {
+    position: relative;
+    overflow: hidden;
+  }
+  .cc-plants img {
+    width: 100%;
+    height: clamp(240px, 30vw, 420px);
+    object-fit: cover;
+    filter: grayscale(0.8) contrast(1.05);
+  }
+  .cc-plants figcaption {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background: var(--graphite);
+    color: var(--white);
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    padding: 0.5rem 0.75rem;
+  }
+
+  /* decision */
+  .cc-decision {
+    padding: clamp(100px, 13vw, 200px) 0;
+    border-top: 4px solid var(--orange);
+  }
+  .cc-decision h2 {
+    font-weight: 500;
+    font-size: clamp(2.4rem, 5.6vw, 6rem);
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+    max-width: 17ch;
+    margin-bottom: clamp(40px, 5vw, 72px);
+  }
+  .cc-decision .cc-body {
+    color: #c9ccd0;
+  }
+  .cc-decision .cc-hero-ctas {
+    margin-top: 0;
+    justify-content: flex-end;
+  }
+  .cc-aud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 4rem;
+  }
+  .cc-aud span {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border: 1px solid var(--cc-line-d);
+    padding: 0.4rem 0.7rem;
+    color: #c9ccd0;
+  }
+  .cc-foot {
+    border-top: 1px solid var(--cc-line-d);
+    padding: 2rem 0 6rem;
+    font-size: 0.85rem;
+    color: var(--steel);
+  }
+  .cc-foot .cc-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+  .cc-foot .cc-mark {
+    color: var(--white);
+  }
+
+  /* responsive */
+  @media (max-width: 1100px) {
+    .cc-levers {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem 0;
+    }
+    .cc-levers li + li {
+      border-left: 0;
+      padding-left: 0;
+    }
+    .cc-line {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .cc-line::before {
+      display: none;
+    }
+  }
+  @media (max-width: 960px) {
+    .cc-hero,
+    .cc-two {
+      grid-template-columns: 1fr;
+    }
+    .cc-hero-fig {
+      min-height: 70vh;
+    }
+    .cc-modules {
+      grid-template-columns: 1fr 1fr;
+    }
+    .cc-decision .cc-hero-ctas {
+      justify-content: flex-start;
+    }
+  }
+  @media (max-width: 640px) {
+    .cc-spec ol,
+    .cc-modules,
+    .cc-levers,
+    .cc-facts,
+    .cc-plants,
+    .cc-assume {
+      grid-template-columns: 1fr;
+    }
+    .cc-spec li + li {
+      padding-left: 0;
+      border-left: 0;
+    }
+    .cc-line {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .cc-table td:first-child {
+      width: 40%;
+    }
+    .cc-matrix td:first-child {
+      width: auto;
+    }
+    .cc-matrix tr {
+      display: grid;
+      grid-template-columns: 1fr;
+      border-bottom: 1px solid var(--cc-line-d);
+      padding: 1rem 0;
+    }
+    .cc-matrix td,
+    .cc-matrix th {
+      width: auto !important;
+      border: 0;
+      padding: 0.2rem 0;
+    }
+    .cc-table--num td:not(:first-child) {
+      font-size: 1.1rem;
+    }
+    .cc-table--num th:nth-child(4),
+    .cc-table--num td:nth-child(4) {
+      display: none;
+    }
+    .cc-live {
+      right: 20px;
+      bottom: 20px;
+    }
+    .cc-hero-fig figcaption {
+      left: 20px;
+      top: 50px;
+    }
+  }
+</style>

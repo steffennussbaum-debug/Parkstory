@@ -1,0 +1,255 @@
+---
+/**
+ * Schematic building section: a conventional ramp garage next to TilePark in
+ * the same envelope. Drawn like an architectural section (thin lines, hatching)
+ * and themed through CSS custom properties:
+ *   --sd-ink (lines), --sd-muted (secondary lines/labels),
+ *   --sd-accent (TilePark cars), --sd-car (conventional cars), --sd-fill (slabs)
+ * It is a principle illustration, not to scale, and says so.
+ */
+export interface Props {
+  class?: string;
+  showCaption?: boolean;
+}
+const { class: cls = '', showCaption = true } = Astro.props;
+
+const G = 70; // ground line
+const LV = 80; // conventional level height
+const X0 = 40,
+  WD = 400; // envelope
+const floors = [G + LV, G + 2 * LV, G + 3 * LV];
+const BASE = G + 3 * LV;
+
+const car = (x: number, y: number) => ({ x, y });
+// conventional: two parking bays, an aisle and a ramp on each level
+const convCars = floors.flatMap((f) => [car(52, f), car(96, f), car(140, f), car(252, f), car(296, f)]);
+// TilePark: transport level with pallets, stacker columns above
+const pitch = 47;
+const tpPositions = Array.from({ length: 8 }, (_, i) => 50 + i * pitch);
+const free = new Set([2, 5]);
+const lvlH = 56;
+const stackCols = [0, 1, 3, 4, 6, 7];
+---
+
+<figure class:list={['sd', cls]}>
+  <svg viewBox="0 0 1000 380" role="img" aria-labelledby="sdT sdD">
+    <title id="sdT">Schematic section: conventional ramp garage and TilePark</title>
+    <desc id="sdD"
+      >Left: a conventional underground garage with ramps and driving aisles on three levels. Right: the same envelope
+      with a TilePark transport level of conveyors and stackers holding cars in storage levels above it, without ramps
+      or aisles.</desc
+    >
+    <defs>
+      <pattern id="sdHatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <line x1="0" y1="0" x2="0" y2="6" class="sd-hatch"></line>
+      </pattern>
+      <symbol id="sdCar" viewBox="0 0 38 16" overflow="visible">
+        <rect x="0" y="5" width="38" height="7" rx="2.5"></rect>
+        <rect x="9" y="0" width="19" height="7" rx="2.5"></rect>
+        <circle cx="8" cy="13" r="2.6"></circle>
+        <circle cx="30" cy="13" r="2.6"></circle>
+      </symbol>
+    </defs>
+
+    {
+      [0, 520].map((dx, side) => (
+        <g transform={`translate(${dx},0)`}>
+          {/* ground + earth hatch */}
+          <rect x={X0 - 24} y={G} width={WD + 48} height={BASE - G + 16} fill="url(#sdHatch)" class="sd-earth" />
+          <rect x={X0} y={G} width={WD} height={BASE - G} class="sd-void" />
+          <line x1={X0 - 30} y1={G} x2={X0 + WD + 30} y2={G} class="sd-ground" />
+          {/* building above ground */}
+          <path d={`M${X0 + 20} ${G} V18 H${X0 + WD - 20} V${G}`} class="sd-building" />
+          {[34, 50].map((y) => (
+            <line x1={X0 + 20} y1={y} x2={X0 + WD - 20} y2={y} class="sd-thin" />
+          ))}
+          {/* envelope walls + base slab */}
+          <path d={`M${X0} ${G} V${BASE} H${X0 + WD} V${G}`} class="sd-wall" />
+          <rect x={X0 - 4} y={BASE} width={WD + 8} height="8" class="sd-slab" />
+          <text x={X0 + WD / 2} y={BASE + 34} class="sd-title">
+            {side === 0 ? 'Conventional ramp garage' : 'TilePark'}
+          </text>
+        </g>
+      ))
+    }
+
+    <!-- Conventional: slabs, ramps, aisles -->
+    <g>
+      {floors.slice(0, 2).map((f) => <rect x={X0} y={f - 4} width={WD - 92} height="8" class="sd-slab" />)}
+      {
+        floors.map((f, i) => (
+          <g>
+            <line
+              x1={i % 2 ? X0 + WD - 8 : X0 + WD - 88}
+              y1={f}
+              x2={i % 2 ? X0 + WD - 88 : X0 + WD - 8}
+              y2={f - LV}
+              class="sd-ramp"
+            />
+            <line x1="186" y1={f - 7} x2="246" y2={f - 7} class="sd-aisle" />
+          </g>
+        ))
+      }
+      {convCars.map((c) => <use href="#sdCar" x={c.x} y={c.y - 16} width="38" height="16" class="sd-car" />)}
+      <g class="sd-labels">
+        <text x={X0 + WD - 62} y={G + 16} text-anchor="middle">Ramps</text>
+        <text x="216" y={floors[0] - 16} text-anchor="middle">Aisle</text>
+      </g>
+    </g>
+
+    <!-- TilePark: transport level + stacker columns -->
+    <g transform="translate(520,0)">
+      {tpPositions.map((x) => <rect x={x - 3} y={BASE - 5} width="44" height="5" class="sd-conveyor" />)}
+      {
+        stackCols.map((i) => (
+          <g>
+            <line
+              x1={tpPositions[i] - 3}
+              y1={BASE - 5}
+              x2={tpPositions[i] - 3}
+              y2={BASE - 4 * lvlH + 8}
+              class="sd-post"
+            />
+            <line
+              x1={tpPositions[i] + 41}
+              y1={BASE - 5}
+              x2={tpPositions[i] + 41}
+              y2={BASE - 4 * lvlH + 8}
+              class="sd-post"
+            />
+            {[1, 2, 3].map((l) => (
+              <line
+                x1={tpPositions[i] - 3}
+                y1={BASE - l * lvlH}
+                x2={tpPositions[i] + 41}
+                y2={BASE - l * lvlH}
+                class="sd-shelf"
+              />
+            ))}
+            {[1, 2, 3].map((l) => (
+              <use href="#sdCar" x={tpPositions[i]} y={BASE - l * lvlH - 16} width="38" height="16" class="sd-tpcar" />
+            ))}
+          </g>
+        ))
+      }
+      {
+        tpPositions.map((x, i) =>
+          free.has(i) ? null : <use href="#sdCar" x={x} y={BASE - 21} width="38" height="16" class="sd-tpcar" />
+        )
+      }
+      <!-- transfer cabin at ground level -->
+      <rect x={X0 + WD / 2 - 26} y={G - 34} width="52" height="34" class="sd-cabin"></rect>
+      <g class="sd-labels">
+        <text x={X0 + WD / 2} y={G - 40} text-anchor="middle">Transfer cabin</text>
+        <text x={tpPositions[2] + 19} y={BASE - 14} text-anchor="middle">free</text>
+        <text x={X0 + WD / 2} y={G + 22} text-anchor="middle">Storage levels: steel shelving, no slabs</text>
+      </g>
+    </g>
+  </svg>
+  {
+    showCaption && (
+      <figcaption>
+        Schematic section, not to scale. It illustrates the principle; actual layouts and capacity depend on the site,
+        vehicle heights and configuration. Transport level of conveyors at the bottom, stackers above.
+      </figcaption>
+    )
+  }
+</figure>
+
+<style>
+  .sd {
+    --sd-ink: currentColor;
+    color: var(--sd-ink);
+  }
+  svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  .sd-hatch {
+    stroke: var(--sd-muted, currentColor);
+    stroke-width: 0.6;
+    opacity: 0.35;
+  }
+  .sd-void {
+    fill: var(--sd-void, transparent);
+  }
+  .sd-ground {
+    stroke: var(--sd-ink);
+    stroke-width: 1.6;
+  }
+  .sd-building {
+    fill: none;
+    stroke: var(--sd-muted, currentColor);
+    stroke-width: 1;
+  }
+  .sd-thin {
+    stroke: var(--sd-muted, currentColor);
+    stroke-width: 0.6;
+    opacity: 0.6;
+  }
+  .sd-wall {
+    fill: none;
+    stroke: var(--sd-ink);
+    stroke-width: 2.2;
+  }
+  .sd-slab {
+    fill: var(--sd-fill, currentColor);
+    opacity: 0.85;
+  }
+  .sd-ramp {
+    stroke: var(--sd-ink);
+    stroke-width: 3;
+  }
+  .sd-aisle {
+    stroke: var(--sd-muted, currentColor);
+    stroke-width: 1;
+    stroke-dasharray: 4 4;
+  }
+  .sd-car {
+    fill: var(--sd-car, currentColor);
+    opacity: 0.55;
+  }
+  .sd-tpcar {
+    fill: var(--sd-accent, currentColor);
+  }
+  .sd-conveyor {
+    fill: var(--sd-ink);
+    opacity: 0.8;
+  }
+  .sd-post {
+    stroke: var(--sd-muted, currentColor);
+    stroke-width: 1;
+  }
+  .sd-shelf {
+    stroke: var(--sd-muted, currentColor);
+    stroke-width: 1.4;
+  }
+  .sd-cabin {
+    fill: none;
+    stroke: var(--sd-accent, currentColor);
+    stroke-width: 1.4;
+  }
+  .sd-labels text,
+  .sd-title {
+    font-family: var(--sd-font, inherit);
+    fill: var(--sd-muted, currentColor);
+  }
+  .sd-labels text {
+    font-size: 11px;
+    letter-spacing: 0.04em;
+  }
+  .sd-title {
+    font-size: 15px;
+    text-anchor: middle;
+    fill: var(--sd-ink);
+    font-weight: 600;
+  }
+  figcaption {
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: var(--sd-muted, currentColor);
+    max-width: 70ch;
+  }
+</style>
