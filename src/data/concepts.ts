@@ -36,7 +36,7 @@ export const shift = {
   title: 'Tomorrow’s infrastructure cannot run on yesterday’s technology.',
   lead: 'Parking infrastructure is a decision measured in decades. The technology behind it shouldn’t belong to the past.',
   intro:
-    'TilePark is Parkstory’s new architecture for automated parking: a floor of independent conveyors that moves every car horizontally, and stackers that move it vertically. No ramps, no driving aisles, and no central machine that every car depends on.',
+    'TilePark is Parkstory’s new architecture for automated parking: a floor of independent conveyors, each able to move a car in both X and Y directions, with stackers that add the vertical Z axis. No ramps, no driving aisles, and no central machine that every car depends on.',
   points: [
     { n: '01', text: 'Automated parking is undergoing a technological transformation.' },
     { n: '02', text: 'TilePark is a new architecture, designed for the cities and buildings of tomorrow.' },
@@ -46,24 +46,28 @@ export const shift = {
 
 export const question = {
   eyebrow: 'The question',
-  title: 'What if the parking system you install today is already becoming obsolete?',
-  body: 'A building is designed around its parking. Ramps, driving aisles, lift cores and shuttle lanes are built into the structure, and they stay there for the life of the building. The technology chosen at the start sets the limits for everything that follows.',
+  title: 'Have you chosen the right parking system supplier for the decades ahead?',
+  body: 'An automated parking system is not bought for opening day. For decades, the building will depend on its architecture, its controls, its spare parts and the company behind it. Before you sign, these are the questions worth asking every supplier, including us.',
   constraints: [
     {
-      k: 'Building design',
-      v: 'Fixed ramps, aisles and lift cores dictate the layout, the column grid and the floor heights around them.',
+      k: 'Does every car depend on a single machine?',
+      v: 'If one shuttle, lift or crane stops, every car behind it waits. Ask whether the system can route around a fault and keep every car accessible.',
     },
     {
-      k: 'Space',
-      v: 'In a conventional garage, roughly half of the floor area is taken up by ramps and driving lanes.',
+      k: 'Will the system improve after opening day?',
+      v: 'Years pass between the decision and the first car. Ask whether new capabilities arrive as software updates, or whether the system stays as it was specified.',
     },
     {
-      k: 'Flexibility',
-      v: 'A layout organised around one shuttle aisle or one lift core is difficult to change once it has been built.',
+      k: 'Who designs and builds the technology?',
+      v: 'Mechanics, controls, software and app from one company, or integrated from third parties? The answer decides who can fix, improve and support the system.',
     },
     {
-      k: 'Operations',
-      v: 'When the one machine every car depends on stops, every car behind it waits.',
+      k: 'Will parts and support still exist in decades?',
+      v: 'Ask how long spare parts are guaranteed, and whether that guarantee depends on other companies’ catalogues.',
+    },
+    {
+      k: 'Does the system adapt to the building?',
+      v: 'Irregular plots, columns, EV charging, additional levels: ask whether the layout adapts to the site, or the site to the machine.',
     },
   ],
   timeline: {

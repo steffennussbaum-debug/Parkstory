@@ -135,20 +135,19 @@ const chapters = [
 
     <section class="cb-sec cb-tight">
       <div class="cb-wrap">
-        <div class="cb-split">
-          <p class="cb-body" data-reveal>{question.body}</p>
-          <ol class="cb-list">
-            {
-              question.constraints.map((c, i) => (
-                <li data-reveal style={`--reveal-delay:${0.06 * i}s`}>
-                  <span class="cb-n">0{i + 1}</span>
-                  <h3>{c.k}</h3>
-                  <p>{c.v}</p>
-                </li>
-              ))
-            }
-          </ol>
-        </div>
+        <p class="cb-body cb-body--wide" data-reveal>{question.body}</p>
+        <p class="cb-asklabel" data-reveal>Five questions to ask every supplier</p>
+        <ol class="cb-list cb-ask">
+          {
+            question.constraints.map((c, i) => (
+              <li data-reveal style={`--reveal-delay:${0.06 * i}s`}>
+                <span class="cb-n">0{i + 1}</span>
+                <h3>{c.k}</h3>
+                <p>{c.v}</p>
+              </li>
+            ))
+          }
+        </ol>
         <div class="cb-timeline">
           <p class="cb-kicker"><b>—</b>A decision measured in decades</p>
           <DecadeTimeline />
@@ -1064,6 +1063,30 @@ const chapters = [
   }
   .cb-q span.lit:nth-last-child(-n + 2) {
     color: var(--lime);
+  }
+  .cb-asklabel {
+    margin-top: clamp(48px, 6vw, 88px);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--lime);
+  }
+  .cb-ask {
+    margin-top: 1rem;
+  }
+  .cb-ask li {
+    grid-template-columns: 3.5rem minmax(0, 1fr) minmax(0, 1.15fr);
+    gap: 1.5rem;
+    padding: 1.6rem 0;
+    align-items: start;
+  }
+  .cb-ask h3 {
+    font-size: clamp(1.25rem, 1.8vw, 1.6rem) !important;
+    line-height: 1.2;
+  }
+  .cb-ask p {
+    padding-top: 0.2rem;
   }
   .cb-tight .cb-split {
     align-items: start;
@@ -2003,6 +2026,13 @@ const chapters = [
     }
   }
   @media (max-width: 960px) {
+    .cb-ask li {
+      grid-template-columns: 3rem minmax(0, 1fr);
+      gap: 0.5rem 1rem;
+    }
+    .cb-ask p {
+      grid-column: 2;
+    }
     .cb-app-grid {
       grid-template-columns: 1fr;
       grid-template-areas:
