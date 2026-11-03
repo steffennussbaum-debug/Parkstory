@@ -18,7 +18,21 @@ import GridDemo from '~/components/tilepark/GridDemo.astro';
 import StackerDemo from '~/components/tilepark/StackerDemo.astro';
 import EvDemo from '~/components/tilepark/EvDemo.astro';
 import BeesFigure from '~/components/tilepark/BeesFigure.astro';
-import { shift, question, breakthrough, edge, economics, ev, next, heritage, decision, nature } from '~/data/concepts';
+import AppPhone from '~/components/tilepark/AppPhone.astro';
+import {
+  shift,
+  question,
+  breakthrough,
+  edge,
+  economics,
+  ev,
+  next,
+  heritage,
+  decision,
+  nature,
+  app,
+  quality,
+} from '~/data/concepts';
 
 import drives from '~/assets/images/tilepark/gastonia-drive-assembly.webp';
 import welding from '~/assets/images/tilepark/kehl-welding.webp';
@@ -42,9 +56,10 @@ const chapters = [
   ['04', 'Why TilePark leads', '#edge'],
   ['05', 'Economics', '#economics'],
   ['06', 'EV charging', '#ev-charging'],
-  ['07', 'What comes next', '#next'],
-  ['08', 'Engineering', '#heritage'],
-  ['09', 'The decision', '#decision'],
+  ['07', 'The app', '#app'],
+  ['08', 'What comes next', '#next'],
+  ['09', 'Engineering', '#heritage'],
+  ['10', 'The decision', '#decision'],
 ];
 ---
 
@@ -58,7 +73,7 @@ const chapters = [
     <a href="#top" class="cb-mark" aria-label="Parkstory, back to top"><ParkstoryMark /></a>
     <nav aria-label="Chapters" class="cb-chapters">
       {
-        chapters.slice(2, 8).map(([n, t, h]) => (
+        chapters.slice(2, 9).map(([n, t, h]) => (
           <a href={h}>
             <i>{n}</i>
             {t}
@@ -368,10 +383,51 @@ const chapters = [
       </div>
     </section>
 
-    <!-- 07 BUILT FOR WHAT COMES NEXT -->
+    <!-- 07 THE APP -->
+    <section class="cb-sec cb-app" id="app">
+      <div class="cb-wrap" data-app-root>
+        <div class="cb-app-grid">
+          <div class="cb-app-head">
+            <p class="cb-kicker" data-reveal><b>07</b>{app.eyebrow}</p>
+            <h2 class="cb-h2" data-reveal>{app.title} <span class="cb-lime">{app.titleAccent}</span></h2>
+            <p class="cb-body" data-reveal>{app.body}</p>
+          </div>
+          <AppPhone class="cb-app-phone" />
+          <div class="cb-app-list">
+            <div class="tp-app-feats cb-app-feats">
+              {
+                app.features.map((f, i) => (
+                  <button data-t={f.t} class:list={{ on: i === 0 }}>
+                    <span class="tp-ico cb-n">{String(i + 1).padStart(2, '0')}</span>
+                    <b>{f.k}</b>
+                    <span class="tp-desc">{f.v}</span>
+                  </button>
+                ))
+              }
+            </div>
+            <p class="cb-note">Tap a feature, or the tabs on the phone, to see the screen.</p>
+          </div>
+        </div>
+        <div class="cb-ops">
+          <p class="cb-kicker" data-reveal><b>—</b>For owners and operators: the same platform, one dashboard</p>
+          <ul class="cb-four cb-four--plain">
+            {
+              app.operators.map((o, i) => (
+                <li data-reveal style={`--reveal-delay:${0.06 * i}s`}>
+                  <h3>{o.k}</h3>
+                  <p>{o.v}</p>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 08 BUILT FOR WHAT COMES NEXT -->
     <section class="cb-sec" id="next">
       <div class="cb-wrap">
-        <p class="cb-kicker" data-reveal><b>07</b>{next.eyebrow}</p>
+        <p class="cb-kicker" data-reveal><b>08</b>{next.eyebrow}</p>
         <h2 class="cb-h2" data-reveal>{next.title}</h2>
         <p class="cb-body" data-reveal>{next.body}</p>
         <div class="cb-lanes">
@@ -399,10 +455,10 @@ const chapters = [
       </div>
     </section>
 
-    <!-- 08 ENGINEERING HERITAGE -->
+    <!-- 09 ENGINEERING HERITAGE -->
     <section class="cb-sec" id="heritage">
       <div class="cb-wrap">
-        <p class="cb-kicker" data-reveal><b>08</b>{heritage.eyebrow}</p>
+        <p class="cb-kicker" data-reveal><b>09</b>{heritage.eyebrow}</p>
         <h2 class="cb-h2" data-reveal>
           We design what we build. <span class="cb-lime">We build what we develop.</span>
         </h2>
@@ -445,20 +501,48 @@ const chapters = [
             ))
           }
         </dl>
+        <div class="cb-qc" id="quality">
+          <div class="cb-qc-text">
+            <p class="cb-kicker" data-reveal><b>—</b>{quality.eyebrow}</p>
+            <h3 class="cb-h3" data-reveal>{quality.title} <span class="cb-lime">{quality.titleAccent}</span></h3>
+            <p class="cb-body" data-reveal>{quality.body}</p>
+            <ul class="cb-qc-list">
+              {
+                quality.checks.map((c, i) => (
+                  <li data-reveal style={`--reveal-delay:${0.08 * i}s`}>
+                    <b>{c.k}</b> {c.v}
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+          <figure class="cb-qc-video" data-reveal>
+            <video
+              src="/videos/load-test.mp4"
+              autoplay
+              muted
+              loop
+              playsinline
+              preload="metadata"
+              aria-label="A conveyor segment running on the load test rig"></video>
+            <span class="cb-rec"><i></i>Load test</span>
+            <figcaption>{quality.caption}</figcaption>
+          </figure>
+        </div>
         <ol class="cb-flow" aria-label="From design to service">
           {heritage.flow.map((s) => <li data-reveal>{s}</li>)}
         </ol>
       </div>
     </section>
 
-    <!-- 09 THE DECISION -->
+    <!-- 10 THE DECISION -->
     <section class="cb-decision" id="decision">
       <div class="cb-decision-field" aria-hidden="true">
         <TileField cell={40} density={0.86} rate={4} accentShare={0.1} />
       </div>
       <div class="cb-decision-shade" aria-hidden="true"></div>
       <div class="cb-wrap cb-decision-in">
-        <p class="cb-kicker"><b>09</b>The decision</p>
+        <p class="cb-kicker"><b>10</b>The decision</p>
         <h2 data-reveal>
           The most expensive parking system may be the one you <span class="cb-lime">cannot adapt.</span>
         </h2>
@@ -1426,6 +1510,206 @@ const chapters = [
     background: var(--mint);
   }
 
+  /* --- app --- */
+  .cb-app {
+    background: var(--ink-2);
+  }
+  .cb-app-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.8fr);
+    grid-template-areas:
+      'head phone'
+      'list phone';
+    column-gap: clamp(40px, 6vw, 112px);
+    align-items: start;
+  }
+  .cb-app-head {
+    grid-area: head;
+  }
+  .cb-app-list {
+    grid-area: list;
+  }
+  .cb-app-feats {
+    margin-top: clamp(32px, 4vw, 56px);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .cb-app-feats button {
+    background: var(--ink-2);
+    color: var(--white);
+    border: 0;
+    border-radius: 0;
+    padding: 1.1rem 1.2rem 1.25rem;
+    box-shadow: none;
+    transform: none !important;
+  }
+  .cb-app-feats button:hover {
+    background: var(--lift);
+  }
+  .cb-app-feats button.on {
+    background: var(--lift);
+    box-shadow: inset 3px 0 0 var(--lime);
+  }
+  .cb-app-feats .tp-ico {
+    padding-top: 0.1rem;
+  }
+  .cb-app-feats b {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 1.05rem;
+  }
+  .cb-app-feats .tp-desc {
+    color: var(--soft);
+    font-size: 0.86rem;
+    line-height: 1.5;
+  }
+  .cb-app-phone {
+    grid-area: phone;
+    position: sticky;
+    top: 96px;
+  }
+  /* phone in Parkstory colours */
+  .cb .tp-phone {
+    background: #0b1d15;
+    box-shadow:
+      0 40px 80px -30px rgb(0 0 0 / 70%),
+      inset 0 0 0 2px #24443a;
+  }
+  .cb .tp-phone .ph-notch {
+    background: #0b1d15;
+  }
+  .cb .tp-phone .ph-head {
+    background: var(--ink-2);
+    font-family: var(--display);
+  }
+  .cb .tp-phone .ph-body {
+    background: #f3f2ec;
+    font-family: var(--text);
+  }
+  .cb .tp-phone .pc em.ok,
+  .cb .tp-phone .pc .lbl,
+  .cb .tp-phone .ph-btn.ghost,
+  .cb .tp-phone .ph-tabs button.on {
+    color: #1f6b3f;
+  }
+  .cb .tp-phone .pc em.ok,
+  .cb .tp-phone .ph-tabs button.on {
+    background: rgb(47 148 82 / 14%);
+  }
+  .cb .tp-phone .ph-btn,
+  .cb .tp-phone .bar i,
+  .cb .tp-phone .tg.on,
+  .cb .tp-phone .vl-steps div.on::before {
+    background: #2f9452;
+    border-color: #2f9452;
+  }
+  .cb .tp-phone .ph-btn.ghost {
+    background: #fff;
+    border-color: rgb(47 148 82 / 45%);
+  }
+  .cb .tp-phone .pc-act {
+    border-color: rgb(47 148 82 / 40%);
+  }
+  .cb .tp-phone .kpis div,
+  .cb .tp-phone .toast {
+    background: var(--ink-2);
+  }
+  .cb-ops {
+    margin-top: clamp(80px, 10vw, 144px);
+  }
+  .cb-ops .cb-four {
+    margin-bottom: 0;
+    margin-top: 1.5rem;
+  }
+
+  /* --- quality control --- */
+  .cb-qc {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    gap: clamp(32px, 6vw, 112px);
+    align-items: center;
+    margin-top: clamp(80px, 10vw, 144px);
+    padding-top: clamp(56px, 7vw, 104px);
+    border-top: 1px solid var(--line);
+  }
+  .cb-qc-list {
+    display: grid;
+    margin-top: 2rem;
+    border-top: 1px solid var(--line-2);
+  }
+  .cb-qc-list li {
+    padding: 0.95rem 0 0.95rem 1.6rem;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+    color: var(--soft);
+  }
+  .cb-qc-list li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--lime);
+    font-weight: 600;
+  }
+  .cb-qc-list b {
+    color: var(--white);
+    font-weight: 600;
+  }
+  /* the portrait video always fits the screen: never taller than the viewport */
+  .cb-qc-video {
+    position: relative;
+    margin: 0;
+    justify-self: center;
+    width: min(100%, calc(min(78vh, 760px) * 0.8));
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: 4px;
+    background: #000;
+    border: 1px solid var(--line);
+  }
+  .cb-qc-video video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .cb-rec {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    background: rgb(4 13 9 / 80%);
+    padding: 0.35rem 0.6rem;
+    border-radius: 3px;
+  }
+  .cb-rec i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #e5484d;
+    animation: cbRec 1.4s infinite;
+  }
+  @keyframes cbRec {
+    50% {
+      opacity: 0.25;
+    }
+  }
+  .cb-qc-video figcaption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 2rem 1rem 0.8rem;
+    font-size: 0.82rem;
+    background: linear-gradient(transparent, rgb(4 13 9 / 92%));
+  }
+
   /* --- next --- */
   .cb-lanes {
     display: grid;
@@ -1719,6 +2003,23 @@ const chapters = [
     }
   }
   @media (max-width: 960px) {
+    .cb-app-grid {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        'head'
+        'phone'
+        'list';
+      row-gap: 2.5rem;
+    }
+    .cb-qc {
+      grid-template-columns: 1fr;
+    }
+    .cb-app-phone {
+      position: static;
+    }
+    .cb-qc-video {
+      width: min(100%, 420px, calc(70vh * 0.8));
+    }
     .cb-split,
     .cb-hero-grid,
     .cb-lanes {

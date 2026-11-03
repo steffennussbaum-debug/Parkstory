@@ -342,3 +342,69 @@ export const edge = {
   loopNote:
     'One company from first sketch to service: no importer, no third-party system and no outside assembler between an idea and the garage that runs it.',
 };
+
+/** The app as the user-facing end of decentralised control. */
+export const app = {
+  eyebrow: 'The TilePark app',
+  title: 'Decentralised control,',
+  titleAccent: 'in the driver’s hand.',
+  body: 'TilePark has no central master that every car depends on. The app takes that principle all the way to the people who use the garage: it puts each driver in charge of their own car, their own guests and their own schedule. It is the one part of TilePark that puts you at the center.',
+  features: [
+    {
+      t: 0,
+      k: 'Your valet, on call',
+      v: 'Announce your departure, or schedule it in advance, and your car is waiting in the transfer cabin when you arrive. No queue, no keys to hand over.',
+    },
+    {
+      t: 5,
+      k: 'Manage your cars',
+      v: 'Several vehicles and users in one account. Enter with a QR code, a secure access code or license-plate recognition.',
+    },
+    {
+      t: 2,
+      k: 'Welcome your guests',
+      v: 'Grant friends, family and visitors access with a tap, for one evening or for good, and revoke it at any time.',
+    },
+    {
+      t: 1,
+      k: 'Plan and charge',
+      v: 'Set your next departure and your charge target. Once charging is complete, the system moves the car away and frees the charger.',
+    },
+    {
+      t: 3,
+      k: 'Fleets, company and hotel parking',
+      v: 'An operator platform with user management, live dashboards and dynamic pricing for company vehicles, employees and hotel guests.',
+    },
+    {
+      t: 4,
+      k: 'Payment',
+      v: 'Parking, charging and guest access paid in the app, for subscribers and occasional users alike, with every receipt in one place.',
+    },
+  ],
+  operators: [
+    { k: 'Billing', v: 'Subscriptions, short-term parking, EV charging and guest access, billed automatically.' },
+    { k: 'User management', v: 'Add, change and remove users, vehicles and access rights in a few clicks.' },
+    {
+      k: 'Groups and roles',
+      v: 'Residents, employees, hotel guests or pool cars, each with their own rules, rates and time windows.',
+    },
+    {
+      k: 'Live dashboard',
+      v: 'Occupancy, charging, revenue and system status at a glance, with reports for every period.',
+    },
+  ],
+};
+
+/** Quality control on the load test rig (with the load-test video). */
+export const quality = {
+  eyebrow: 'Quality control',
+  title: 'Every conveyor segment is',
+  titleAccent: 'tested under load.',
+  body: 'Before a conveyor leaves our factory, it goes onto the test rig. A hydraulic press applies load from above while the drives run, just as they will under a parked car. Only conveyors that pass are released for shipping.',
+  checks: [
+    { k: 'Drives, gearboxes and rollers', v: 'run under load, not just switched on.' },
+    { k: 'Structure and alignment', v: 'are checked while the conveyor carries weight.' },
+    { k: 'Every result is logged', v: 'against the component’s serial number.' },
+  ],
+  caption: 'Conveyor segment on the load test rig',
+};
