@@ -35,8 +35,7 @@ export const shift = {
   eyebrow: 'Parkstory · TilePark',
   title: 'Your vision needs space. We unlock it.',
   lead: 'Every square foot consumed by an inefficient parking solution is a square foot your development can never recover.',
-  intro:
-    'TilePark is Parkstory’s new architecture for automated parking: a floor of independent conveyors, each able to move a car in both X and Y directions, with stackers that add the vertical Z axis. No ramps, no driving aisles, and no central machine that every car depends on.',
+  intro: 'Residents need parking, but every square foot it occupies is space you can’t market.',
   points: [
     { n: '01', text: 'Automated parking is undergoing a technological transformation.' },
     { n: '02', text: 'TilePark is a new architecture, designed for the cities and buildings of tomorrow.' },
@@ -86,7 +85,7 @@ export const breakthrough = {
     {
       n: '01',
       k: 'Every position moves',
-      v: 'The floor is a grid of conveyors. Each car rests on its own pallet and is moved lengthwise and crosswise, like a tile in a sliding puzzle.',
+      v: 'The floor is a grid of conveyors, each able to move a car in both X and Y directions. Each car rests on its own pallet and moves like a tile in a sliding puzzle.',
     },
     {
       n: '02',
