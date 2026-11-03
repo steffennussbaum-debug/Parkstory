@@ -33,8 +33,8 @@ export const concepts = [
 
 export const shift = {
   eyebrow: 'Parkstory · TilePark',
-  title: 'Tomorrow’s infrastructure cannot run on yesterday’s technology.',
-  lead: 'Parking infrastructure is a decision measured in decades. The technology behind it shouldn’t belong to the past.',
+  title: 'Your vision needs space. We unlock it.',
+  lead: 'Every square foot consumed by an inefficient parking solution is a square foot your development can never recover.',
   intro:
     'TilePark is Parkstory’s new architecture for automated parking: a floor of independent conveyors, each able to move a car in both X and Y directions, with stackers that add the vertical Z axis. No ramps, no driving aisles, and no central machine that every car depends on.',
   points: [
