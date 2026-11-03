@@ -650,3 +650,110 @@ export const valueChain = {
   ],
   youtube: 'https://www.youtube.com/@parkstory2332',
 };
+
+/**
+ * Innovation and engineering. Statements are Parkstory's own; the
+ * automation strategy summarises principles already shown on the page
+ * (one automation level, decentralised control, software-first, learning).
+ */
+export const innovation = {
+  eyebrow: 'Engineering and innovation',
+  title: 'Innovation is',
+  titleAccent: 'our DNA.',
+  body: 'TilePark was not adapted from an existing parking machine. It was engineered from first principles by one team that covers every discipline the system needs, and it keeps evolving in our own hands.',
+  disciplines: [
+    {
+      k: 'Mechanical engineering',
+      v: 'Conveyors, drives, stackers and steel structures, designed specifically for TilePark.',
+    },
+    { k: 'Electrical engineering', v: 'Drives, power distribution and charging integration, down to every conveyor.' },
+    { k: 'Structural engineering', v: 'Steel structures and integration into new and existing buildings.' },
+    { k: 'Controls', v: 'The decentralised control system that runs every conveyor. We know every line of code.' },
+    {
+      k: 'Software and AI',
+      v: 'Route planning, swarm learning, remote diagnostics and updates, developed with AI-backed software engineering.',
+    },
+    {
+      k: 'App and platform',
+      v: 'The driver app and the operator platform: valet, guests, fleets, charging and payment.',
+    },
+  ],
+  aiTitle: 'AI-backed software engineering',
+  aiBody:
+    'Software is where TilePark’s intelligence lives, so it is where we invest. Our team uses AI throughout software engineering, and builds AI into the product itself: every TilePark learns which routes and storage positions work best, and all systems learn from each other.',
+  strategyTitle: 'A clear automation strategy, at the core of the product',
+  strategy: [
+    {
+      n: '01',
+      k: 'Automate where it creates value',
+      v: 'Only the transport level is automated. Everything above is simple steel storage.',
+    },
+    {
+      n: '02',
+      k: 'Decentralise everything',
+      v: 'A controller in every conveyor. No master computer, no single machine every car depends on.',
+    },
+    {
+      n: '03',
+      k: 'Software first',
+      v: 'New capabilities arrive as remote updates, so a system keeps improving for decades.',
+    },
+    { n: '04', k: 'Learn continuously', v: 'Swarm learning through AI: every sequence makes every system better.' },
+  ],
+  patent: 'Patented principle: European patent EP 3924576 B1, with further patents pending in the US and Germany.',
+};
+
+/**
+ * Project delivery and after-sales service. The uptime benchmark and the
+ * service figures (24/7, 99 % solved remotely) are Parkstory's own
+ * statements and must match its service contracts.
+ */
+export const delivery = {
+  eyebrow: 'From first sketch to decades of operation',
+  title: 'One partner leads',
+  titleAccent: 'every phase.',
+  body: 'Parkstory leads and manages the entire process itself: planning, engineering, manufacturing, commissioning and after-sales service. One company, one contract, one team that knows your system from the first sketch.',
+  phases: [
+    {
+      k: 'Planning',
+      v: 'Together with architects and developers from the first sketch: the grid, stackers, transfer cabins and EV charging fitted to the site and the building.',
+    },
+    {
+      k: 'Engineering',
+      v: 'Our engineers design the mechanical, electrical and structural system and configure the controls for your project.',
+    },
+    {
+      k: 'Manufacturing',
+      v: 'Built and pre-assembled in our own factories in Kehl and Gastonia. Every conveyor is load-tested before shipping.',
+    },
+    {
+      k: 'Commissioning',
+      v: 'Installed and commissioned by our own team, and handed over by the people who built it.',
+    },
+    {
+      k: 'After-sales service',
+      v: '24/7 availability, remote diagnostics and updates, and spare parts for at least 30 years.',
+    },
+  ],
+  uptime: {
+    value: '99.5 %',
+    label: 'uptime',
+    claim: 'A system that doesn’t deliver 99.5 % uptime has failed.',
+    note: 'That is the standard we hold TilePark to, and why every phase stays in our hands.',
+  },
+  service: {
+    title: 'After-sales service, around the clock',
+    steps: [
+      { k: '24/7', v: 'Our after-sales team is available around the clock, every day of the year.' },
+      {
+        k: 'Kiosk or app',
+        v: 'Drivers and operators reach us directly from the kiosk or the app, in their own language.',
+      },
+      {
+        k: '99 % solved remotely',
+        v: 'Our after-sales team solves 99 % of all issues remotely, through remote diagnostics.',
+      },
+      { k: 'On site', v: 'If an issue cannot be solved remotely, a Parkstory technician comes on site.' },
+    ],
+  },
+};

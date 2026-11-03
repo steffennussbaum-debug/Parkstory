@@ -38,6 +38,8 @@ import {
   power,
   driver,
   valueChain,
+  innovation,
+  delivery,
 } from '~/data/concepts';
 
 import drives from '~/assets/images/tilepark/gastonia-drive-assembly.webp';
@@ -77,15 +79,19 @@ const plantPics = [
 const chapters = [
   ['01', 'The shift', '#shift'],
   ['02', 'The question', '#question'],
-  ['03', 'The breakthrough', '#breakthrough'],
-  ['04', 'Why TilePark leads', '#edge'],
+  ['03', 'Breakthrough', '#breakthrough'],
+  ['04', 'Why we lead', '#edge'],
   ['05', 'Third dimension', '#economics'],
   ['06', 'EV charging', '#ev-charging'],
   ['07', 'The app', '#app'],
   ['08', 'What comes next', '#next'],
-  ['09', 'Value chain', '#heritage'],
-  ['10', 'The decision', '#decision'],
+  ['09', 'Innovation', '#innovation'],
+  ['10', 'Value chain', '#heritage'],
+  ['11', 'Service', '#delivery'],
+  ['12', 'The decision', '#decision'],
 ];
+// chapters shown in the top navigation
+const navChapters = chapters.filter((_, i) => [2, 3, 4, 5, 6, 8, 9, 10].includes(i));
 ---
 
 <ConceptLayout
@@ -98,7 +104,7 @@ const chapters = [
     <a href="#top" class="cb-mark" aria-label="Parkstory, back to top"><ParkstoryMark /></a>
     <nav aria-label="Chapters" class="cb-chapters">
       {
-        chapters.slice(2, 9).map(([n, t, h]) => (
+        navChapters.map(([n, t, h]) => (
           <a href={h}>
             <i>{n}</i>
             {t}
@@ -588,11 +594,63 @@ const chapters = [
       </div>
     </section>
 
-    <!-- 09 ONE COMPANY, THE ENTIRE VALUE CHAIN -->
+    <!-- 09 ENGINEERING AND INNOVATION -->
+    <section class="cb-sec cb-innov" id="innovation">
+      <div class="cb-wrap">
+        <p class="cb-kicker" data-reveal><b>09</b>{innovation.eyebrow}</p>
+        <div class="cb-split">
+          <h2 class="cb-h2" data-reveal>{innovation.title} <span class="cb-lime">{innovation.titleAccent}</span></h2>
+          <p class="cb-body" data-reveal>{innovation.body}</p>
+        </div>
+
+        <ul class="cb-six cb-disciplines">
+          {
+            innovation.disciplines.map((d, i) => (
+              <li data-reveal style={`--reveal-delay:${0.05 * i}s`}>
+                <span class="cb-n">{String(i + 1).padStart(2, '0')}</span>
+                <h3>{d.k}</h3>
+                <p>{d.v}</p>
+              </li>
+            ))
+          }
+        </ul>
+
+        <div class="cb-ai">
+          <div>
+            <p class="cb-kicker" data-reveal><b>—</b>Software and AI</p>
+            <h3 class="cb-h3" data-reveal>{innovation.aiTitle}</h3>
+            <p class="cb-body" data-reveal>{innovation.aiBody}</p>
+          </div>
+          <figure class="cb-ai-viz" data-reveal>
+            <TileField cell={30} density={0.8} rate={16} accentShare={0.35} />
+            <figcaption><i></i>Every sequence teaches the swarm</figcaption>
+          </figure>
+        </div>
+
+        <div class="cb-strategy">
+          <p class="cb-kicker" data-reveal><b>—</b>{innovation.strategyTitle}</p>
+          <ol class="cb-pillars">
+            {
+              innovation.strategy.map((s, i) => (
+                <li data-reveal style={`--reveal-delay:${0.08 * i}s`}>
+                  <span class="cb-pillar-n">{s.n}</span>
+                  <h3>{s.k}</h3>
+                  <p>{s.v}</p>
+                </li>
+              ))
+            }
+          </ol>
+          <p class="cb-note">{innovation.patent}</p>
+        </div>
+        <a class="cb-nextch" href={chapters[9][2]}><span>Next</span><b>{chapters[9][0]}</b>{chapters[9][1]}<i>↓</i></a>
+      </div>
+    </section>
+
+    <!-- 10 ONE COMPANY, THE ENTIRE VALUE CHAIN -->
     <section class="cb-sec cb-chain-sec" id="heritage">
       <div class="cb-grid-bg" aria-hidden="true"></div>
       <div class="cb-wrap">
-        <p class="cb-kicker" data-reveal><b>09</b>{valueChain.eyebrow}</p>
+        <p class="cb-kicker" data-reveal><b>10</b>{valueChain.eyebrow}</p>
         <h2 class="cb-h2" data-reveal>{valueChain.title} <span class="cb-lime">{valueChain.titleAccent}</span></h2>
         <p class="cb-body cb-body--wide" data-reveal>{valueChain.body}</p>
 
@@ -715,18 +773,73 @@ const chapters = [
             >YouTube channel</a
           >.
         </p>
-        <a class="cb-nextch" href={chapters[9][2]}><span>Next</span><b>{chapters[9][0]}</b>{chapters[9][1]}<i>↓</i></a>
+        <a class="cb-nextch" href={chapters[10][2]}
+          ><span>Next</span><b>{chapters[10][0]}</b>{chapters[10][1]}<i>↓</i></a
+        >
       </div>
     </section>
 
-    <!-- 10 THE DECISION -->
+    <!-- 11 DELIVERY AND SERVICE -->
+    <section class="cb-sec" id="delivery">
+      <div class="cb-wrap">
+        <p class="cb-kicker" data-reveal><b>11</b>{delivery.eyebrow}</p>
+        <div class="cb-split">
+          <h2 class="cb-h2" data-reveal>{delivery.title} <span class="cb-lime">{delivery.titleAccent}</span></h2>
+          <p class="cb-body" data-reveal>{delivery.body}</p>
+        </div>
+
+        <div class="cb-journey cb-phases">
+          <p class="cb-lead-bar" data-reveal><span>Parkstory leads</span></p>
+          <ol>
+            {
+              delivery.phases.map((ph, i) => (
+                <li data-reveal style={`--reveal-delay:${0.08 * i}s`}>
+                  <span class="cb-journey-n">{i + 1}</span>
+                  <h3>{ph.k}</h3>
+                  <p>{ph.v}</p>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+
+        <div class="cb-uptime" data-reveal>
+          <p class="cb-uptime-n">
+            {delivery.uptime.value}<span>{delivery.uptime.label}</span>
+          </p>
+          <div>
+            <h3>{delivery.uptime.claim}</h3>
+            <p>{delivery.uptime.note}</p>
+          </div>
+        </div>
+
+        <div class="cb-service">
+          <p class="cb-kicker" data-reveal><b>—</b>{delivery.service.title}</p>
+          <ol>
+            {
+              delivery.service.steps.map((st, i) => (
+                <li data-reveal style={`--reveal-delay:${0.08 * i}s`} class:list={{ hi: i === 2 }}>
+                  <b>{st.k}</b>
+                  <p>{st.v}</p>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+        <a class="cb-nextch" href={chapters[11][2]}
+          ><span>Next</span><b>{chapters[11][0]}</b>{chapters[11][1]}<i>↓</i></a
+        >
+      </div>
+    </section>
+
+    <!-- 12 THE DECISION -->
     <section class="cb-decision" id="decision">
       <div class="cb-decision-field" aria-hidden="true">
         <TileField cell={40} density={0.86} rate={4} accentShare={0.1} />
       </div>
       <div class="cb-decision-shade" aria-hidden="true"></div>
       <div class="cb-wrap cb-decision-in">
-        <p class="cb-kicker"><b>10</b>The decision</p>
+        <p class="cb-kicker"><b>12</b>The decision</p>
         <h2 data-reveal>
           The most expensive parking system may be the one you <span class="cb-lime">cannot adapt.</span>
         </h2>
@@ -2431,6 +2544,211 @@ const chapters = [
     }
     .cb-plant-pics {
       grid-template-rows: 200px 110px;
+    }
+  }
+
+  /* --- 09 innovation --- */
+  .cb-innov {
+    background: var(--ink-2);
+  }
+  .cb-disciplines li {
+    background: var(--ink-2) !important;
+  }
+  .cb-disciplines .cb-n {
+    display: block;
+    margin-bottom: 0.8rem;
+  }
+  .cb-ai {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 96px);
+    align-items: center;
+    margin-top: clamp(72px, 9vw, 136px);
+  }
+  .cb-ai-viz {
+    position: relative;
+    margin: 0;
+    height: clamp(260px, 28vw, 380px);
+    border: 1px solid rgb(184 240 60 / 35%);
+    border-radius: 4px;
+    overflow: hidden;
+    --tf-bg: #07150f;
+    --tf-line: rgb(184 240 60 / 9%);
+    --tf-car: #24443a;
+    --tf-car-2: #173025;
+    --tf-glass: rgb(0 0 0 / 45%);
+    --tf-accent: #b8f03c;
+  }
+  .cb-ai-viz figcaption {
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: rgb(4 13 9 / 85%);
+    padding: 0.4rem 0.7rem;
+    border-radius: 3px;
+  }
+  .cb-ai-viz figcaption i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--lime);
+    animation: cbRec 1.6s infinite;
+  }
+  .cb-strategy {
+    margin-top: clamp(72px, 9vw, 136px);
+  }
+  .cb-strategy .cb-pillars {
+    margin-top: 1.5rem;
+  }
+  .cb-strategy .cb-pillars li {
+    background: var(--ink-2);
+  }
+
+  /* --- 11 delivery and service --- */
+  .cb-phases ol {
+    grid-template-columns: repeat(5, 1fr);
+    margin-top: 1rem;
+  }
+  .cb-lead-bar {
+    position: relative;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+  }
+  .cb-lead-bar::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    background: linear-gradient(90deg, var(--lime), rgb(184 240 60 / 40%));
+  }
+  .cb-lead-bar span {
+    position: relative;
+    background: var(--black);
+    padding-right: 0.9rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--lime);
+  }
+  .cb-uptime {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 96px);
+    align-items: center;
+    margin-top: clamp(72px, 9vw, 136px);
+    padding: clamp(32px, 4vw, 64px) 0;
+    border-top: 1px solid var(--line-2);
+    border-bottom: 1px solid var(--line-2);
+  }
+  .cb-uptime-n {
+    font-family: var(--display);
+    font-weight: 300;
+    font-size: clamp(5rem, 13vw, 12rem);
+    line-height: 0.85;
+    letter-spacing: -0.05em;
+    color: var(--lime);
+    white-space: nowrap;
+  }
+  .cb-uptime-n span {
+    display: block;
+    font-family: var(--text);
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--grey);
+    margin-top: 1rem;
+  }
+  .cb-uptime h3 {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(1.8rem, 3.4vw, 3.2rem);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    max-width: 18ch;
+  }
+  .cb-uptime > div p {
+    margin-top: 1rem;
+    color: var(--soft);
+    font-size: 1.05rem;
+  }
+  .cb-service {
+    margin-top: clamp(72px, 9vw, 136px);
+  }
+  .cb-service ol {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+  .cb-service li {
+    position: relative;
+    padding: 1.5rem 1.4rem 1.6rem;
+    border: 1px solid var(--line-2);
+    border-radius: 4px;
+  }
+  .cb-service li + li::before {
+    content: '→';
+    position: absolute;
+    left: -1.2rem;
+    top: 1.6rem;
+    color: var(--lime);
+  }
+  .cb-service li.hi {
+    border-color: var(--lime);
+    background: rgb(184 240 60 / 5%);
+  }
+  .cb-service b {
+    display: block;
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 1.5rem;
+    letter-spacing: -0.02em;
+    color: var(--white);
+  }
+  .cb-service li.hi b {
+    color: var(--lime);
+  }
+  .cb-service p {
+    margin-top: 0.5rem;
+    color: var(--soft);
+    font-size: 0.92rem;
+  }
+  @media (max-width: 1100px) {
+    .cb-phases ol {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .cb-service ol {
+      grid-template-columns: 1fr 1fr;
+    }
+    .cb-service li:nth-child(3)::before {
+      display: none;
+    }
+  }
+  @media (max-width: 960px) {
+    .cb-ai,
+    .cb-uptime {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 640px) {
+    .cb-phases ol,
+    .cb-service ol {
+      grid-template-columns: 1fr;
+    }
+    .cb-service li + li::before {
+      display: none;
     }
   }
 
