@@ -27,7 +27,6 @@ import {
   economics,
   ev,
   next,
-  heritage,
   decision,
   nature,
   app,
@@ -40,6 +39,7 @@ import {
   valueChain,
   innovation,
   delivery,
+  dna,
 } from '~/data/concepts';
 
 import drives from '~/assets/images/tilepark/gastonia-drive-assembly.webp';
@@ -85,10 +85,19 @@ const chapters = [
   ['06', 'EV charging', '#ev-charging'],
   ['07', 'The app', '#app'],
   ['08', 'What comes next', '#next'],
-  ['09', 'Innovation', '#innovation'],
+  ['09', 'Our DNA', '#dna'],
   ['10', 'Value chain', '#heritage'],
   ['11', 'Service', '#delivery'],
   ['12', 'The decision', '#decision'],
+];
+// value-chain facts not already covered by the steps, the quality section or chapter 11
+const chainPillars = [
+  ...valueChain.pillars.filter((p) => ['Spare parts for 30+ years', 'Every component serialised'].includes(p.k)),
+  {
+    k: 'Materials and tolerances',
+    v: 'What each part is made of and why, with precision that holds from the first unit to the last.',
+  },
+  { k: 'Quality built in', v: 'Built into every production step, not added at the end.' },
 ];
 // chapters shown in the top navigation
 const navChapters = chapters.filter((_, i) => [2, 3, 4, 5, 6, 8, 9, 10].includes(i));
@@ -329,22 +338,6 @@ const navChapters = chapters.filter((_, i) => [2, 3, 4, 5, 6, 8, 9, 10].includes
           </figure>
         </div>
 
-        <div class="cb-loop" data-reveal>
-          <p class="cb-kicker"><b>—</b>Fast to react: one team, one loop</p>
-          <ol>
-            {
-              edge.loop.map((s, i) => (
-                <li>
-                  <span class="cb-loop-dot" />
-                  <b>{s}</b>
-                  {i === edge.loop.length - 1 && <em>↺ back to engineering</em>}
-                </li>
-              ))
-            }
-          </ol>
-          <p class="cb-note">{edge.loopNote}</p>
-        </div>
-
         <div class="cb-power" data-reveal>
           <div class="cb-power-bolt" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="30" height="30"
@@ -433,9 +426,10 @@ const navChapters = chapters.filter((_, i) => [2, 3, 4, 5, 6, 8, 9, 10].includes
               <ol>{economics.example.assumptions.map((a) => <li>{a}</li>)}</ol>
             </details>
           </div>
+          <p class="cb-foot-line cb-ambition" data-reveal>{economics.ambition}</p>
           <ul class="cb-five">
             {
-              economics.levers.map((l, i) => (
+              [...economics.levers.filter((l) => l.k !== 'Lighter construction'), economics.community].map((l, i) => (
                 <li data-reveal style={`--reveal-delay:${0.05 * i}s`}>
                   <h3>{l.k}</h3>
                   <p>{l.v}</p>
@@ -566,16 +560,21 @@ const navChapters = chapters.filter((_, i) => [2, 3, 4, 5, 6, 8, 9, 10].includes
     <section class="cb-sec" id="next">
       <div class="cb-wrap">
         <p class="cb-kicker" data-reveal><b>08</b>{next.eyebrow}</p>
-        <h2 class="cb-h2" data-reveal>{next.title}</h2>
-        <p class="cb-body" data-reveal>{next.body}</p>
+        <div class="cb-split">
+          <h2 class="cb-h2" data-reveal>{next.title}</h2>
+          <p class="cb-body" data-reveal>{next.evolveBody}</p>
+        </div>
         <div class="cb-lanes">
+          <div class="cb-lane is-today" data-reveal>
+            <p class="cb-badge"><i></i>Available today</p>
+            <ul class="cb-today-list">{next.todayShort.map((t) => <li>{t}</li>)}</ul>
+          </div>
           {
             [
-              ['Available today', next.today, 'today'],
               ['Continuous development', next.developing, 'dev'],
               ['Future direction', next.future, 'future'],
             ].map(([label, items, cls], i) => (
-              <div class:list={['cb-lane', `is-${cls}`]} data-reveal style={`--reveal-delay:${0.1 * i}s`}>
+              <div class:list={['cb-lane', `is-${cls}`]} data-reveal style={`--reveal-delay:${0.1 * (i + 1)}s`}>
                 <p class="cb-badge">
                   <i />
                   {label as string}
@@ -590,16 +589,83 @@ const navChapters = chapters.filter((_, i) => [2, 3, 4, 5, 6, 8, 9, 10].includes
             ))
           }
         </div>
+        <p class="cb-foot-line" data-reveal><b>Built to last, designed to evolve.</b>{next.evolve}</p>
+        <p class="cb-note">{next.adoption}</p>
         <a class="cb-nextch" href={chapters[8][2]}><span>Next</span><b>{chapters[8][0]}</b>{chapters[8][1]}<i>↓</i></a>
       </div>
     </section>
 
-    <!-- 09 ENGINEERING AND INNOVATION -->
-    <section class="cb-sec cb-innov" id="innovation">
+    <!-- 09 OUR DNA -->
+    <section class="cb-sec cb-innov cb-dna" id="dna">
       <div class="cb-wrap">
-        <p class="cb-kicker" data-reveal><b>09</b>{innovation.eyebrow}</p>
+        <p class="cb-kicker" data-reveal><b>09</b>{dna.eyebrow}</p>
         <div class="cb-split">
-          <h2 class="cb-h2" data-reveal>{innovation.title} <span class="cb-lime">{innovation.titleAccent}</span></h2>
+          <h2 class="cb-h2" data-reveal>{dna.title} <span class="cb-lime">{dna.titleAccent}</span></h2>
+          <p class="cb-body" data-reveal>{dna.body}</p>
+        </div>
+
+        <div class="cb-legacy">
+          {
+            dna.legacies.map((l, i) => (
+              <div class="cb-leg" data-reveal style={`--reveal-delay:${0.1 * i}s`}>
+                <p class="cb-leg-years">
+                  {l.years}
+                  <span>years</span>
+                </p>
+                <h3>{l.name}</h3>
+                <p class="cb-leg-text">{l.text}</p>
+                <ol>
+                  {l.steps.map(([k, v]) => (
+                    <li>
+                      {k}
+                      {v && <span>{v}</span>}
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            ))
+          }
+        </div>
+        <div class="cb-merge" data-reveal>
+          <svg viewBox="0 0 640 64" preserveAspectRatio="none" aria-hidden="true"
+            ><path
+              d="M160 0C160 36 320 28 320 64M480 0C480 36 320 28 320 64"
+              fill="none"
+              stroke="#b8f03c"
+              stroke-width="1.5"></path></svg
+          >
+          <div class="cb-merge-box">
+            <span class="cb-merge-mark"><ParkstoryMark /></span>
+            <b>{dna.merge}</b>
+            <p>{dna.mergeBody}</p>
+          </div>
+        </div>
+
+        <div class="cb-founders">
+          <div>
+            <h3 class="cb-h3" data-reveal>{dna.foundersTitle}</h3>
+            <p class="cb-body" data-reveal>{dna.foundersBody}</p>
+          </div>
+          <ul>
+            {
+              dna.founders.map((f, i) => (
+                <li data-reveal style={`--reveal-delay:${0.08 * i}s`}>
+                  <span class="cb-av">{f.initials}</span>
+                  <div>
+                    <b>{f.name}</b>
+                    <span>{f.role}</span>
+                  </div>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <div class="cb-split cb-dna-sub">
+          <div>
+            <p class="cb-kicker" data-reveal><b>—</b>{innovation.eyebrow}</p>
+            <h3 class="cb-h3" data-reveal>Engineered from <span class="cb-lime">first principles.</span></h3>
+          </div>
           <p class="cb-body" data-reveal>{innovation.body}</p>
         </div>
 
@@ -640,7 +706,36 @@ const navChapters = chapters.filter((_, i) => [2, 3, 4, 5, 6, 8, 9, 10].includes
               ))
             }
           </ol>
-          <p class="cb-note">{innovation.patent}</p>
+        </div>
+
+        <div class="cb-people">
+          <div class="cb-split">
+            <h3 class="cb-h3" data-reveal>{dna.peopleTitle} <span class="cb-lime">{dna.peopleAccent}</span></h3>
+            <p class="cb-body" data-reveal>{dna.peopleBody}</p>
+          </div>
+          <div class="cb-stats">
+            {
+              dna.stats.map(([n, t], i) => (
+                <div data-reveal style={`--reveal-delay:${0.08 * i}s`}>
+                  <b>{n}</b>
+                  <span>{t}</span>
+                </div>
+              ))
+            }
+          </div>
+          <ul class="cb-sites">
+            {
+              dna.sites.map((st) => (
+                <li data-reveal>
+                  <span class="cb-flag">{st.flag}</span>
+                  <div>
+                    <b>{st.country}</b>
+                    <span>{st.place}</span>
+                  </div>
+                </li>
+              ))
+            }
+          </ul>
         </div>
         <a class="cb-nextch" href={chapters[9][2]}><span>Next</span><b>{chapters[9][0]}</b>{chapters[9][1]}<i>↓</i></a>
       </div>
@@ -671,18 +766,16 @@ const navChapters = chapters.filter((_, i) => [2, 3, 4, 5, 6, 8, 9, 10].includes
         </div>
 
         <div class="cb-split cb-heritage-copy">
-          {
-            heritage.body.map((b) => (
-              <p class="cb-body" data-reveal>
-                {b}
-              </p>
-            ))
-          }
+          <h3 class="cb-h3" data-reveal>
+            {dna.ownership.title}{' '}
+            <span class="cb-lime">{dna.ownership.titleAccent}</span>
+          </h3>
+          <p class="cb-body" data-reveal>{dna.ownership.body}</p>
         </div>
 
         <ul class="cb-eight">
           {
-            valueChain.pillars.map((p, i) => (
+            chainPillars.map((p, i) => (
               <li data-reveal style={`--reveal-delay:${0.04 * i}s`}>
                 <span class="cb-check">✓</span>
                 <h3>{p.k}</h3>
@@ -704,6 +797,10 @@ const navChapters = chapters.filter((_, i) => [2, 3, 4, 5, 6, 8, 9, 10].includes
             <span>{valueChain.banner.caption}</span>
           </figcaption>
         </figure>
+
+        <blockquote class="cb-dna-quote" data-reveal>
+          <p>{dna.quality}</p>
+        </blockquote>
 
         <div class="cb-qc" id="quality">
           <div class="cb-qc-text">
@@ -773,6 +870,7 @@ const navChapters = chapters.filter((_, i) => [2, 3, 4, 5, 6, 8, 9, 10].includes
             >YouTube channel</a
           >.
         </p>
+        <p class="cb-close" data-reveal>{dna.close} <span class="cb-lime">{dna.closeAccent}</span></p>
         <a class="cb-nextch" href={chapters[10][2]}
           ><span>Next</span><b>{chapters[10][0]}</b>{chapters[10][1]}<i>↓</i></a
         >
@@ -852,6 +950,7 @@ const navChapters = chapters.filter((_, i) => [2, 3, 4, 5, 6, 8, 9, 10].includes
             >
           </div>
         </div>
+        <p class="cb-sign" data-reveal>{dna.sign}</p>
         <ul class="cb-aud">{decision.audience.map((a) => <li>{a}</li>)}</ul>
       </div>
     </section>
@@ -1664,52 +1763,6 @@ const navChapters = chapters.filter((_, i) => [2, 3, 4, 5, 6, 8, 9, 10].includes
     font-size: 0.72rem;
     background: rgb(4 13 9 / 85%);
     padding: 0.3rem 0.6rem;
-  }
-  .cb-loop {
-    margin-top: clamp(72px, 9vw, 136px);
-  }
-  .cb-loop ol {
-    position: relative;
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    margin-top: 2rem;
-  }
-  .cb-loop ol::before {
-    content: '';
-    position: absolute;
-    left: 6px;
-    right: 6px;
-    top: 6px;
-    height: 1px;
-    background: linear-gradient(90deg, var(--lime), rgb(184 240 60 / 25%));
-  }
-  .cb-loop li {
-    position: relative;
-    padding-right: 1rem;
-  }
-  .cb-loop-dot {
-    display: block;
-    width: 13px;
-    height: 13px;
-    border-radius: 50%;
-    background: var(--black);
-    border: 2px solid var(--lime);
-    margin-bottom: 1rem;
-    position: relative;
-  }
-  .cb-loop li b {
-    display: block;
-    font-family: var(--display);
-    font-weight: 500;
-    font-size: 1.15rem;
-    letter-spacing: -0.015em;
-  }
-  .cb-loop li em {
-    display: block;
-    font-style: normal;
-    font-size: 0.8rem;
-    color: var(--lime);
-    margin-top: 0.3rem;
   }
 
   /* --- economics --- */
@@ -2611,6 +2664,276 @@ const navChapters = chapters.filter((_, i) => [2, 3, 4, 5, 6, 8, 9, 10].includes
     background: var(--ink-2);
   }
 
+  /* --- 09 our DNA --- */
+  .cb-legacy {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    margin-top: clamp(56px, 7vw, 104px);
+  }
+  .cb-leg {
+    background: var(--ink-2);
+    padding: clamp(1.5rem, 3vw, 2.75rem);
+  }
+  .cb-leg-years {
+    font-family: var(--display);
+    font-weight: 300;
+    font-size: clamp(3.6rem, 7vw, 6.4rem);
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+    color: var(--lime);
+  }
+  .cb-leg-years span {
+    font-family: var(--text);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--grey);
+    margin-left: 0.6rem;
+  }
+  .cb-leg h3 {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(1.4rem, 2vw, 1.8rem);
+    margin-top: 1.25rem;
+  }
+  .cb-leg-text {
+    color: var(--soft);
+    margin-top: 0.4rem;
+    max-width: 44ch;
+  }
+  .cb-leg ol {
+    list-style: none;
+    margin: 1.75rem 0 0;
+    padding: 0 0 0 1.5rem;
+    border-left: 1px solid rgb(184 240 60 / 35%);
+    display: grid;
+    gap: 0.9rem;
+  }
+  .cb-leg li {
+    position: relative;
+    font-weight: 500;
+    line-height: 1.35;
+  }
+  .cb-leg li span {
+    display: block;
+    font-weight: 400;
+    font-size: 0.88rem;
+    color: var(--grey);
+  }
+  .cb-leg li::before {
+    content: '';
+    position: absolute;
+    left: calc(-1.5rem - 5px);
+    top: 0.4em;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: 1.5px solid var(--lime);
+    background: var(--ink-2);
+  }
+  .cb-leg li:last-child::before {
+    background: var(--lime);
+  }
+  .cb-merge {
+    display: grid;
+    justify-items: center;
+  }
+  .cb-merge > svg {
+    width: 50%;
+    height: 64px;
+    display: block;
+  }
+  .cb-merge-box {
+    max-width: 720px;
+    text-align: center;
+    border: 1px solid rgb(184 240 60 / 45%);
+    border-radius: 4px;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    background: var(--black);
+  }
+  .cb-merge-mark {
+    display: inline-block;
+    font-size: clamp(2rem, 3.4vw, 2.8rem);
+  }
+  .cb-merge-box b {
+    display: block;
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(1.25rem, 1.9vw, 1.6rem);
+    letter-spacing: -0.02em;
+    margin-top: 0.9rem;
+  }
+  .cb-merge-box p {
+    color: var(--soft);
+    margin-top: 0.75rem;
+  }
+  .cb-founders {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: clamp(32px, 6vw, 120px);
+    align-items: center;
+    margin-top: clamp(72px, 9vw, 136px);
+  }
+  .cb-founders ul {
+    display: grid;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .cb-founders li {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    background: var(--ink-2);
+    padding: 1.1rem 1.4rem;
+  }
+  .cb-av {
+    flex: none;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 1px solid var(--lime);
+    color: var(--lime);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--display);
+    font-weight: 500;
+  }
+  .cb-founders li b,
+  .cb-sites b {
+    display: block;
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 1.15rem;
+  }
+  .cb-founders li span:not(.cb-av),
+  .cb-sites li span:not(.cb-flag) {
+    color: var(--grey);
+    font-size: 0.9rem;
+  }
+  .cb-dna-sub {
+    margin-top: clamp(72px, 9vw, 136px);
+    padding-top: clamp(56px, 7vw, 104px);
+    border-top: 1px solid var(--line);
+  }
+  .cb-people {
+    margin-top: clamp(72px, 9vw, 136px);
+    padding-top: clamp(56px, 7vw, 104px);
+    border-top: 1px solid var(--line);
+  }
+  .cb-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    margin-top: clamp(40px, 5vw, 72px);
+  }
+  .cb-stats div {
+    background: var(--ink-2);
+    padding: 1.5rem 1.75rem;
+  }
+  .cb-stats b {
+    display: block;
+    font-family: var(--display);
+    font-weight: 300;
+    font-size: clamp(3.4rem, 6vw, 5.6rem);
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+    color: var(--lime);
+  }
+  .cb-stats span {
+    color: var(--soft);
+  }
+  .cb-sites {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+  .cb-sites li {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+  .cb-today-list {
+    display: grid;
+    gap: 0.85rem;
+  }
+  .cb-today-list li {
+    position: relative;
+    padding-left: 1.3rem;
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 1.1rem;
+    line-height: 1.3;
+  }
+  .cb-today-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.45em;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--lime);
+  }
+  .cb-ambition {
+    margin-top: 2rem;
+  }
+  .cb-dna-quote {
+    margin: clamp(72px, 9vw, 136px) auto 0;
+    max-width: 980px;
+    text-align: center;
+  }
+  .cb-dna-quote p {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(1.6rem, 3vw, 2.8rem);
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+  }
+  .cb-close,
+  .cb-sign {
+    font-family: var(--display);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+  }
+  .cb-close {
+    font-size: clamp(1.8rem, 3.4vw, 3.2rem);
+    line-height: 1.08;
+    max-width: 24ch;
+    margin-top: clamp(56px, 7vw, 104px);
+  }
+  .cb-sign {
+    font-size: clamp(1.15rem, 1.6vw, 1.4rem);
+    margin-top: 2rem;
+    max-width: 48ch;
+  }
+  @media (max-width: 960px) {
+    .cb-legacy,
+    .cb-founders {
+      grid-template-columns: 1fr;
+    }
+    .cb-merge > svg {
+      display: none;
+    }
+    .cb-merge {
+      margin-top: 1.5rem;
+    }
+  }
+  @media (max-width: 640px) {
+    .cb-stats,
+    .cb-sites {
+      grid-template-columns: 1fr;
+    }
+  }
+
   /* --- 11 delivery and service --- */
   .cb-phases ol {
     grid-template-columns: repeat(5, 1fr);
@@ -3089,28 +3412,6 @@ const navChapters = chapters.filter((_, i) => [2, 3, 4, 5, 6, 8, 9, 10].includes
     }
     .cb-facts {
       grid-template-columns: 1fr 1fr;
-    }
-    .cb-loop ol {
-      grid-template-columns: 1fr;
-      gap: 1.25rem;
-    }
-    .cb-loop ol::before {
-      left: 6px;
-      right: auto;
-      top: 6px;
-      bottom: 6px;
-      width: 1px;
-      height: auto;
-      background: linear-gradient(var(--lime), rgb(184 240 60 / 25%));
-    }
-    .cb-loop li {
-      display: grid;
-      grid-template-columns: 13px 1fr;
-      column-gap: 1rem;
-    }
-    .cb-loop-dot {
-      grid-row: span 2;
-      margin: 0.2rem 0 0;
     }
   }
   @media (max-width: 640px) {

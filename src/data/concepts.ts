@@ -133,6 +133,12 @@ export const economics = {
       v: 'The grid is built from identical, industry-standard modules, so a system is sized to the site rather than to a machine.',
     },
   ],
+  ambition:
+    'Our ambition: fully automated parking at costs comparable to traditional self-parking structures, with far greater flexibility and space efficiency. Not a luxury for exceptional projects, but a competitive alternative.',
+  community: {
+    k: 'More room for people and nature',
+    v: 'Fewer paved surfaces, more green areas, and more land for housing and public space. Economic efficiency and environmental responsibility as outcomes of the same engineering.',
+  },
   example: {
     title: 'Worked example',
     caption: 'From the TilePark planning model used on this page. Illustrative, not a project result.',
@@ -155,6 +161,20 @@ export const next = {
   eyebrow: 'Built for what comes next',
   title: 'Infrastructure that keeps up with mobility.',
   body: 'A building outlives several generations of cars. We separate clearly what TilePark does today, what we keep developing, and where we are heading.',
+  evolveBody:
+    'Buildings are designed to last for decades. The technology within them should be able to evolve throughout their lifetime. Software updates and new digital capabilities let TilePark evolve without changing its mechanical infrastructure.',
+  evolve:
+    'We build mechanical systems for decades of reliable operation, with the intelligence to keep improving throughout their lifetime.',
+  // compact list for pages that already show each of these in its own chapter
+  todayShort: [
+    'Integrated EV charging with automated re-parking',
+    'Integration with building and energy management systems',
+    'Driver app and operator platform',
+    'Remote diagnostics and remote updates',
+    'Generator operation during a power outage',
+  ],
+  adoption:
+    'These developments will not happen simultaneously, and their adoption will differ across markets. The parking system installed today should be ready for the technologies of tomorrow.',
   today: [
     {
       k: 'Integrated EV charging',
@@ -183,6 +203,10 @@ export const next = {
     {
       k: 'Autonomous mobility',
       v: 'Cars are handed over in a transfer cabin and moved without anyone inside, a natural interface for vehicles that arrive on their own. A direction of development, not a current feature.',
+    },
+    {
+      k: 'Vehicle-to-grid and energy networks',
+      v: 'Parked EVs as part of the building’s and the city’s energy system. A direction of development, not a current feature.',
     },
     {
       k: 'Evolving buildings',
@@ -755,4 +779,75 @@ export const delivery = {
       { k: 'On site', v: 'If an issue cannot be solved remotely, a Parkstory technician comes on site.' },
     ],
   },
+};
+
+/**
+ * Our DNA: company origins, founders and people. Text and figures are taken
+ * from Parkstory's own "Our DNA" page (75+ / 30+ years, founders, ~60
+ * people, three countries); nothing is added.
+ */
+export const dna = {
+  eyebrow: 'Our DNA',
+  title: 'Two legacies of innovation.',
+  titleAccent: 'One vision for the future.',
+  body: 'Innovation is part of our heritage. Rethinking what is possible is our ambition. Parkstory brings together two distinct technological traditions, and develops mechanics and software as one integrated system from the outset.',
+  legacies: [
+    {
+      years: '75+',
+      name: 'The Nussbaum family',
+      text: 'Generations of mechanical innovation and industrial entrepreneurship.',
+      steps: [
+        ['Zeppelin technology', ''],
+        ['Agricultural machinery', ''],
+        ['Automotive service lifts', ''],
+        ['Automated parking systems', 'since the early 1990s'],
+      ],
+    },
+    {
+      years: '30+',
+      name: 'Marc Lott & Actimage',
+      text: 'Large-scale software, intelligent digital platforms and advanced control technologies.',
+      steps: [
+        ['Early enterprise software', ''],
+        ['Large-scale software development', ''],
+        ['Intelligent real estate management systems', ''],
+        ['Artificial intelligence and machine learning', ''],
+      ],
+    },
+  ],
+  merge: 'Where industrial engineering meets digital intelligence.',
+  mergeBody:
+    'Both histories share a common belief: technology should challenge conventions, solve real problems and keep evolving. Parkstory is not a parking manufacturer that has added software to its machines.',
+  foundersTitle: 'Never simply another parking system.',
+  foundersBody:
+    'Steffen Nussbaum, Juergen Lukas and Marc Lott founded Parkstory with a shared ambition: to fundamentally rethink automated parking and its role in modern infrastructure.',
+  founders: [
+    { initials: 'SN', name: 'Steffen Nussbaum', role: 'Co-Founder & CEO' },
+    { initials: 'JL', name: 'Juergen Lukas', role: 'Co-Founder' },
+    { initials: 'ML', name: 'Marc Lott', role: 'Co-Founder · Actimage' },
+  ],
+  peopleTitle: 'A family of 60 enthusiasts.',
+  peopleAccent: 'One common vision.',
+  peopleBody:
+    'Technology is only as good as the people behind it. Our team of around 60 dedicated enthusiasts works on a new generation of automated parking technology, and we love the enthusiasm that thrives when everyone shares a common vision.',
+  stats: [
+    ['60', 'dedicated enthusiasts'],
+    ['3', 'countries'],
+    ['1', 'common vision'],
+  ],
+  sites: [
+    { flag: 'US', country: 'United States', place: 'Gastonia, North Carolina' },
+    { flag: 'DE', country: 'Germany', place: 'Kehl and Munich' },
+    { flag: 'HU', country: 'Hungary', place: 'Budapest' },
+  ],
+  ownership: {
+    title: 'We design what we build, and',
+    titleAccent: 'we build what we have developed ourselves.',
+    body: 'To truly master a technology, you must understand how to develop it, how to build it and how to make it better. For us, innovation does not end with an idea or a prototype: it extends through industrialisation, manufacturing, assembly, testing and continuous improvement. Only by understanding both can we achieve the precision, consistency and reliability we expect from our products.',
+  },
+  quality:
+    'Quality is not something we inspect into a finished product. It is something we engineer into the product and the processes that create it.',
+  close: 'We don’t just design technology.',
+  closeAccent: 'We master how to build it.',
+  sign: 'We are Parkstory. We are rethinking parking as intelligent infrastructure for the future.',
 };
