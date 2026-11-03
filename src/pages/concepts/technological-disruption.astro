@@ -1,9 +1,12 @@
 ---
 /**
  * Concept B — Technological Disruption, in the Parkstory corporate identity.
- * Bold, cinematic, high contrast. Parkstory's deep green-black, lime and mint,
- * the exploding-P wordmark as the opening, condensed display type, a live
- * TilePark field and scroll-driven motion.
+ *
+ * Cinematic and immersive, but engineered rather than sporty: Parkstory's
+ * Outfit (display) and Inter (text) in sentence case, hairline precision rules,
+ * deep green-black with lime used as a signal only. Opens with the exploding-P
+ * wordmark over a live TilePark field; chapter 04 makes the case for why
+ * TilePark is the disruptor.
  */
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
@@ -15,27 +18,34 @@ import GridDemo from '~/components/tilepark/GridDemo.astro';
 import StackerDemo from '~/components/tilepark/StackerDemo.astro';
 import EvDemo from '~/components/tilepark/EvDemo.astro';
 import BeesFigure from '~/components/tilepark/BeesFigure.astro';
-import { shift, question, breakthrough, economics, next, heritage, decision, nature, ev } from '~/data/concepts';
+import { shift, question, breakthrough, edge, economics, ev, next, heritage, decision, nature } from '~/data/concepts';
 
 import drives from '~/assets/images/tilepark/gastonia-drive-assembly.webp';
 import welding from '~/assets/images/tilepark/kehl-welding.webp';
 import cnc from '~/assets/images/tilepark/gastonia-cnc.webp';
 import bending from '~/assets/images/tilepark/kehl-bending.webp';
+import wheels from '~/assets/images/tilepark/gastonia-wheels.webp';
 import evCharging from '~/assets/images/tilepark/ev-charging.webp';
 import evApp from '~/assets/images/tilepark/ev-app-screen.webp';
 
-import '@fontsource-variable/archivo/wdth.css';
+import '@fontsource-variable/inter';
+import '@fontsource-variable/outfit';
 import '~/assets/styles/tilepark.css';
 import '~/assets/styles/concept-demos.css';
 
 const questionWords = question.title.split(' ');
-const constraintWord: Record<string, string> = {
-  'Building design': 'Design',
-  Space: 'Space',
-  Flexibility: 'Change',
-  Operations: 'Uptime',
-};
 const ex = economics.example.rows;
+const chapters = [
+  ['01', 'The shift', '#shift'],
+  ['02', 'The question', '#question'],
+  ['03', 'The breakthrough', '#breakthrough'],
+  ['04', 'Why TilePark leads', '#edge'],
+  ['05', 'Economics', '#economics'],
+  ['06', 'EV charging', '#ev-charging'],
+  ['07', 'What comes next', '#next'],
+  ['08', 'Engineering', '#heritage'],
+  ['09', 'The decision', '#decision'],
+];
 ---
 
 <ConceptLayout
@@ -46,40 +56,48 @@ const ex = economics.example.rows;
 >
   <header class="cb-nav">
     <a href="#top" class="cb-mark" aria-label="Parkstory, back to top"><ParkstoryMark /></a>
-    <p>TilePark · A new architecture for automated parking</p>
-    <a href="#decision" class="cb-nav-cta">Briefing</a>
+    <nav aria-label="Chapters" class="cb-chapters">
+      {
+        chapters.slice(2, 8).map(([n, t, h]) => (
+          <a href={h}>
+            <i>{n}</i>
+            {t}
+          </a>
+        ))
+      }
+    </nav>
+    <a href="#decision" class="cb-nav-cta">Technology briefing</a>
   </header>
 
   <main id="top">
     <!-- 01 THE SHIFT -->
     <section class="cb-hero" id="shift">
       <div class="cb-field" aria-hidden="true">
-        <div class="cb-field-plane"><TileField cell={58} density={0.84} rate={9} accentShare={0.16} /></div>
+        <div class="cb-field-plane"><TileField cell={58} density={0.84} rate={9} accentShare={0.14} /></div>
       </div>
       <div class="cb-hero-shade" aria-hidden="true"></div>
       <div class="cb-wrap cb-hero-in">
         <ParkstoryMark variant="swarm" class="cb-word" />
-        <p class="cb-kicker cb-rise" style="--d:.6s">TilePark · A new architecture for automated parking</p>
-        <h1 class="cb-rise" style="--d:.7s">
-          <span>Tomorrow’s infrastructure</span>
-          <span>cannot run on</span>
-          <span><span class="cb-outline">yesterday’s</span> technology.</span>
-        </h1>
-        <div class="cb-hero-foot cb-rise" style="--d:.9s">
-          <p class="cb-lead">{shift.lead}</p>
-          <a href="#question" class="cb-scroll">Scroll<i></i></a>
+        <div class="cb-hero-grid">
+          <h1 class="cb-rise" style="--d:.7s">
+            Tomorrow’s infrastructure cannot run on <span class="cb-dim">yesterday’s technology.</span>
+          </h1>
+          <div class="cb-rise cb-hero-side" style="--d:.9s">
+            <p class="cb-lead">{shift.lead}</p>
+            <a href="#question" class="cb-scroll"><i></i>Scroll to explore</a>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="cb-points">
+    <section class="cb-sec cb-points">
       <div class="cb-wrap">
         <p class="cb-intro" data-reveal>{shift.intro}</p>
-        <ol>
+        <ol class="cb-three">
           {
             shift.points.map((p, i) => (
               <li data-reveal style={`--reveal-delay:${0.1 * i}s`}>
-                <span>{p.n}</span>
+                <span class="cb-n">{p.n}</span>
                 <p>{p.text}</p>
               </li>
             ))
@@ -92,7 +110,7 @@ const ex = economics.example.rows;
     <section class="cb-question" id="question">
       <div class="cb-sticky">
         <div class="cb-wrap">
-          <p class="cb-kicker">02 / {question.eyebrow}</p>
+          <p class="cb-kicker"><b>02</b>{question.eyebrow}</p>
           <h2 class="cb-q" data-words>
             {questionWords.map((w) => <span>{w} </span>)}
           </h2>
@@ -102,22 +120,22 @@ const ex = economics.example.rows;
 
     <section class="cb-sec cb-tight">
       <div class="cb-wrap">
-        <p class="cb-body" data-reveal>{question.body}</p>
-        <ol class="cb-rows">
-          {
-            question.constraints.map((c) => (
-              <li data-reveal>
-                <b>{constraintWord[c.k] ?? c.k}</b>
-                <div>
-                  <span>{c.k}</span>
+        <div class="cb-split">
+          <p class="cb-body" data-reveal>{question.body}</p>
+          <ol class="cb-list">
+            {
+              question.constraints.map((c, i) => (
+                <li data-reveal style={`--reveal-delay:${0.06 * i}s`}>
+                  <span class="cb-n">0{i + 1}</span>
+                  <h3>{c.k}</h3>
                   <p>{c.v}</p>
-                </div>
-              </li>
-            ))
-          }
-        </ol>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
         <div class="cb-timeline">
-          <p class="cb-kicker">A decision measured in decades</p>
+          <p class="cb-kicker"><b>—</b>A decision measured in decades</p>
           <DecadeTimeline />
           <p class="cb-note">{question.timeline.note}</p>
         </div>
@@ -129,27 +147,41 @@ const ex = economics.example.rows;
       <video src="/videos/realvid.mp4" autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>
       <div class="cb-cinema-shade" aria-hidden="true"></div>
       <div class="cb-wrap cb-cinema-in">
-        <p class="cb-kicker" data-reveal>03 / {breakthrough.eyebrow}</p>
-        <h2 class="cb-h2" data-reveal>
-          Not a better machine.<br /><span class="cb-lime">A different architecture.</span>
-        </h2>
+        <p class="cb-kicker" data-reveal><b>03</b>{breakthrough.eyebrow}</p>
+        <h2 class="cb-h2" data-reveal>Not a better machine. <span class="cb-lime">A different architecture.</span></h2>
         <p class="cb-tag">Real footage · TilePark in operation, Munich</p>
       </div>
     </section>
 
     <section class="cb-sec">
       <div class="cb-wrap">
-        <p class="cb-body" data-reveal>{breakthrough.body}</p>
-        <p class="cb-swarm" data-reveal>
-          Hundreds of independent conveyors. No central control. <span>One shared goal:</span> getting your car to you by
-          the shortest route.
-        </p>
+        <div class="cb-split">
+          <p class="cb-statement" data-reveal>
+            Hundreds of independent conveyors. No central control. <span class="cb-lime">One shared goal:</span> getting your
+            car to you by the shortest route.
+          </p>
+          <p class="cb-body" data-reveal>{breakthrough.body}</p>
+        </div>
+        <ol class="cb-four">
+          {
+            breakthrough.principles.map((p, i) => (
+              <li data-reveal style={`--reveal-delay:${0.08 * i}s`}>
+                <span class="cb-n">{p.n}</span>
+                <h3>{p.k}</h3>
+                <p>{p.v}</p>
+              </li>
+            ))
+          }
+        </ol>
+        <div class="cx-demos"><GridDemo /></div>
+        <p class="cb-note">{breakthrough.patent}</p>
+
         <div class="cb-nature">
-          <div class="cb-nature-head">
-            <p class="cb-kicker" data-reveal>{nature.eyebrow}</p>
-            <h3 class="cb-h3" data-reveal>
-              We asked the bees <span class="cb-lime">how to park.</span>
-            </h3>
+          <div class="cb-split">
+            <div>
+              <p class="cb-kicker" data-reveal><b>—</b>{nature.eyebrow}</p>
+              <h3 class="cb-h3" data-reveal>We asked the bees <span class="cb-lime">how to park.</span></h3>
+            </div>
             <p class="cb-body" data-reveal>{nature.body}</p>
           </div>
           <div class="cx-demos" data-reveal><BeesFigure /></div>
@@ -157,7 +189,7 @@ const ex = economics.example.rows;
             {
               nature.rules.map((r, i) => (
                 <li data-reveal style={`--reveal-delay:${0.06 * i}s`}>
-                  <span class="cb-rule-n">{i + 1}</span>
+                  <span class="cb-n">{String(i + 1).padStart(2, '0')}</span>
                   <p class="cb-rule-q">“{r.q}”</p>
                   <p class="cb-rule-b">
                     <b>The bees</b>
@@ -172,30 +204,82 @@ const ex = economics.example.rows;
             }
           </ol>
         </div>
-        <ol class="cb-principles">
+      </div>
+    </section>
+
+    <!-- 04 WHY TILEPARK LEADS -->
+    <section class="cb-sec cb-edge" id="edge">
+      <div class="cb-grid-bg" aria-hidden="true"></div>
+      <div class="cb-wrap">
+        <p class="cb-kicker" data-reveal><b>04</b>{edge.eyebrow}</p>
+        <h2 class="cb-h2" data-reveal>{edge.title} <span class="cb-lime">{edge.titleAccent}</span></h2>
+        <p class="cb-body" data-reveal>{edge.body}</p>
+
+        <ol class="cb-pillars">
           {
-            breakthrough.principles.map((p, i) => (
+            edge.pillars.map((p, i) => (
               <li data-reveal style={`--reveal-delay:${0.08 * i}s`}>
-                <span>{p.n}</span>
+                <span class="cb-pillar-n">{p.n}</span>
                 <h3>{p.k}</h3>
                 <p>{p.v}</p>
               </li>
             ))
           }
         </ol>
-        <div class="cx-demos"><GridDemo /></div>
-        <p class="cb-note">{breakthrough.patent}</p>
+
+        <div class="cb-stack" data-reveal>
+          <div class="cb-layer cb-layer--soft">
+            <p class="cb-layer-h">
+              <span>Software</span><em>where the complexity lives: adaptive, updateable</em>
+            </p>
+            <ul>{edge.software.map((s) => <li>{s}</li>)}</ul>
+          </div>
+          <div class="cb-layer-join" aria-hidden="true">
+            {Array.from({ length: 12 }, () => <i />)}
+          </div>
+          <div class="cb-layer cb-layer--steel">
+            <p class="cb-layer-h">
+              <span>Mechanics</span><em>kept deliberately simple: standard, robust, serviceable</em>
+            </p>
+            <ul>{edge.mechanics.map((s) => <li>{s}</li>)}</ul>
+          </div>
+          <figure class="cb-stack-img">
+            <Image
+              src={wheels}
+              alt="TilePark drive wheel units with polyurethane wheels"
+              widths={[400, 700]}
+              sizes="(max-width: 960px) 100vw, 30vw"
+            />
+            <figcaption>Drive wheel units, Gastonia</figcaption>
+          </figure>
+        </div>
+
+        <div class="cb-loop" data-reveal>
+          <p class="cb-kicker"><b>—</b>Fast to react: one team, one loop</p>
+          <ol>
+            {
+              edge.loop.map((s, i) => (
+                <li>
+                  <span class="cb-loop-dot" />
+                  <b>{s}</b>
+                  {i === edge.loop.length - 1 && <em>↺ back to engineering</em>}
+                </li>
+              ))
+            }
+          </ol>
+          <p class="cb-note">{edge.loopNote}</p>
+        </div>
       </div>
     </section>
 
-    <!-- 04 THE ECONOMICS OF CHANGE -->
-    <section class="cb-sec cb-econ" id="economics">
+    <!-- 05 THE ECONOMICS OF CHANGE -->
+    <section class="cb-sec" id="economics">
       <div class="cb-wrap">
-        <p class="cb-kicker" data-reveal>04 / {economics.eyebrow}</p>
+        <p class="cb-kicker" data-reveal><b>05</b>{economics.eyebrow}</p>
         <h2 class="cb-h2" data-reveal>{economics.title}</h2>
 
         <div class="cb-big" data-reveal>
-          <p class="cb-big-cap">Same grid. Same 297 m². {economics.example.caption}</p>
+          <p class="cb-big-cap">Same grid, same 297 m². {economics.example.caption}</p>
           <div class="cb-big-row">
             {
               ex.map((r, i) => (
@@ -214,7 +298,7 @@ const ex = economics.example.rows;
           </details>
         </div>
 
-        <ul class="cb-levers">
+        <ul class="cb-five">
           {
             economics.levers.map((l, i) => (
               <li data-reveal style={`--reveal-delay:${0.05 * i}s`}>
@@ -228,25 +312,23 @@ const ex = economics.example.rows;
       </div>
     </section>
 
-    <!-- 05 INTEGRATED EV CHARGING -->
+    <!-- 06 INTEGRATED EV CHARGING -->
     <section class="cb-cinema cb-cinema--ev" id="ev-charging">
       <video src="/videos/ev-connection.mp4" autoplay muted loop playsinline preload="metadata" aria-hidden="true"
       ></video>
       <div class="cb-cinema-shade" aria-hidden="true"></div>
       <div class="cb-wrap cb-cinema-in">
-        <p class="cb-kicker" data-reveal>05 / {ev.eyebrow}</p>
-        <h2 class="cb-h2" data-reveal>
-          {ev.title}<br /><span class="cb-lime">{ev.titleAccent}</span>
-        </h2>
+        <p class="cb-kicker" data-reveal><b>06</b>{ev.eyebrow}</p>
+        <h2 class="cb-h2" data-reveal>{ev.title} <span class="cb-lime">{ev.titleAccent}</span></h2>
         <p class="cb-tag">Real footage · connecting a car to the charging point on its pallet</p>
       </div>
     </section>
 
     <section class="cb-sec cb-tight">
       <div class="cb-wrap">
-        <p class="cb-body" data-reveal>{ev.body}</p>
+        <p class="cb-body cb-body--wide" data-reveal>{ev.body}</p>
         <div class="cx-demos cb-ev"><EvDemo /></div>
-        <ul class="cb-levers cb-levers--4">
+        <ul class="cb-four cb-four--plain">
           {
             ev.features.map((f, i) => (
               <li data-reveal style={`--reveal-delay:${0.06 * i}s`}>
@@ -274,11 +356,11 @@ const ex = economics.example.rows;
           </figure>
           <div class="cb-ev-who" data-reveal style="--reveal-delay:.2s">
             <div>
-              <p class="cb-badge-sm">For the driver</p>
+              <p class="cb-label">For the driver</p>
               <ul>{ev.driver.map((d) => <li>{d}</li>)}</ul>
             </div>
             <div>
-              <p class="cb-badge-sm">For the owner and operator</p>
+              <p class="cb-label">For the owner and operator</p>
               <ul>{ev.owner.map((d) => <li>{d}</li>)}</ul>
             </div>
           </div>
@@ -286,21 +368,24 @@ const ex = economics.example.rows;
       </div>
     </section>
 
-    <!-- 06 BUILT FOR WHAT COMES NEXT -->
+    <!-- 07 BUILT FOR WHAT COMES NEXT -->
     <section class="cb-sec" id="next">
       <div class="cb-wrap">
-        <p class="cb-kicker" data-reveal>06 / {next.eyebrow}</p>
+        <p class="cb-kicker" data-reveal><b>07</b>{next.eyebrow}</p>
         <h2 class="cb-h2" data-reveal>{next.title}</h2>
         <p class="cb-body" data-reveal>{next.body}</p>
         <div class="cb-lanes">
           {
             [
-              ['Today', next.today, 'today'],
+              ['Available today', next.today, 'today'],
               ['In development', next.developing, 'dev'],
               ['Future direction', next.future, 'future'],
             ].map(([label, items, cls], i) => (
               <div class:list={['cb-lane', `is-${cls}`]} data-reveal style={`--reveal-delay:${0.1 * i}s`}>
-                <p class="cb-badge">{label as string}</p>
+                <p class="cb-badge">
+                  <i />
+                  {label as string}
+                </p>
                 {(items as { k: string; v: string }[]).map((it) => (
                   <div class="cb-lane-item">
                     <h3>{it.k}</h3>
@@ -314,12 +399,12 @@ const ex = economics.example.rows;
       </div>
     </section>
 
-    <!-- 07 ENGINEERING HERITAGE -->
-    <section class="cb-sec cb-heritage" id="heritage">
+    <!-- 08 ENGINEERING HERITAGE -->
+    <section class="cb-sec" id="heritage">
       <div class="cb-wrap">
-        <p class="cb-kicker" data-reveal>07 / {heritage.eyebrow}</p>
+        <p class="cb-kicker" data-reveal><b>08</b>{heritage.eyebrow}</p>
         <h2 class="cb-h2" data-reveal>
-          We design what we build.<br /><span class="cb-lime">We build what we develop.</span>
+          We design what we build. <span class="cb-lime">We build what we develop.</span>
         </h2>
         <div class="cb-collage">
           {
@@ -341,8 +426,14 @@ const ex = economics.example.rows;
             ))
           }
         </div>
-        <div class="cb-her-copy">
-          {heritage.body.map((b) => <p data-reveal>{b}</p>)}
+        <div class="cb-split">
+          {
+            heritage.body.map((b) => (
+              <p class="cb-body" data-reveal>
+                {b}
+              </p>
+            ))
+          }
         </div>
         <dl class="cb-facts">
           {
@@ -354,34 +445,33 @@ const ex = economics.example.rows;
             ))
           }
         </dl>
-        <p class="cb-flow" data-reveal>
-          {
-            heritage.flow.map((s, i) => (
-              <span>
-                {s}
-                {i < heritage.flow.length - 1 && <i>→</i>}
-              </span>
-            ))
-          }
-        </p>
+        <ol class="cb-flow" aria-label="From design to service">
+          {heritage.flow.map((s) => <li data-reveal>{s}</li>)}
+        </ol>
       </div>
     </section>
 
-    <!-- 08 THE DECISION -->
+    <!-- 09 THE DECISION -->
     <section class="cb-decision" id="decision">
-      <div class="cb-wrap">
-        <p class="cb-kicker">08 / The decision</p>
-        <h2 data-reveal>{decision.title}</h2>
-        <div class="cb-decision-row">
-          <p data-reveal>{decision.body}</p>
+      <div class="cb-decision-field" aria-hidden="true">
+        <TileField cell={40} density={0.86} rate={4} accentShare={0.1} />
+      </div>
+      <div class="cb-decision-shade" aria-hidden="true"></div>
+      <div class="cb-wrap cb-decision-in">
+        <p class="cb-kicker"><b>09</b>The decision</p>
+        <h2 data-reveal>
+          The most expensive parking system may be the one you <span class="cb-lime">cannot adapt.</span>
+        </h2>
+        <div class="cb-split">
+          <p class="cb-body" data-reveal>{decision.body}</p>
           <div class="cb-ctas" data-reveal>
-            <a href={decision.ctaHref} class="cb-btn">{decision.cta}</a>
-            <a href={decision.secondaryHref} target="_blank" rel="noopener" class="cb-btn cb-btn--ghost"
+            <a href={decision.ctaHref} class="cb-btn">{decision.cta}<span aria-hidden="true">→</span></a>
+            <a href={decision.secondaryHref} target="_blank" rel="noopener" class="cb-btn cb-btn--line"
               >{decision.secondary}</a
             >
           </div>
         </div>
-        <p class="cb-aud">For {decision.audience.join(' · ')}</p>
+        <ul class="cb-aud">{decision.audience.map((a) => <li>{a}</li>)}</ul>
       </div>
     </section>
   </main>
@@ -390,6 +480,7 @@ const ex = economics.example.rows;
     <div class="cb-wrap">
       <span class="cb-mark"><ParkstoryMark /></span>
       <p>Designed, programmed and built by Parkstory in Kehl, Germany, and Gastonia, USA.</p>
+      <p class="cb-foot-pat">European patent EP 3924576 B1</p>
     </div>
   </footer>
 
@@ -423,18 +514,20 @@ const ex = economics.example.rows;
 
 <style is:global>
   html:root {
-    /* Parkstory CI colours (from Parkstory's own artwork) */
+    /* Parkstory CI (from Parkstory's own artwork): colours and typefaces */
     --black: #040d09;
     --ink-2: #07150f;
     --lift: #0f261b;
-    --line: #18291f;
+    --line: rgb(255 255 255 / 9%);
+    --line-2: rgb(255 255 255 / 16%);
     --white: #ffffff;
     --grey: #a2beb0;
     --soft: #c5d9cf;
     --lime: #b8f03c;
     --mint: #5ee3a1;
     --amber: #f5a524;
-    --cond: 'Archivo Variable', 'Arial Narrow', sans-serif;
+    --display: 'Outfit Variable', 'Outfit', Arial, sans-serif;
+    --text: 'Inter Variable', 'Inter', 'Helvetica Neue', Arial, sans-serif;
     /* demo theme */
     --tp-accent: #b8f03c;
     --tp-accent-soft: #b8f03c;
@@ -447,57 +540,234 @@ const ex = economics.example.rows;
     --tp-text-dim: #a2beb0;
     --tp-text-soft: #c5d9cf;
     --tp-warn: #f5a524;
-    --cx-radius: 0;
-    --cx-radius-sm: 0;
-    --cx-btn-radius: 0;
+    --cx-radius: 4px;
+    --cx-radius-sm: 3px;
+    --cx-btn-radius: 3px;
     --cx-btn-bg: #b8f03c;
     --cx-btn-fg: #07150f;
-    --cx-font: var(--cond);
-    --cx-font-display: var(--cond);
-    --cx-font-mono: var(--cond);
+    --cx-font: var(--text);
+    --cx-font-display: var(--display);
+    --cx-font-mono: var(--text);
     --cx-tile: #1f3a2c;
   }
   .cb {
     background: var(--black);
     color: var(--white);
-    font-family: var(--cond);
-    font-stretch: 100%;
+    font-family: var(--text);
     font-size: 17px;
-    line-height: 1.55;
+    line-height: 1.6;
+    font-feature-settings: 'ss01', 'cv11';
   }
   .cb ::selection {
     background: var(--lime);
     color: var(--black);
   }
   .cb-wrap {
-    max-width: 1520px;
+    max-width: 1440px;
     margin: 0 auto;
     padding: 0 clamp(20px, 4vw, 64px);
   }
   .cb-lime {
     color: var(--lime);
   }
+  .cb-dim {
+    color: var(--grey);
+  }
+
+  /* --- type scale (Outfit, sentence case) --- */
+  .cb h1,
+  .cb-h2,
+  .cb-h3,
+  .cb-q,
+  .cb-statement,
+  .cb-intro,
+  .cb-decision h2 {
+    font-family: var(--display);
+    font-weight: 500;
+    letter-spacing: -0.035em;
+  }
+  .cb h1 {
+    font-size: clamp(2.5rem, min(5.4vw, 9vh), 6.2rem);
+    line-height: 1.02;
+    max-width: 17ch;
+  }
+  .cb-h2 {
+    font-size: clamp(2.2rem, 4.4vw, 4.6rem);
+    line-height: 1.04;
+    max-width: 20ch;
+    margin-top: 1.5rem;
+  }
+  .cb-h3 {
+    font-size: clamp(1.8rem, 3vw, 3rem);
+    line-height: 1.06;
+    margin-top: 1.25rem;
+  }
+  .cb-statement {
+    font-size: clamp(1.6rem, 2.6vw, 2.6rem);
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+  }
+  .cb-intro {
+    font-size: clamp(1.5rem, 2.4vw, 2.4rem);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    font-weight: 400;
+    max-width: 34ch;
+  }
+  .cb-body {
+    font-size: clamp(1.05rem, 1.25vw, 1.2rem);
+    line-height: 1.6;
+    color: var(--soft);
+    max-width: 52ch;
+    margin-top: 1.75rem;
+  }
+  .cb-body--wide {
+    max-width: 68ch;
+  }
+  .cb-split .cb-body {
+    margin-top: 0;
+  }
+  .cb-note {
+    margin-top: 1.25rem;
+    font-size: 0.82rem;
+    color: var(--grey);
+    max-width: 76ch;
+  }
   .cb-kicker {
-    font-size: 0.78rem;
-    font-weight: 600;
-    letter-spacing: 0.22em;
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--grey);
   }
-  .cb h1,
-  .cb-h2,
-  .cb-q,
-  .cb-decision h2,
-  .cb-rows b,
-  .cb-big-cell b,
-  .cb-principles span {
-    font-stretch: 68%;
-    font-weight: 800;
+  .cb-kicker b {
+    font-weight: 600;
+    color: var(--lime);
+    letter-spacing: 0.06em;
+  }
+  .cb-kicker::after {
+    content: '';
+    flex: 0 1 120px;
+    height: 1px;
+    background: var(--line-2);
+  }
+  .cb-n {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--lime);
+    font-variant-numeric: tabular-nums;
+  }
+  .cb-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    letter-spacing: -0.01em;
+    color: var(--lime);
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 0.75rem;
   }
 
-  /* nav */
+  /* --- layout helpers --- */
+  .cb-split {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: clamp(32px, 6vw, 120px);
+    align-items: end;
+  }
+  .cb-sec {
+    position: relative;
+    padding: clamp(96px, 12vw, 192px) 0;
+    border-top: 1px solid var(--line);
+  }
+  .cb-tight {
+    border-top: 0;
+    padding-top: 0;
+  }
+  .cb h3 {
+    margin: 0;
+  }
+  .cb-three,
+  .cb-four,
+  .cb-five,
+  .cb-list {
+    display: grid;
+    border-top: 1px solid var(--line-2);
+  }
+  .cb-three {
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: clamp(56px, 7vw, 104px);
+  }
+  .cb-four {
+    grid-template-columns: repeat(4, 1fr);
+    margin: clamp(56px, 7vw, 104px) 0;
+  }
+  .cb-five {
+    grid-template-columns: repeat(5, 1fr);
+    margin: clamp(48px, 6vw, 88px) 0;
+  }
+  .cb-three li,
+  .cb-four li,
+  .cb-five li {
+    padding: 1.4rem 1.5rem 0 0;
+  }
+  .cb-three li + li,
+  .cb-four li + li,
+  .cb-five li + li {
+    padding-left: 1.5rem;
+    border-left: 1px solid var(--line);
+  }
+  .cb-three p {
+    margin-top: 0.75rem;
+    font-family: var(--display);
+    font-size: 1.35rem;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    max-width: 24ch;
+  }
+  .cb-four h3,
+  .cb-five h3,
+  .cb-list h3 {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 1.2rem;
+    letter-spacing: -0.015em;
+    margin-top: 0.9rem;
+  }
+  .cb-four--plain h3,
+  .cb-five h3 {
+    margin-top: 0;
+  }
+  .cb-four p,
+  .cb-five p,
+  .cb-list p {
+    margin-top: 0.5rem;
+    color: var(--soft);
+    font-size: 0.95rem;
+  }
+  .cb-list {
+    grid-template-columns: 1fr;
+  }
+  .cb-list li {
+    display: grid;
+    grid-template-columns: 3rem 11rem 1fr;
+    gap: 1rem;
+    align-items: baseline;
+    padding: 1.1rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .cb-list h3 {
+    margin: 0;
+  }
+  .cb-list p {
+    margin: 0;
+  }
+
+  /* --- nav --- */
   .cb-nav {
     position: fixed;
     inset: 0 0 auto;
@@ -506,90 +776,286 @@ const ex = economics.example.rows;
     align-items: center;
     justify-content: space-between;
     gap: 2rem;
-    padding: 18px clamp(20px, 4vw, 64px);
-    font-size: 0.78rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    background: linear-gradient(rgb(4 13 9 / 85%), transparent);
+    height: 68px;
+    padding: 0 clamp(20px, 4vw, 64px);
+    font-size: 0.85rem;
+    transition: background 0.4s;
   }
   .cb-mark {
     text-decoration: none;
     font-size: 30px;
-    text-transform: none;
-    letter-spacing: 0;
   }
-  .cb-nav .cb-mark {
+  .cb-nav .cb-mark,
+  .cb-chapters {
     opacity: 0;
-    transform: translateY(-6px);
     pointer-events: none;
     transition:
       opacity 0.4s,
       transform 0.4s;
   }
-  .cb-nav p {
-    transition: opacity 0.4s;
-  }
-  .cb-nav:not(.show-mark) p {
-    opacity: 0;
-  }
-  .cb-nav {
-    transition: background 0.4s;
+  .cb-nav .cb-mark {
+    transform: translateY(-6px);
   }
   .cb-nav.show-mark {
-    background: rgb(4 13 9 / 92%);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: rgb(4 13 9 / 90%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--line);
   }
-  .cb-nav.show-mark .cb-mark {
+  .cb-nav.show-mark .cb-mark,
+  .cb-nav.show-mark .cb-chapters {
     opacity: 1;
     transform: none;
     pointer-events: auto;
   }
-  .cb-word {
-    font-size: clamp(3.6rem, min(11vw, 17vh), 11rem);
-    margin-bottom: clamp(1.5rem, 4vh, 3rem);
+  .cb-chapters {
+    display: flex;
+    gap: 1.6rem;
   }
-  .cb-swarm {
-    margin-top: clamp(56px, 7vw, 104px);
-    font-family: 'Outfit Variable', 'Outfit', sans-serif;
-    font-weight: 600;
-    font-size: clamp(1.8rem, 3.6vw, 3.4rem);
-    line-height: 1.1;
-    letter-spacing: -0.025em;
-    max-width: 26ch;
+  .cb-chapters a {
+    text-decoration: none;
+    color: var(--soft);
+    white-space: nowrap;
   }
-  .cb-swarm span {
+  .cb-chapters a:hover {
+    color: var(--white);
+  }
+  .cb-chapters i {
+    font-style: normal;
+    color: var(--grey);
+    font-size: 0.72rem;
+    margin-right: 0.35rem;
+  }
+  .cb-nav-cta {
+    text-decoration: none;
+    border: 1px solid var(--line-2);
+    border-radius: 3px;
+    padding: 0.55rem 0.95rem;
+    font-weight: 500;
+    transition:
+      border-color 0.2s,
+      color 0.2s;
+  }
+  .cb-nav-cta:hover {
+    border-color: var(--lime);
     color: var(--lime);
   }
+  @media (max-width: 1180px) {
+    .cb-chapters {
+      display: none;
+    }
+  }
 
-  /* inspired by nature */
-  .cb-nature {
-    margin: clamp(80px, 10vw, 160px) 0;
-    padding-top: clamp(48px, 6vw, 88px);
+  /* --- hero --- */
+  .cb-hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+  }
+  .cb-field {
+    position: absolute;
+    inset: 0;
+    perspective: 1100px;
+    perspective-origin: 50% 0%;
+  }
+  .cb-field-plane {
+    position: absolute;
+    left: -30%;
+    right: -30%;
+    top: 22%;
+    height: 140%;
+    transform: rotateX(60deg);
+    transform-origin: 50% 0%;
+    --tf-bg: #040d09;
+    --tf-line: rgb(255 255 255 / 7%);
+    --tf-car: #24443a;
+    --tf-car-2: #173025;
+    --tf-glass: rgb(0 0 0 / 55%);
+    --tf-accent: #b8f03c;
+  }
+  .cb-hero-shade {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, #040d09 0%, rgb(4 13 9 / 70%) 30%, rgb(4 13 9 / 20%) 58%, rgb(4 13 9 / 92%) 100%),
+      radial-gradient(80% 60% at 50% 70%, transparent, rgb(4 13 9 / 55%));
+  }
+  .cb-hero-in {
+    position: relative;
+    width: 100%;
+    padding-top: 110px;
+    padding-bottom: clamp(36px, 7vh, 72px);
+  }
+  .cb-word {
+    font-size: clamp(3.4rem, min(10vw, 16vh), 10rem);
+    margin-bottom: clamp(1.75rem, 5vh, 3.5rem);
+  }
+  .cb-hero-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: clamp(32px, 5vw, 96px);
+    align-items: end;
+  }
+  .cb-lead {
+    font-size: clamp(1.05rem, 1.35vw, 1.25rem);
+    line-height: 1.5;
+    color: var(--soft);
+    max-width: 34ch;
+  }
+  .cb-scroll {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 2rem;
+    text-decoration: none;
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--grey);
+  }
+  .cb-scroll i {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(var(--lime), transparent);
+    animation: cbDrop 2.2s ease-in-out infinite;
+  }
+  @keyframes cbDrop {
+    0% {
+      transform: scaleY(0);
+      transform-origin: top;
+    }
+    50% {
+      transform: scaleY(1);
+      transform-origin: top;
+    }
+    51% {
+      transform-origin: bottom;
+    }
+    100% {
+      transform: scaleY(0);
+      transform-origin: bottom;
+    }
+  }
+  .cb-rise {
+    animation: cbRise 1.2s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: var(--d, 0s);
+  }
+  @keyframes cbRise {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+  }
+
+  /* --- question --- */
+  .cb-points {
+    border-top: 0;
+  }
+  .cb-question {
+    height: 170vh;
+    position: relative;
     border-top: 1px solid var(--line);
   }
-  .cb-nature-head {
-    margin-bottom: clamp(40px, 5vw, 72px);
+  .cb-sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
   }
-  .cb-h3 {
-    font-stretch: 68%;
-    font-weight: 800;
+  .cb-q {
+    font-size: clamp(2.4rem, 5.6vw, 6.4rem);
+    line-height: 1.03;
+    margin-top: 1.75rem;
+    max-width: 18ch;
+  }
+  .cb-q span {
+    color: #1d3328;
+    transition: color 0.35s;
+  }
+  .cb-q span.lit {
+    color: var(--white);
+  }
+  .cb-q span.lit:nth-last-child(-n + 2) {
+    color: var(--lime);
+  }
+  .cb-tight .cb-split {
+    align-items: start;
+  }
+  .cb-timeline {
+    margin-top: clamp(96px, 12vw, 160px);
+    --dt-ink: #fff;
+    --dt-muted: #a2beb0;
+    --dt-line: rgb(255 255 255 / 14%);
+    --dt-old: #4d6a5c;
+    --dt-accent: #b8f03c;
+  }
+  .cb-timeline .cb-kicker {
+    margin-bottom: 2.5rem;
+  }
+
+  /* --- cinema --- */
+  .cb-cinema {
+    position: relative;
+    height: 92svh;
+    min-height: 560px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+  }
+  .cb-cinema video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(1) contrast(1.1) brightness(0.62);
+  }
+  .cb-cinema--ev video {
+    filter: grayscale(0.4) contrast(1.08) brightness(0.62);
+  }
+  .cb-cinema-shade {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, #040d09 0%, transparent 28%, rgb(4 13 9 / 40%) 55%, #040d09 100%),
+      linear-gradient(90deg, rgb(4 13 9 / 55%), transparent 60%);
+  }
+  .cb-cinema-in {
+    position: relative;
+    width: 100%;
+    padding-bottom: clamp(48px, 8vh, 96px);
+  }
+  .cb-tag {
+    margin-top: 2rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    font-size: clamp(2.2rem, 5vw, 5rem);
-    line-height: 0.9;
-    margin-top: 1rem;
-    max-width: 16ch;
+    color: var(--grey);
+  }
+  .cb-four + .cx-demos {
+    margin-top: 0;
+  }
+
+  /* --- nature --- */
+  .cb-nature {
+    margin-top: clamp(96px, 12vw, 176px);
+    padding-top: clamp(56px, 7vw, 104px);
+    border-top: 1px solid var(--line);
+  }
+  .cb-nature .cx-demos {
+    margin-top: clamp(40px, 5vw, 72px);
   }
   .cb-rules {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 0;
     margin-top: clamp(40px, 5vw, 72px);
-    border-top: 1px solid var(--line);
+    border-top: 1px solid var(--line-2);
   }
   .cb-rules li {
-    padding: 1.5rem 1.25rem 0 0;
+    padding: 1.4rem 1.25rem 0 0;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
@@ -598,36 +1064,23 @@ const ex = economics.example.rows;
     padding-left: 1.25rem;
     border-left: 1px solid var(--line);
   }
-  .cb-rule-n {
-    font-family: 'Outfit Variable', 'Outfit', sans-serif;
-    font-weight: 700;
-    color: var(--black);
-    background: var(--amber);
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.9rem;
-  }
   .cb-rule-q {
-    font-family: 'Outfit Variable', 'Outfit', sans-serif;
-    font-weight: 600;
-    font-size: 1.3rem;
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 1.25rem;
     line-height: 1.15;
     letter-spacing: -0.015em;
   }
   .cb-rule-b,
   .cb-rule-t {
-    font-size: 0.88rem;
+    font-size: 0.86rem;
     color: var(--soft);
   }
   .cb-rule-b b,
   .cb-rule-t b {
     display: block;
-    font-size: 0.68rem;
-    letter-spacing: 0.18em;
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     margin-bottom: 0.2rem;
   }
@@ -643,13 +1096,275 @@ const ex = economics.example.rows;
     color: var(--lime);
   }
 
-  /* EV chapter */
-  .cb-cinema--ev video {
-    filter: grayscale(0.3) contrast(1.1) brightness(0.7);
+  /* --- 04 why TilePark leads --- */
+  .cb-edge {
+    overflow: hidden;
+    background: var(--ink-2);
   }
-  .cb-levers--4 {
+  .cb-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgb(184 240 60 / 5%) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(184 240 60 / 5%) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: linear-gradient(180deg, transparent, #000 20%, #000 70%, transparent);
+    -webkit-mask-image: linear-gradient(180deg, transparent, #000 20%, #000 70%, transparent);
+    pointer-events: none;
+  }
+  .cb-edge .cb-wrap {
+    position: relative;
+  }
+  .cb-pillars {
+    display: grid;
     grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
     margin-top: clamp(56px, 7vw, 104px);
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .cb-pillars li {
+    background: var(--ink-2);
+    padding: 2rem 1.75rem 2.25rem;
+    transition: background 0.3s;
+  }
+  .cb-pillars li:hover {
+    background: var(--lift);
+  }
+  .cb-pillar-n {
+    display: block;
+    font-family: var(--display);
+    font-weight: 300;
+    font-size: 3.2rem;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--lime);
+  }
+  .cb-pillars h3 {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 1.4rem;
+    letter-spacing: -0.02em;
+    margin-top: 2.5rem !important;
+  }
+  .cb-pillars p {
+    margin-top: 0.6rem;
+    color: var(--soft);
+    font-size: 0.95rem;
+  }
+  .cb-stack {
+    display: grid;
+    grid-template-columns: 1fr 0.55fr;
+    grid-template-rows: auto auto auto;
+    column-gap: clamp(24px, 3vw, 48px);
+    margin-top: clamp(72px, 9vw, 136px);
+  }
+  .cb-layer {
+    grid-column: 1;
+    padding: 1.75rem 2rem;
+    border: 1px solid var(--line-2);
+  }
+  .cb-layer--soft {
+    border-color: rgb(184 240 60 / 45%);
+    background: rgb(184 240 60 / 4%);
+  }
+  .cb-layer-h {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4rem 1rem;
+    margin-bottom: 1.1rem;
+  }
+  .cb-layer-h span {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 1.6rem;
+    letter-spacing: -0.02em;
+  }
+  .cb-layer--soft .cb-layer-h span {
+    color: var(--lime);
+  }
+  .cb-layer-h em {
+    font-style: normal;
+    font-size: 0.85rem;
+    color: var(--grey);
+  }
+  .cb-layer ul {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.55rem 2rem;
+  }
+  .cb-layer li {
+    position: relative;
+    padding-left: 1.2rem;
+    font-size: 0.95rem;
+    color: var(--soft);
+  }
+  .cb-layer li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 6px;
+    height: 6px;
+    background: currentColor;
+    opacity: 0.6;
+  }
+  .cb-layer--soft li::before {
+    background: var(--lime);
+    opacity: 1;
+    border-radius: 50%;
+  }
+  .cb-layer-join {
+    grid-column: 1;
+    display: flex;
+    justify-content: space-around;
+    height: 44px;
+    padding: 0 2rem;
+  }
+  .cb-layer-join i {
+    width: 1px;
+    background: linear-gradient(rgb(184 240 60 / 60%), var(--line-2));
+  }
+  .cb-stack-img {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+    margin: 0;
+    position: relative;
+  }
+  .cb-stack-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(0.6) contrast(1.05);
+  }
+  .cb-stack-img figcaption {
+    position: absolute;
+    left: 12px;
+    bottom: 10px;
+    font-size: 0.72rem;
+    background: rgb(4 13 9 / 85%);
+    padding: 0.3rem 0.6rem;
+  }
+  .cb-loop {
+    margin-top: clamp(72px, 9vw, 136px);
+  }
+  .cb-loop ol {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    margin-top: 2rem;
+  }
+  .cb-loop ol::before {
+    content: '';
+    position: absolute;
+    left: 6px;
+    right: 6px;
+    top: 6px;
+    height: 1px;
+    background: linear-gradient(90deg, var(--lime), rgb(184 240 60 / 25%));
+  }
+  .cb-loop li {
+    position: relative;
+    padding-right: 1rem;
+  }
+  .cb-loop-dot {
+    display: block;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: var(--black);
+    border: 2px solid var(--lime);
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  .cb-loop li b {
+    display: block;
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 1.15rem;
+    letter-spacing: -0.015em;
+  }
+  .cb-loop li em {
+    display: block;
+    font-style: normal;
+    font-size: 0.8rem;
+    color: var(--lime);
+    margin-top: 0.3rem;
+  }
+
+  /* --- economics --- */
+  .cb-big {
+    margin: clamp(56px, 7vw, 104px) 0 0;
+  }
+  .cb-big-cap {
+    font-size: 0.85rem;
+    color: var(--grey);
+    margin-bottom: 1.25rem;
+  }
+  .cb-big-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--line-2);
+    border-bottom: 1px solid var(--line);
+  }
+  .cb-big-cell {
+    padding: 2rem 2rem 2rem 0;
+  }
+  .cb-big-cell + .cb-big-cell {
+    padding-left: 2rem;
+    border-left: 1px solid var(--line);
+  }
+  .cb-big-cell b {
+    display: block;
+    font-family: var(--display);
+    font-weight: 300;
+    font-size: clamp(4.5rem, 10vw, 10rem);
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+    color: #3d5a4b;
+    font-variant-numeric: tabular-nums;
+  }
+  .cb-big-cell.hi b {
+    color: var(--lime);
+  }
+  .cb-big-cell span {
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--grey);
+  }
+  .cb-big-cell p {
+    margin-top: 1.25rem;
+    font-family: var(--display);
+    font-size: 1.1rem;
+  }
+  .cb-big-cell em {
+    font-style: normal;
+    color: var(--grey);
+    font-size: 0.9rem;
+  }
+  .cb-assume {
+    padding-top: 1rem;
+    font-size: 0.85rem;
+    color: var(--grey);
+  }
+  .cb-assume summary {
+    cursor: pointer;
+    color: var(--white);
+  }
+  .cb-assume ol {
+    list-style: decimal;
+    padding-left: 1.2rem;
+    margin-top: 0.75rem;
+    columns: 2;
+    column-gap: 3rem;
+  }
+
+  /* --- EV --- */
+  .cb-ev {
+    margin-top: clamp(40px, 5vw, 72px);
+    display: grid;
   }
   .cb-ev-media {
     display: grid;
@@ -690,458 +1405,33 @@ const ex = economics.example.rows;
     display: grid;
     gap: 2rem;
   }
-  .cb-badge-sm {
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--lime);
-    padding-bottom: 0.6rem;
-    border-bottom: 1px solid var(--line);
-    margin-bottom: 0.75rem;
-  }
-  .cb-ev-who ul {
+  .cb-ev-who ul,
+  .cb-lane-item + .cb-lane-item {
     display: grid;
     gap: 0.5rem;
   }
   .cb-ev-who li {
     position: relative;
-    padding-left: 1.4rem;
+    padding-left: 1.3rem;
     color: var(--soft);
   }
   .cb-ev-who li::before {
     content: '';
     position: absolute;
     left: 0;
-    top: 0.55em;
-    width: 8px;
-    height: 8px;
+    top: 0.6em;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
     background: var(--mint);
   }
-  .cb-nav p {
-    color: var(--grey);
-  }
-  .cb-nav-cta {
-    text-decoration: none;
-    border: 1px solid var(--white);
-    padding: 0.55rem 1rem;
-  }
-  .cb-nav-cta:hover {
-    background: var(--lime);
-    border-color: var(--lime);
-    color: var(--black);
-  }
-  @media (max-width: 760px) {
-    .cb-nav p {
-      display: none;
-    }
-  }
 
-  /* hero */
-  .cb-hero {
-    position: relative;
-    min-height: 100svh;
-    display: flex;
-    align-items: flex-end;
-    overflow: hidden;
-  }
-  .cb-field {
-    position: absolute;
-    inset: 0;
-    perspective: 1100px;
-    perspective-origin: 50% 0%;
-  }
-  .cb-field-plane {
-    position: absolute;
-    left: -30%;
-    right: -30%;
-    top: 18%;
-    height: 140%;
-    transform: rotateX(58deg);
-    transform-origin: 50% 0%;
-    --tf-bg: #040d09;
-    --tf-line: rgb(255 255 255 / 8%);
-    --tf-car: #24443a;
-    --tf-car-2: #173025;
-    --tf-glass: rgb(0 0 0 / 55%);
-    --tf-accent: #b8f03c;
-  }
-  .cb-hero-shade {
-    position: absolute;
-    inset: 0;
-    background:
-      linear-gradient(180deg, #040d09 0%, rgb(4 13 9 / 70%) 28%, rgb(4 13 9 / 15%) 55%, rgb(4 13 9 / 85%) 100%),
-      radial-gradient(80% 60% at 50% 70%, transparent, rgb(4 13 9 / 60%));
-  }
-  .cb-hero-in {
-    position: relative;
-    width: 100%;
-    padding-top: 96px;
-    padding-bottom: clamp(32px, 6vh, 64px);
-  }
-  .cb h1 {
-    font-size: clamp(2.6rem, min(6.4vw, 9.5vh), 8.5rem);
-    line-height: 0.86;
-    margin: 1.25rem 0 2.5rem;
-  }
-  .cb h1 > span {
-    display: block;
-  }
-  .cb-outline {
-    color: transparent;
-    -webkit-text-stroke: 1.5px var(--white);
-  }
-  .cb-hero-foot {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    gap: 2rem;
-  }
-  .cb-lead {
-    font-size: clamp(1.15rem, 1.7vw, 1.5rem);
-    max-width: 36ch;
-    line-height: 1.35;
-    color: var(--soft);
-  }
-  .cb-scroll {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    text-decoration: none;
-    font-size: 0.75rem;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--grey);
-  }
-  .cb-scroll i {
-    width: 1px;
-    height: 48px;
-    background: linear-gradient(var(--lime), transparent);
-    animation: cbDrop 2s ease-in-out infinite;
-  }
-  @keyframes cbDrop {
-    0% {
-      transform: scaleY(0);
-      transform-origin: top;
-    }
-    50% {
-      transform: scaleY(1);
-      transform-origin: top;
-    }
-    51% {
-      transform-origin: bottom;
-    }
-    100% {
-      transform: scaleY(0);
-      transform-origin: bottom;
-    }
-  }
-  .cb-rise {
-    animation: cbRise 1.2s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-    animation-delay: var(--d, 0s);
-  }
-  @keyframes cbRise {
-    from {
-      opacity: 0;
-      transform: translateY(40px);
-    }
-  }
-
-  /* points */
-  .cb-points {
-    padding: clamp(80px, 10vw, 160px) 0;
-    border-bottom: 1px solid var(--line);
-  }
-  .cb-intro {
-    font-size: clamp(1.4rem, 2.6vw, 2.4rem);
-    line-height: 1.2;
-    max-width: 34ch;
-    letter-spacing: -0.01em;
-  }
-  .cb-points ol {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    margin-top: clamp(56px, 7vw, 112px);
-  }
-  .cb-points li {
-    border-top: 1px solid var(--line);
-    padding-top: 1.25rem;
-  }
-  .cb-points span {
-    color: var(--lime);
-    font-weight: 700;
-    font-size: 0.85rem;
-    letter-spacing: 0.2em;
-  }
-  .cb-points li p {
-    margin-top: 0.75rem;
-    font-size: 1.3rem;
-    line-height: 1.25;
-    max-width: 22ch;
-  }
-
-  /* question */
-  .cb-question {
-    height: 170vh;
-    position: relative;
-  }
-  .cb-sticky {
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-  }
-  .cb-q {
-    font-size: clamp(2.8rem, 8vw, 9rem);
-    line-height: 0.9;
-    margin-top: 1.5rem;
-    max-width: 16ch;
-  }
-  .cb-q span {
-    color: #14261d;
-    transition: color 0.35s;
-  }
-  .cb-q span.lit {
-    color: var(--white);
-  }
-  .cb-q span.lit:nth-last-child(-n + 2) {
-    color: var(--lime);
-  }
-
-  /* generic sections */
-  .cb-sec {
-    padding: clamp(96px, 12vw, 200px) 0;
-  }
-  .cb-tight {
-    padding-top: 0;
-  }
-  .cb-h2 {
-    font-size: clamp(2.6rem, 7vw, 7.5rem);
-    line-height: 0.9;
-    margin-top: 1.25rem;
-    max-width: 16ch;
-  }
-  .cb-body {
-    font-size: clamp(1.15rem, 1.6vw, 1.45rem);
-    line-height: 1.4;
-    max-width: 46ch;
-    color: var(--soft);
-    margin-top: 2rem;
-  }
-  .cb-note {
-    margin-top: 1.5rem;
-    font-size: 0.82rem;
-    color: var(--grey);
-    max-width: 72ch;
-  }
-  .cb-rows {
-    margin-top: clamp(64px, 8vw, 120px);
-    border-top: 1px solid var(--line);
-  }
-  .cb-rows li {
-    display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: 2rem;
-    align-items: center;
-    padding: 1.5rem 0;
-    border-bottom: 1px solid var(--line);
-  }
-  .cb-rows b {
-    font-size: clamp(3rem, 9vw, 8.5rem);
-    line-height: 0.85;
-    color: #0f2018;
-    -webkit-text-stroke: 1px #2a4637;
-    transition: color 0.4s;
-  }
-  .cb-rows li:hover b {
-    color: var(--lime);
-    -webkit-text-stroke-color: var(--lime);
-  }
-  .cb-rows span {
-    font-size: 0.75rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--lime);
-  }
-  .cb-rows p {
-    font-size: 1.15rem;
-    margin-top: 0.4rem;
-    max-width: 38ch;
-  }
-  .cb-timeline {
-    margin-top: clamp(96px, 12vw, 160px);
-    --dt-ink: #ffffff;
-    --dt-muted: #a2beb0;
-    --dt-line: #1f3529;
-    --dt-old: #4d6a5c;
-    --dt-accent: #b8f03c;
-  }
-  .cb-timeline .cb-kicker {
-    margin-bottom: 2.5rem;
-  }
-
-  /* cinema */
-  .cb-cinema {
-    position: relative;
-    height: 100svh;
-    min-height: 560px;
-    overflow: hidden;
-    display: flex;
-    align-items: flex-end;
-  }
-  .cb-cinema video {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: grayscale(1) contrast(1.15) brightness(0.75);
-  }
-  .cb-cinema-shade {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, #040d09 0%, transparent 30%, rgb(4 13 9 / 35%) 50%, #040d09 100%);
-  }
-  .cb-cinema-in {
-    position: relative;
-    width: 100%;
-    padding-bottom: clamp(48px, 8vh, 96px);
-  }
-  .cb-tag {
-    margin-top: 2rem;
-    font-size: 0.72rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--grey);
-  }
-  .cb-principles {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 2rem;
-    margin: clamp(64px, 8vw, 120px) 0;
-  }
-  .cb-principles li {
-    border-top: 2px solid var(--lime);
-    padding-top: 1.25rem;
-  }
-  .cb-principles span {
-    font-size: clamp(3.5rem, 6vw, 6rem);
-    line-height: 0.9;
-    color: var(--lime);
-  }
-  .cb-principles h3 {
-    font-size: 1.3rem;
-    font-weight: 700;
-    margin: 1rem 0 0.5rem;
-    text-transform: uppercase;
-    font-stretch: 85%;
-  }
-  .cb-principles p {
-    color: var(--soft);
-    font-size: 0.98rem;
-  }
-
-  /* economics */
-  .cb-econ {
-    border-top: 1px solid var(--line);
-  }
-  .cb-big {
-    margin: clamp(64px, 8vw, 120px) 0;
-  }
-  .cb-big-cap {
-    font-size: 0.85rem;
-    color: var(--grey);
-    margin-bottom: 1.5rem;
-  }
-  .cb-big-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    border-top: 1px solid var(--line);
-  }
-  .cb-big-cell {
-    padding: 2rem 2rem 2rem 0;
-    border-right: 1px solid var(--line);
-  }
-  .cb-big-cell + .cb-big-cell {
-    padding-left: 2rem;
-  }
-  .cb-big-cell:last-child {
-    border-right: 0;
-  }
-  .cb-big-cell b {
-    display: block;
-    font-size: clamp(5rem, 13vw, 13rem);
-    line-height: 0.8;
-    color: #2a4637;
-  }
-  .cb-big-cell.hi b {
-    color: var(--lime);
-  }
-  .cb-big-cell span {
-    font-size: 0.78rem;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--grey);
-  }
-  .cb-big-cell p {
-    margin-top: 1.25rem;
-    font-size: 1.05rem;
-  }
-  .cb-big-cell em {
-    font-style: normal;
-    color: var(--grey);
-    font-size: 0.9rem;
-  }
-  .cb-assume {
-    margin-top: 1.5rem;
-    border-top: 1px solid var(--line);
-    padding-top: 1rem;
-    font-size: 0.85rem;
-    color: var(--grey);
-  }
-  .cb-assume summary {
-    cursor: pointer;
-    color: var(--white);
-    letter-spacing: 0.08em;
-  }
-  .cb-assume ol {
-    list-style: decimal;
-    padding-left: 1.2rem;
-    margin-top: 0.75rem;
-    columns: 2;
-    column-gap: 3rem;
-  }
-  .cb-levers {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 1.5rem;
-    margin-bottom: clamp(64px, 8vw, 120px);
-  }
-  .cb-levers li {
-    border-left: 1px solid var(--line);
-    padding-left: 1.25rem;
-  }
-  .cb-levers h3 {
-    font-size: 1.05rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    font-stretch: 85%;
-    margin-bottom: 0.5rem;
-  }
-  .cb-levers p {
-    color: var(--soft);
-    font-size: 0.92rem;
-  }
-
-  /* next */
+  /* --- next --- */
   .cb-lanes {
     display: grid;
     grid-template-columns: 1.4fr 1fr 1fr;
-    gap: 2px;
-    margin: clamp(64px, 8vw, 120px) 0;
+    gap: 1px;
+    margin-top: clamp(56px, 7vw, 104px);
     background: var(--line);
     border: 1px solid var(--line);
   }
@@ -1150,32 +1440,46 @@ const ex = economics.example.rows;
     padding: 2rem;
   }
   .cb-badge {
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
     font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.2em;
+    font-weight: 600;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    padding: 0.45rem 0.8rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.75rem;
+  }
+  .cb-badge i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
   }
   .is-today .cb-badge {
+    color: var(--lime);
+  }
+  .is-today .cb-badge i {
     background: var(--lime);
-    color: var(--black);
   }
   .is-dev .cb-badge {
-    border: 1px solid var(--mint);
     color: var(--mint);
   }
+  .is-dev .cb-badge i {
+    border: 1.5px solid var(--mint);
+    background: linear-gradient(90deg, var(--mint) 50%, transparent 50%);
+  }
   .is-future .cb-badge {
-    border: 1px dashed var(--grey);
     color: var(--grey);
+  }
+  .is-future .cb-badge i {
+    border: 1.5px dashed var(--grey);
   }
   .cb-lane-item + .cb-lane-item {
     margin-top: 1.5rem;
   }
   .cb-lane-item h3 {
-    font-size: 1.1rem;
-    font-weight: 700;
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 1.15rem;
   }
   .cb-lane-item p {
     font-size: 0.92rem;
@@ -1187,21 +1491,19 @@ const ex = economics.example.rows;
     color: var(--grey);
   }
 
-  /* heritage */
-  .cb-heritage {
-    border-top: 1px solid var(--line);
-  }
+  /* --- heritage --- */
   .cb-collage {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr;
     grid-template-rows: 1fr 1fr;
     gap: 8px;
-    height: clamp(420px, 70vh, 820px);
-    margin: clamp(64px, 8vw, 120px) 0;
+    height: clamp(420px, 66vh, 760px);
+    margin: clamp(56px, 7vw, 104px) 0;
   }
   .cb-collage figure {
     position: relative;
     overflow: hidden;
+    margin: 0;
   }
   .cb-collage .big {
     grid-row: span 2;
@@ -1213,7 +1515,7 @@ const ex = economics.example.rows;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: grayscale(1) contrast(1.1);
+    filter: grayscale(0.85) contrast(1.05);
     transition:
       filter 0.6s,
       transform 1.2s cubic-bezier(0.2, 0.7, 0.2, 1);
@@ -1227,93 +1529,87 @@ const ex = economics.example.rows;
     left: 12px;
     bottom: 10px;
     font-size: 0.72rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    background: rgb(4 13 9 / 80%);
-    padding: 0.35rem 0.6rem;
+    background: rgb(4 13 9 / 85%);
+    padding: 0.3rem 0.6rem;
   }
-  .cb-her-copy {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-    font-size: 1.2rem;
-    line-height: 1.45;
-    color: var(--soft);
-    max-width: 1100px;
+  #heritage .cb-split {
+    align-items: start;
   }
   .cb-facts {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 1.5rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
     margin-top: clamp(56px, 7vw, 104px);
   }
   .cb-facts > div {
-    border-top: 1px solid var(--lime);
-    padding-top: 1rem;
+    background: var(--black);
+    padding: 1.5rem 1.5rem 1.75rem;
   }
   .cb-facts dt {
-    font-weight: 700;
-    text-transform: uppercase;
-    font-stretch: 80%;
-    font-size: 1.1rem;
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 1.35rem;
+    letter-spacing: -0.02em;
   }
   .cb-facts dd {
-    color: var(--grey);
-    font-size: 0.85rem;
     margin-top: 0.4rem;
+    color: var(--grey);
+    font-size: 0.9rem;
   }
   .cb-flow {
-    margin-top: clamp(56px, 7vw, 104px);
-    font-stretch: 68%;
-    font-weight: 800;
-    text-transform: uppercase;
-    font-size: clamp(1.4rem, 3vw, 2.6rem);
-    line-height: 1.15;
-    color: #2f4a3c;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    margin-top: clamp(48px, 6vw, 88px);
+    border-top: 1px solid var(--line-2);
+    counter-reset: flow;
   }
-  .cb-flow {
-    display: flex;
-    flex-wrap: wrap;
-    column-gap: 0;
+  .cb-flow li {
+    padding: 1rem 0.75rem 0 0;
+    font-family: var(--display);
+    font-size: 1rem;
+    counter-increment: flow;
   }
-  .cb-flow > span {
-    white-space: nowrap;
-  }
-  .cb-flow span:last-child {
+  .cb-flow li::before {
+    content: counter(flow, decimal-leading-zero);
+    display: block;
+    font-size: 0.75rem;
     color: var(--lime);
-  }
-  .cb-flow i {
-    font-style: normal;
-    margin: 0 0.4em;
-    color: #1f3529;
+    margin-bottom: 0.3rem;
   }
 
-  /* decision */
+  /* --- decision --- */
   .cb-decision {
-    background: var(--lime);
-    color: var(--black);
-    padding: clamp(120px, 16vw, 240px) 0 clamp(100px, 12vw, 180px);
+    position: relative;
+    overflow: hidden;
+    padding: clamp(120px, 16vw, 240px) 0 clamp(96px, 12vw, 176px);
+    border-top: 1px solid var(--line);
   }
-  .cb-decision .cb-kicker {
-    color: rgb(4 13 9 / 60%);
+  .cb-decision-field {
+    position: absolute;
+    inset: 0;
+    opacity: 0.55;
+    --tf-bg: #040d09;
+    --tf-line: rgb(255 255 255 / 6%);
+    --tf-car: #1b3328;
+    --tf-car-2: #12251c;
+    --tf-glass: rgb(0 0 0 / 45%);
+    --tf-accent: #b8f03c;
+  }
+  .cb-decision-shade {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(90% 80% at 25% 50%, rgb(4 13 9 / 92%), rgb(4 13 9 / 55%));
+  }
+  .cb-decision-in {
+    position: relative;
   }
   .cb-decision h2 {
-    font-size: clamp(3rem, 8.6vw, 9.5rem);
-    line-height: 0.86;
-    margin-top: 1.5rem;
-    max-width: 15ch;
-  }
-  .cb-decision-row {
-    display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: 3rem;
-    align-items: end;
-    margin-top: clamp(48px, 6vw, 96px);
-  }
-  .cb-decision-row p {
-    font-size: 1.25rem;
-    line-height: 1.4;
-    max-width: 44ch;
+    font-size: clamp(2.6rem, 5.8vw, 6.4rem);
+    line-height: 1.02;
+    max-width: 17ch;
+    margin: 1.75rem 0 clamp(48px, 6vw, 88px);
   }
   .cb-ctas {
     display: flex;
@@ -1322,31 +1618,47 @@ const ex = economics.example.rows;
     justify-content: flex-end;
   }
   .cb-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
     text-decoration: none;
-    background: var(--black);
-    color: var(--white);
-    padding: 1.1rem 1.5rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-    transition: transform 0.2s;
+    background: var(--lime);
+    color: var(--ink-2);
+    padding: 1rem 1.4rem;
+    border-radius: 3px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition:
+      background 0.2s,
+      color 0.2s;
   }
   .cb-btn:hover {
-    transform: translateY(-2px);
+    background: #c9f76a;
   }
-  .cb-btn--ghost {
+  .cb-btn--line {
     background: transparent;
-    color: var(--black);
-    border: 1.5px solid var(--black);
+    color: var(--white);
+    border: 1px solid var(--line-2);
+  }
+  .cb-btn--line:hover {
+    background: transparent;
+    border-color: var(--white);
   }
   .cb-aud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
     margin-top: 4rem;
-    font-size: 0.8rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
+  }
+  .cb-aud li {
+    font-size: 0.78rem;
+    color: var(--soft);
+    border: 1px solid var(--line-2);
+    border-radius: 3px;
+    padding: 0.4rem 0.75rem;
   }
   .cb-foot {
+    border-top: 1px solid var(--line);
     padding: 2.5rem 0 6rem;
     font-size: 0.85rem;
     color: var(--grey);
@@ -1354,28 +1666,27 @@ const ex = economics.example.rows;
   .cb-foot .cb-wrap {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 1rem 2rem;
   }
   .cb-foot .cb-mark {
-    color: var(--white);
-  }
-  .cb-ev {
-    margin-top: clamp(40px, 5vw, 72px);
-    display: grid;
-    gap: 0;
+    font-size: 30px;
   }
 
-  /* responsive */
+  /* --- responsive --- */
   @media (max-width: 1100px) {
-    .cb-levers {
+    .cb-five,
+    .cb-pillars {
       grid-template-columns: repeat(2, 1fr);
     }
-    .cb-facts {
-      grid-template-columns: repeat(3, 1fr);
+    .cb-five li + li {
+      border-left: 0;
     }
-  }
-  @media (max-width: 1100px) {
+    .cb-five li {
+      padding-left: 0 !important;
+      padding-bottom: 1.25rem;
+    }
     .cb-rules {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 1.5rem 0;
@@ -1386,9 +1697,6 @@ const ex = economics.example.rows;
     .cb-rules li {
       padding-left: 0 !important;
     }
-    .cb-levers--4 {
-      grid-template-columns: repeat(2, 1fr);
-    }
     .cb-ev-media {
       grid-template-columns: 1fr 220px;
     }
@@ -1396,47 +1704,99 @@ const ex = economics.example.rows;
       grid-column: 1 / -1;
       grid-template-columns: 1fr 1fr;
     }
+    .cb-flow {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem 0;
+    }
+    .cb-stack {
+      grid-template-columns: 1fr;
+    }
+    .cb-stack-img {
+      grid-column: 1;
+      grid-row: auto;
+      margin-top: 24px;
+      aspect-ratio: 16 / 9;
+    }
   }
   @media (max-width: 960px) {
-    .cb-principles {
+    .cb-split,
+    .cb-hero-grid,
+    .cb-lanes {
+      grid-template-columns: 1fr;
+    }
+    .cb-four {
       grid-template-columns: 1fr 1fr;
     }
-    .cb-lanes,
-    .cb-decision-row,
-    .cb-her-copy {
-      grid-template-columns: 1fr;
+    .cb-four li + li {
+      border-left: 0;
+    }
+    .cb-four li {
+      padding-left: 0 !important;
+      padding-bottom: 1.25rem;
     }
     .cb-ctas {
       justify-content: flex-start;
     }
+    .cb-facts {
+      grid-template-columns: 1fr 1fr;
+    }
+    .cb-loop ol {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+    .cb-loop ol::before {
+      left: 6px;
+      right: auto;
+      top: 6px;
+      bottom: 6px;
+      width: 1px;
+      height: auto;
+      background: linear-gradient(var(--lime), rgb(184 240 60 / 25%));
+    }
+    .cb-loop li {
+      display: grid;
+      grid-template-columns: 13px 1fr;
+      column-gap: 1rem;
+    }
+    .cb-loop-dot {
+      grid-row: span 2;
+      margin: 0.2rem 0 0;
+    }
   }
   @media (max-width: 640px) {
+    .cb-three,
+    .cb-four,
+    .cb-five,
+    .cb-pillars,
     .cb-rules,
-    .cb-levers--4,
-    .cb-ev-media,
-    .cb-ev-who {
-      grid-template-columns: 1fr;
-    }
-    .cb-ev-phone {
-      width: 240px;
-      justify-self: center;
-    }
-    .cb-points ol,
-    .cb-principles,
     .cb-big-row,
-    .cb-levers,
-    .cb-facts {
+    .cb-facts,
+    .cb-ev-media,
+    .cb-ev-who,
+    .cb-layer ul {
       grid-template-columns: 1fr;
+    }
+    .cb-three li + li {
+      padding-left: 0;
+      border-left: 0;
+    }
+    .cb-three li {
+      padding-bottom: 1rem;
     }
     .cb-big-cell,
     .cb-big-cell + .cb-big-cell {
       padding: 1.5rem 0;
-      border-right: 0;
+      border-left: 0;
       border-bottom: 1px solid var(--line);
     }
-    .cb-rows li {
-      grid-template-columns: 1fr;
-      gap: 0.5rem;
+    .cb-list li {
+      grid-template-columns: 2.5rem 1fr;
+    }
+    .cb-list li p {
+      grid-column: 2;
+    }
+    .cb-flow {
+      grid-template-columns: repeat(2, 1fr);
     }
     .cb-collage {
       grid-template-columns: 1fr 1fr;
@@ -1450,9 +1810,12 @@ const ex = economics.example.rows;
     .cb-assume ol {
       columns: 1;
     }
-    .cb-hero-foot {
-      flex-direction: column;
-      align-items: flex-start;
+    .cb-ev-phone {
+      width: 240px;
+      justify-self: center;
+    }
+    .cb-layer {
+      padding: 1.25rem;
     }
   }
 </style>

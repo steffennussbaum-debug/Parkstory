@@ -290,3 +290,55 @@ export const ev = {
     'Intelligent load management across the whole system',
   ],
 };
+
+/**
+ * Why TilePark is the disruptor: system design, decentralised intelligence,
+ * simple mechanics and fast reaction through in-house R&D. Every statement is
+ * taken from Parkstory's existing material; no comparison with named
+ * competitors and no superlatives that cannot be shown.
+ */
+export const edge = {
+  eyebrow: 'Why TilePark leads',
+  title: 'Intelligent where it matters.',
+  titleAccent: 'Simple where it counts.',
+  body: 'What makes TilePark disruptive is not a single feature. It is how the system is designed, and how Parkstory develops it.',
+  pillars: [
+    {
+      n: '01',
+      k: 'Designed differently',
+      v: 'The floor itself is the machine. Instead of a few central shuttles, lifts or cranes that every car must pass through, every position is a conveyor that moves a car lengthwise and crosswise.',
+    },
+    {
+      n: '02',
+      k: 'Decentralised intelligence',
+      v: 'Each conveyor has its own controller and acts independently. Routes are calculated for the grid’s current layout, many conveyors move at the same time, and a single fault never stops the garage.',
+    },
+    {
+      n: '03',
+      k: 'Simple, reliable mechanics',
+      v: 'Because the intelligence lives in software, the steel can stay simple: identical, pre-assembled modules built from industry-standard components, robust and easy to service.',
+    },
+    {
+      n: '04',
+      k: 'Fast to react',
+      v: 'Mechanics, controls, software and the app are developed by our own team and built in our own factories. Improvements reach the field as remote updates, and remote diagnostics let our team respond to any issue immediately.',
+    },
+  ],
+  software: [
+    'Decentralised control: a controller in every conveyor',
+    'Routes calculated for the current layout',
+    'Many conveyors moving in parallel',
+    'Learning from operation (in development)',
+    'Remote diagnostics and remote updates',
+  ],
+  mechanics: [
+    'Identical conveyor modules, pre-assembled and 100 % tested',
+    'Industry-standard components',
+    'At least four drive motors per conveyor; any conveyor can take over for any other',
+    'Cars only move horizontally on the transport level',
+    'Storage levels are simple steel shelving',
+  ],
+  loop: ['Engineering', 'Controls & software', 'Own factories', 'In operation', 'Remote updates'],
+  loopNote:
+    'One company from first sketch to service: no importer, no third-party system and no outside assembler between an idea and the garage that runs it.',
+};
