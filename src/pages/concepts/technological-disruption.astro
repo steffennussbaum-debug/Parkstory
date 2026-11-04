@@ -122,7 +122,27 @@ const navChapters = chapters.filter((_, i) => [2, 3, 4, 5, 6, 8, 9, 10].includes
       }
     </nav>
     <a href="#decision" class="cb-nav-cta">Technology briefing</a>
+    <button type="button" class="cb-menu-btn" aria-expanded="false" aria-controls="cb-menu">
+      <span class="cb-menu-ico" aria-hidden="true"><i></i><i></i></span>Chapters
+    </button>
   </header>
+  <div class="cb-menu" id="cb-menu" hidden>
+    <nav aria-label="All chapters">
+      <ol>
+        {
+          chapters.map(([n, t, h]) => (
+            <li>
+              <a href={h}>
+                <i>{n}</i>
+                {t}
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+    </nav>
+    <a href="#decision" class="cb-btn cb-menu-cta">Request a technology briefing<span aria-hidden="true">→</span></a>
+  </div>
 
   <main id="top">
     <!-- 01 THE SHIFT -->
@@ -972,14 +992,32 @@ const navChapters = chapters.filter((_, i) => [2, 3, 4, 5, 6, 8, 9, 10].includes
       new IntersectionObserver((es) => nav.classList.toggle('show-mark', !es[0].isIntersecting)).observe(word);
     }
 
+    // Phones and tablets: the "Chapters" button opens a full-screen list of all chapters.
+    const menuBtn = document.querySelector<HTMLButtonElement>('.cb-menu-btn');
+    const menu = document.querySelector<HTMLElement>('.cb-menu');
+    if (menuBtn && menu) {
+      const setOpen = (open: boolean) => {
+        menu.hidden = !open;
+        menuBtn.setAttribute('aria-expanded', String(open));
+        document.documentElement.classList.toggle('cb-menu-open', open);
+      };
+      menuBtn.addEventListener('click', () => setOpen(menu.hidden));
+      menu.addEventListener('click', (e) => {
+        if ((e.target as HTMLElement).closest('a')) setOpen(false);
+      });
+      addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') setOpen(false);
+      });
+    }
+
     // Highlight the chapter currently on screen in the navigation.
-    const links = [...document.querySelectorAll<HTMLAnchorElement>('.cb-chapters a')];
-    const byId = new Map(links.map((a) => [a.getAttribute('href')!.slice(1), a]));
+    const links = [...document.querySelectorAll<HTMLAnchorElement>('.cb-chapters a, .cb-menu a[href^="#"]')];
+    const idOf = (a: HTMLAnchorElement) => a.getAttribute('href')!.slice(1);
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
           if (!e.isIntersecting) continue;
-          links.forEach((a) => a.classList.toggle('on', a === byId.get(e.target.id)));
+          links.forEach((a) => a.classList.toggle('on', idOf(a) === e.target.id));
         }
       },
       { rootMargin: '-45% 0px -50% 0px' }
@@ -1334,9 +1372,125 @@ const navChapters = chapters.filter((_, i) => [2, 3, 4, 5, 6, 8, 9, 10].includes
     border-color: var(--lime);
     color: var(--lime);
   }
+  .cb-menu-btn,
+  .cb-menu {
+    display: none;
+  }
   @media (max-width: 1180px) {
     .cb-chapters {
       display: none;
+    }
+    .cb-nav {
+      gap: 0.75rem;
+    }
+    .cb-nav .cb-mark {
+      margin-right: auto;
+    }
+    .cb-menu-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      min-height: 40px;
+      padding: 0 0.9rem;
+      border: 1px solid var(--lime);
+      border-radius: 3px;
+      background: rgb(4 13 9 / 70%);
+      color: var(--white);
+      font: inherit;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .cb-menu-ico {
+      display: grid;
+      gap: 4px;
+      width: 16px;
+    }
+    .cb-menu-ico i {
+      height: 1.5px;
+      background: var(--lime);
+      transition: transform 0.25s;
+    }
+    .cb-menu-btn[aria-expanded='true'] .cb-menu-ico i:first-child {
+      transform: translateY(2.75px) rotate(45deg);
+    }
+    .cb-menu-btn[aria-expanded='true'] .cb-menu-ico i:last-child {
+      transform: translateY(-2.75px) rotate(-45deg);
+    }
+    .cb-menu:not([hidden]) {
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      inset: 68px 0 0;
+      z-index: 49;
+      overflow-y: auto;
+      padding: 1rem clamp(20px, 4vw, 64px) 2rem;
+      background: rgb(4 13 9 / 97%);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .cb-menu ol {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .cb-menu li {
+      border-bottom: 1px solid var(--line);
+    }
+    .cb-menu li a {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 0.9rem 0;
+      text-decoration: none;
+      color: var(--soft);
+      font-family: var(--display);
+      font-weight: 500;
+      font-size: 1.35rem;
+      letter-spacing: -0.02em;
+    }
+    .cb-menu li i {
+      font-style: normal;
+      font-family: var(--text);
+      font-size: 0.8rem;
+      color: var(--grey);
+      min-width: 1.6rem;
+    }
+    .cb-menu li a.on {
+      color: var(--white);
+    }
+    .cb-menu li a.on i {
+      color: var(--lime);
+    }
+    .cb-menu-cta {
+      align-self: flex-start;
+      margin-top: 1.75rem;
+    }
+    html.cb-menu-open {
+      overflow: hidden;
+    }
+    html.cb-menu-open .cs {
+      display: none;
+    }
+    html.cb-menu-open .cb-nav {
+      background: rgb(4 13 9 / 97%);
+    }
+    html.cb-menu-open .cb-nav .cb-mark {
+      opacity: 1;
+      transform: none;
+      pointer-events: auto;
+    }
+  }
+  @media (max-width: 420px) {
+    .cb-nav-cta {
+      display: none;
+    }
+  }
+  @media (max-width: 360px) {
+    .cb-nav .cb-mark {
+      font-size: 24px;
+    }
+    .cb-menu-btn {
+      padding: 0 0.7rem;
     }
   }
 
