@@ -17,51 +17,82 @@ const swatches: Record<string, { colors: string[]; type: string }> = {
     colors: ['#141618', '#e9e8e4', '#ff5b1f', '#8d9297'],
     type: 'IBM Plex Sans · Plex Mono',
   },
+  'engineering-heritage': {
+    colors: ['#f2f0e9', '#0b1a13', '#b8f03c', '#3f6b1a'],
+    type: 'Outfit · Inter (Parkstory CI, light)',
+  },
+  'built-by-parkstory': {
+    colors: ['#0a0f0c', '#ffffff', '#b8f03c', '#f5a524'],
+    type: 'Outfit · Inter (Parkstory CI)',
+  },
+  'proven-disruption': {
+    colors: ['#040d09', '#ffffff', '#b8f03c', '#5ee3a1'],
+    type: 'Outfit · Inter (Parkstory CI)',
+  },
 };
+const rounds = [
+  {
+    title: 'First round',
+    text: 'Three visual languages for the same story.',
+    items: concepts.filter((c) => 'ABC'.includes(c.letter)),
+  },
+  {
+    title: 'New: confidence in decades of know-how',
+    text: 'Three alternatives that lead with Parkstory’s engineering heritage, its own factories and its service, then introduce TilePark as the new architecture built on that know-how.',
+    items: concepts.filter((c) => 'DEF'.includes(c.letter)),
+  },
+];
 ---
 
 <ConceptLayout title="Parkstory — Homepage concepts" bodyClass="cx-index">
   <header class="ix-head">
     <p class="ix-kicker">Parkstory · Homepage redesign · Draft</p>
-    <h1>Three directions for the new Parkstory homepage</h1>
+    <h1>Directions for the new Parkstory homepage</h1>
     <p class="ix-sub">
-      All three tell the same seven-part story: the shift, the question, the breakthrough, the economics, what comes
-      next, engineering heritage and the decision. Only the visual language differs. The current website is unchanged
-      until a direction is chosen.
+      Every concept tells Parkstory’s story with the same facts; only the emphasis and the visual language differ. The
+      current website is unchanged until a direction is chosen.
     </p>
   </header>
 
-  <main class="ix-grid">
-    {
-      concepts.map((c) => (
-        <article class="ix-card">
-          <a class="ix-frame" href={`/concepts/${c.slug}`} aria-label={`Open concept ${c.letter}: ${c.name}`}>
-            <iframe
-              src={`/concepts/${c.slug}`}
-              title={`Preview of concept ${c.letter}`}
-              loading="lazy"
-              tabindex="-1"
-              scrolling="no"
-            />
-          </a>
-          <div class="ix-meta">
-            <p class="ix-letter">Concept {c.letter}</p>
-            <h2>{c.name}</h2>
-            <p>{c.summary}</p>
-            <div class="ix-sw">
-              {swatches[c.slug].colors.map((col) => (
-                <i style={`background:${col}`} />
-              ))}
-              <span>{swatches[c.slug].type}</span>
-            </div>
-            <a class="ix-open" href={`/concepts/${c.slug}`}>
-              Open full page →
-            </a>
-          </div>
-        </article>
-      ))
-    }
-  </main>
+  {
+    rounds.map((r) => (
+      <section class="ix-round">
+        <div class="ix-round-head">
+          <h2>{r.title}</h2>
+          <p>{r.text}</p>
+        </div>
+        <div class="ix-grid">
+          {r.items.map((c) => (
+            <article class="ix-card">
+              <a class="ix-frame" href={`/concepts/${c.slug}`} aria-label={`Open concept ${c.letter}: ${c.name}`}>
+                <iframe
+                  src={`/concepts/${c.slug}`}
+                  title={`Preview of concept ${c.letter}`}
+                  loading="lazy"
+                  tabindex="-1"
+                  scrolling="no"
+                />
+              </a>
+              <div class="ix-meta">
+                <p class="ix-letter">Concept {c.letter}</p>
+                <h2>{c.name}</h2>
+                <p>{c.summary}</p>
+                <div class="ix-sw">
+                  {swatches[c.slug].colors.map((col) => (
+                    <i style={`background:${col}`} />
+                  ))}
+                  <span>{swatches[c.slug].type}</span>
+                </div>
+                <a class="ix-open" href={`/concepts/${c.slug}`}>
+                  Open full page →
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    ))
+  }
 
   <footer class="ix-foot">
     <p>
@@ -111,6 +142,25 @@ const swatches: Record<string, { colors: string[]; type: string }> = {
     max-width: 70ch;
     color: #45433f;
     line-height: 1.55;
+  }
+  .ix-round + .ix-round {
+    margin-top: 72px;
+  }
+  .ix-round-head {
+    max-width: 1600px;
+    margin: 0 auto 24px;
+    padding: 24px clamp(20px, 3vw, 48px) 0;
+    border-top: 1px solid rgb(18 18 18 / 14%);
+  }
+  .ix-round-head h2 {
+    font-size: 1.35rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .ix-round-head p {
+    margin-top: 6px;
+    color: #6b6862;
+    max-width: 72ch;
   }
   .ix-grid {
     max-width: 1600px;

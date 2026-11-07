@@ -29,6 +29,25 @@ export const concepts = [
     summary:
       'Premium European engineering. Precision manufacturing, software and robotics presented like a specification.',
   },
+  {
+    slug: 'engineering-heritage',
+    letter: 'D',
+    name: 'Engineering Heritage',
+    summary:
+      'Light and editorial, like a company chronicle. Generations of engineering lead to TilePark; trust comes first.',
+  },
+  {
+    slug: 'built-by-parkstory',
+    letter: 'E',
+    name: 'Built by Parkstory',
+    summary: 'Factory-first and photographic. The shop floor is the proof: from raw steel to a running garage.',
+  },
+  {
+    slug: 'proven-disruption',
+    letter: 'F',
+    name: 'Proven Disruption',
+    summary: 'Concept B’s identity, led by credentials: what is proven over decades, and what TilePark changes.',
+  },
 ] as const;
 
 export const shift = {
@@ -850,4 +869,92 @@ export const dna = {
   close: 'We don’t just design technology.',
   closeAccent: 'We master how to build it.',
   sign: 'We are Parkstory. We are rethinking parking as intelligent infrastructure for the future.',
+};
+
+/**
+ * Confidence in decades of know-how (concepts D, E, F). Every figure repeats
+ * one already stated in Parkstory's material above (dna, valueChain,
+ * heritage, quality, delivery, breakthrough); nothing new is added.
+ */
+export const trust = {
+  facts: [
+    {
+      n: '75+',
+      unit: 'years',
+      k: 'Engineering and manufacturing',
+      v: 'Generations of mechanical innovation in the Nussbaum family.',
+    },
+    {
+      n: '1990s',
+      unit: 'since the early',
+      k: 'Automated parking',
+      v: 'Automated parking systems since the early 1990s.',
+    },
+    {
+      n: '30+',
+      unit: 'years',
+      k: 'Software development',
+      v: 'Large-scale software, digital platforms and AI by Marc Lott and Actimage.',
+    },
+    {
+      n: '2',
+      unit: 'own factories',
+      k: 'Kehl and Gastonia',
+      v: 'Germany and the USA, about 10,000 m² of production in Kehl alone.',
+    },
+    { n: '100 %', unit: 'tested', k: 'Every conveyor', v: 'Functional test and load test on the rig before shipping.' },
+    {
+      n: '30+',
+      unit: 'years',
+      k: 'Spare parts',
+      v: 'Guaranteed, because we own the drawings, the tooling and the production.',
+    },
+  ],
+  chronicle: [
+    { k: 'Zeppelin technology', v: 'Where the Nussbaum family’s engineering story begins.' },
+    { k: 'Agricultural machinery', v: 'Robust machines built for daily, heavy use.' },
+    { k: 'Automotive service lifts', v: 'Lifting cars safely, every day, in workshops.' },
+    { k: 'Automated parking', v: 'Automated parking systems since the early 1990s.' },
+    { k: 'TilePark', v: 'Decades of mechanics, joined with decades of software: a new architecture.' },
+  ],
+  lessons: [
+    {
+      k: 'Keep the mechanics simple',
+      v: 'Identical, pre-assembled conveyor modules from industry-standard components. The intelligence lives in software.',
+    },
+    {
+      k: 'Own the whole process',
+      v: 'Design, controls, software, manufacturing, installation and service from one company.',
+    },
+    {
+      k: 'Test everything',
+      v: 'Every conveyor is load-tested, every component serialised, every result logged.',
+    },
+    {
+      k: 'Plan for decades',
+      v: 'Spare parts for at least 30 years, remote updates for a system that keeps improving.',
+    },
+  ],
+  proven: {
+    title: 'What decades have proven',
+    items: [
+      'Mechanical engineering and manufacturing, 75+ years in the family',
+      'Automated parking systems since the early 1990s',
+      'Our own factories in Kehl and Gastonia',
+      'Every conveyor load-tested, every component serialised',
+      'Spare parts for at least 30 years',
+      'After-sales service around the clock',
+    ],
+  },
+  changes: {
+    title: 'What TilePark changes',
+    items: [
+      'Every position is a conveyor that moves a car in X and Y',
+      'No central machine that every car depends on',
+      'A controller in every conveyor, routes calculated for each request',
+      'Stackers add Z: up to four cars on the footprint of one',
+      'Remote updates and swarm learning through AI',
+      'The driver in charge, through the app',
+    ],
+  },
 };

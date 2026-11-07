@@ -1,0 +1,1181 @@
+---
+/**
+ * Concept F — Proven Disruption, in the Parkstory corporate identity.
+ *
+ * Concept B's look (exploding P, green-black, lime as signal), restructured to
+ * lead with credentials: decades of proven engineering on one side, what
+ * TilePark changes on the other, then a chronicle that ends in TilePark and
+ * the proof (factories, testing, service).
+ */
+import { Image } from 'astro:assets';
+import ConceptLayout from '~/layouts/ConceptLayout.astro';
+import ParkstoryMark from '~/components/concepts/ParkstoryMark.astro';
+import TileField from '~/components/concepts/TileField.astro';
+import GridDemo from '~/components/tilepark/GridDemo.astro';
+import { shift, breakthrough, valueChain, quality, delivery, decision, dna, trust } from '~/data/concepts';
+
+import welding from '~/assets/images/tilepark/kehl-welding.webp';
+import bending from '~/assets/images/tilepark/kehl-bending.webp';
+import drives from '~/assets/images/tilepark/gastonia-drive-assembly.webp';
+import cnc from '~/assets/images/tilepark/gastonia-cnc.webp';
+import kehlPlant from '~/assets/images/tilepark/kehl-plant.webp';
+
+import '@fontsource-variable/inter';
+import '@fontsource-variable/outfit';
+import '~/assets/styles/tilepark.css';
+import '~/assets/styles/concept-demos.css';
+
+const nav = [
+  ['Proven', '#proven'],
+  ['Chronicle', '#chronicle'],
+  ['TilePark', '#tilepark'],
+  ['Made by us', '#made'],
+  ['Service', '#service'],
+];
+const rail = [
+  ['75+', 'years of engineering'],
+  ['Early 1990s', 'automated parking since'],
+  ['30+', 'years of software'],
+  ['2', 'own factories'],
+  ['EP 3924576 B1', 'European patent'],
+];
+const mosaic = [
+  [drives, 'Conveyor drive assembly · Gastonia', '50% 55%'],
+  [welding, 'Robotic welding · Kehl', '50% 35%'],
+  [bending, 'CNC bending · Kehl', '75% 55%'],
+  [cnc, 'CNC machining · Gastonia', '50% 50%'],
+  [kehlPlant, 'Our plant · Kehl', '50% 55%'],
+] as const;
+---
+
+<ConceptLayout
+  title="Parkstory — Concept F · Proven Disruption"
+  description={shift.lead}
+  bodyClass="cf"
+  current="proven-disruption"
+>
+  <header class="cf-nav">
+    <a href="#top" class="cf-logo" aria-label="Parkstory, back to top"><ParkstoryMark /></a>
+    <nav aria-label="Sections" class="cf-links">
+      {nav.map(([t, h]) => <a href={h}>{t}</a>)}
+    </nav>
+    <a href="#decision" class="cf-nav-cta">Technology briefing</a>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="cf-hero">
+      <div class="cf-hero-field" aria-hidden="true">
+        <TileField cell={46} density={0.86} rate={6} accentShare={0.12} />
+      </div>
+      <div class="cf-hero-shade" aria-hidden="true"></div>
+      <div class="cf-wrap cf-hero-in">
+        <ParkstoryMark variant="swarm" class="cf-word" />
+        <h1 data-reveal>Your vision needs space. <em>We unlock it.</em></h1>
+        <p class="cf-lead" data-reveal>{shift.lead}</p>
+        <p class="cf-lead cf-lead--sub" data-reveal>
+          With decades of engineering behind every part of TilePark, and a new architecture in front of it.
+        </p>
+      </div>
+      <ul class="cf-rail" aria-label="Parkstory credentials">
+        {
+          rail.map(([n, t]) => (
+            <li>
+              <span>{t}</span>
+              <b>{n}</b>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <!-- PROVEN VS NEW -->
+    <section class="cf-sec" id="proven">
+      <div class="cf-wrap">
+        <p class="cf-kicker" data-reveal><b>01</b>Decades of know-how, a new architecture</p>
+        <h2 class="cf-h2" data-reveal>Not a start-up experiment. <em>A new architecture on proven ground.</em></h2>
+        <div class="cf-compare">
+          <div class="cf-col cf-col--proven" data-reveal>
+            <p class="cf-badge"><i></i>{trust.proven.title}</p>
+            <ul>{trust.proven.items.map((t) => <li>{t}</li>)}</ul>
+          </div>
+          <div class="cf-join" aria-hidden="true">
+            <span>+</span>
+          </div>
+          <div class="cf-col cf-col--new" data-reveal style="--reveal-delay:.12s">
+            <p class="cf-badge"><i></i>{trust.changes.title}</p>
+            <ul>{trust.changes.items.map((t) => <li>{t}</li>)}</ul>
+          </div>
+        </div>
+        <p class="cf-statement" data-reveal>
+          {dna.mergeBody}
+        </p>
+      </div>
+    </section>
+
+    <!-- CHRONICLE -->
+    <section class="cf-sec cf-sec--ink" id="chronicle">
+      <div class="cf-wrap">
+        <p class="cf-kicker" data-reveal><b>02</b>{dna.eyebrow}</p>
+        <div class="cf-split">
+          <h2 class="cf-h2" data-reveal>{dna.title} <em>{dna.titleAccent}</em></h2>
+          <p class="cf-body" data-reveal>{dna.foundersBody}</p>
+        </div>
+        <ol class="cf-chron">
+          {
+            trust.chronicle.map((c, i) => (
+              <li
+                class:list={{ now: i === trust.chronicle.length - 1 }}
+                data-reveal
+                style={`--reveal-delay:${0.08 * i}s`}
+              >
+                <span class="cf-chron-dot" />
+                <h3>{c.k}</h3>
+                <p>{c.v}</p>
+              </li>
+            ))
+          }
+        </ol>
+        <div class="cf-legacy">
+          {
+            dna.legacies.map((l) => (
+              <div data-reveal>
+                <b>{l.years}</b>
+                <span>years</span>
+                <h3>{l.name}</h3>
+                <p>{l.text}</p>
+              </div>
+            ))
+          }
+          <div class="cf-founders" data-reveal>
+            {
+              dna.founders.map((f) => (
+                <p>
+                  <i>{f.initials}</i>
+                  <span>
+                    <b>{f.name}</b>
+                    {f.role}
+                  </span>
+                </p>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TILEPARK -->
+    <section class="cf-sec" id="tilepark">
+      <div class="cf-wrap">
+        <p class="cf-kicker" data-reveal><b>03</b>{breakthrough.eyebrow}</p>
+        <div class="cf-split">
+          <h2 class="cf-h2" data-reveal>Not a better machine. <em>A different architecture.</em></h2>
+          <p class="cf-body" data-reveal>{breakthrough.body}</p>
+        </div>
+        <div class="cx-demos cf-demo" data-reveal><GridDemo /></div>
+        <ol class="cf-four">
+          {
+            breakthrough.principles.map((p, i) => (
+              <li data-reveal style={`--reveal-delay:${0.08 * i}s`}>
+                <span>{p.n}</span>
+                <h3>{p.k}</h3>
+                <p>{p.v}</p>
+              </li>
+            ))
+          }
+        </ol>
+        <p class="cf-note">{breakthrough.patent}</p>
+      </div>
+    </section>
+
+    <!-- MADE BY US -->
+    <section class="cf-sec cf-sec--ink" id="made">
+      <div class="cf-wrap">
+        <p class="cf-kicker" data-reveal><b>04</b>{valueChain.eyebrow}</p>
+        <div class="cf-split">
+          <h2 class="cf-h2" data-reveal>{valueChain.title} <em>{valueChain.titleAccent}</em></h2>
+          <p class="cf-body" data-reveal>{valueChain.body}</p>
+        </div>
+        <ol class="cf-chain" data-reveal>
+          {
+            valueChain.steps.map((st) => (
+              <li>
+                <b>{st.k}</b>
+                <span>{st.v}</span>
+              </li>
+            ))
+          }
+        </ol>
+        <div class="cf-mosaic">
+          {
+            mosaic.map(([img, cap, pos], i) => (
+              <figure class:list={{ big: i === 0 }} data-reveal style={`--reveal-delay:${0.06 * i}s`}>
+                <Image
+                  src={img}
+                  alt={cap}
+                  widths={i === 0 ? [600, 1000] : [400, 700]}
+                  sizes={i === 0 ? '(max-width: 960px) 100vw, 40vw' : '(max-width: 960px) 50vw, 30vw'}
+                  style={`object-position:${pos}`}
+                />
+                <figcaption>{cap}</figcaption>
+              </figure>
+            ))
+          }
+        </div>
+        <div class="cf-qc">
+          <figure class="cf-qc-video" data-reveal>
+            <video
+              src="/videos/load-test.mp4"
+              autoplay
+              muted
+              loop
+              playsinline
+              preload="metadata"
+              aria-label="A conveyor segment running on the load test rig"></video>
+            <figcaption><i></i>{quality.caption}</figcaption>
+          </figure>
+          <div>
+            <p class="cf-kicker" data-reveal><b>—</b>{quality.eyebrow}</p>
+            <blockquote class="cf-quote" data-reveal><p>{dna.quality}</p></blockquote>
+            <p class="cf-body" data-reveal>{quality.body}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICE -->
+    <section class="cf-sec" id="service">
+      <div class="cf-wrap">
+        <p class="cf-kicker" data-reveal><b>05</b>{delivery.eyebrow}</p>
+        <div class="cf-uptime" data-reveal>
+          <p class="cf-uptime-n">{delivery.uptime.value}<span>{delivery.uptime.label}</span></p>
+          <div>
+            <h2 class="cf-h2">{delivery.uptime.claim}</h2>
+            <p class="cf-body">{delivery.body}</p>
+          </div>
+        </div>
+        <ul class="cf-service">
+          {
+            delivery.service.steps.map((st, i) => (
+              <li data-reveal style={`--reveal-delay:${0.08 * i}s`}>
+                <b>{st.k}</b>
+                <p>{st.v}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- DECISION -->
+    <section class="cf-decision" id="decision">
+      <div class="cf-hero-field" aria-hidden="true">
+        <TileField cell={40} density={0.86} rate={4} accentShare={0.1} />
+      </div>
+      <div class="cf-hero-shade" aria-hidden="true"></div>
+      <div class="cf-wrap cf-decision-in">
+        <h2 data-reveal>{decision.title}</h2>
+        <p class="cf-body" data-reveal>{decision.body}</p>
+        <div class="cf-ctas" data-reveal>
+          <a class="cf-btn" href={decision.ctaHref}>{decision.cta}<span aria-hidden="true">→</span></a>
+          <a class="cf-btn cf-btn--line" href={decision.secondaryHref} target="_blank" rel="noopener"
+            >{decision.secondary}</a
+          >
+        </div>
+        <p class="cf-sign" data-reveal>{dna.sign}</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="cf-foot">
+    <ParkstoryMark />
+    <p>Designed, programmed and built by Parkstory in Kehl, Germany, and Gastonia, USA.</p>
+    <p>European patent EP 3924576 B1</p>
+  </footer>
+
+  <script>
+    // The navigation logo appears once the big hero wordmark has scrolled away.
+    const word = document.querySelector('.cf-word');
+    const nav = document.querySelector('.cf-nav');
+    if (word && nav) {
+      new IntersectionObserver((es) => nav.classList.toggle('solid', !es[0].isIntersecting)).observe(word);
+    }
+  </script>
+</ConceptLayout>
+
+<style is:global>
+  html:root {
+    --black: #040d09;
+    --ink-2: #07150f;
+    --lift: #0f261b;
+    --line: rgb(255 255 255 / 9%);
+    --line-2: rgb(255 255 255 / 16%);
+    --white: #ffffff;
+    --grey: #a2beb0;
+    --soft: #c5d9cf;
+    --lime: #b8f03c;
+    --mint: #5ee3a1;
+    --amber: #f5a524;
+    --display: 'Outfit Variable', 'Outfit', Arial, sans-serif;
+    --text: 'Inter Variable', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+    --tp-accent: #b8f03c;
+    --tp-accent-soft: #b8f03c;
+    --tp-accent-wash: rgb(184 240 60 / 15%);
+    --tp-panel: #07150f;
+    --tp-panel-2: #0f261b;
+    --tp-board: #040d09;
+    --tp-line: rgb(255 255 255 / 8%);
+    --tp-line-2: rgb(255 255 255 / 18%);
+    --tp-text-dim: #a2beb0;
+    --tp-text-soft: #c5d9cf;
+    --tp-warn: #f5a524;
+    --cx-radius: 4px;
+    --cx-radius-sm: 3px;
+    --cx-btn-radius: 3px;
+    --cx-btn-bg: #b8f03c;
+    --cx-btn-fg: #07150f;
+    --cx-font: var(--text);
+    --cx-font-display: var(--display);
+    --cx-font-mono: var(--text);
+    --cx-tile: #1f3a2c;
+  }
+  .cf {
+    margin: 0;
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--text);
+    font-size: 17px;
+    line-height: 1.6;
+  }
+  .cf *,
+  .cf *::before,
+  .cf *::after {
+    box-sizing: border-box;
+  }
+  /* reset with zero specificity, so every component class can set its own spacing */
+  :where(.cf) :where(h1, h2, h3, p, ol, ul, figure, blockquote) {
+    margin: 0;
+  }
+  :where(.cf) :where(ol, ul) {
+    list-style: none;
+    padding: 0;
+  }
+  :where(.cf) img {
+    display: block;
+    max-width: 100%;
+  }
+  .cf em {
+    font-style: normal;
+    color: var(--lime);
+  }
+  .cf-wrap {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 4vw, 64px);
+  }
+
+  /* nav */
+  .cf-nav {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    height: 66px;
+    padding: 0 clamp(20px, 4vw, 64px);
+    transition: background 0.4s;
+  }
+  .cf-nav.solid {
+    background: rgb(4 13 9 / 92%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .cf-logo {
+    font-size: 26px;
+    text-decoration: none;
+    margin-right: auto;
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .cf-nav.solid .cf-logo {
+    opacity: 1;
+  }
+  .cf-links {
+    display: flex;
+    gap: 1.6rem;
+    font-size: 0.86rem;
+  }
+  .cf-links a {
+    color: var(--soft);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .cf-links a:hover {
+    color: var(--white);
+  }
+  .cf-nav-cta {
+    color: var(--white);
+    text-decoration: none;
+    font-size: 0.86rem;
+    font-weight: 500;
+    border: 1px solid var(--line-2);
+    border-radius: 3px;
+    padding: 0.55rem 0.95rem;
+    white-space: nowrap;
+  }
+  .cf-nav-cta:hover {
+    border-color: var(--lime);
+    color: var(--lime);
+  }
+
+  /* type */
+  .cf h1,
+  .cf-h2,
+  .cf h3,
+  .cf-quote p,
+  .cf-statement,
+  .cf-decision h2 {
+    font-family: var(--display);
+    font-weight: 500;
+    letter-spacing: -0.035em;
+  }
+  .cf h1 {
+    font-size: clamp(2.6rem, 6vw, 6.6rem);
+    line-height: 1;
+    max-width: 13ch;
+    margin-top: 1.5rem;
+  }
+  .cf-h2 {
+    font-size: clamp(2.1rem, 4.2vw, 4.4rem);
+    line-height: 1.04;
+    max-width: 20ch;
+    margin-top: 1.25rem;
+  }
+  .cf-kicker {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--grey);
+  }
+  .cf-kicker b {
+    font-weight: 600;
+    color: var(--lime);
+  }
+  .cf-kicker::after {
+    content: '';
+    flex: 0 1 120px;
+    height: 1px;
+    background: var(--line-2);
+  }
+  .cf-lead {
+    font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+    color: var(--soft);
+    max-width: 48ch;
+    margin-top: 1.75rem;
+  }
+  .cf-lead--sub {
+    margin-top: 0.9rem;
+    color: var(--white);
+  }
+  .cf-body {
+    font-size: clamp(1.02rem, 1.2vw, 1.15rem);
+    color: var(--soft);
+    max-width: 54ch;
+  }
+  .cf-note {
+    margin-top: 1.25rem;
+    font-size: 0.82rem;
+    color: var(--grey);
+  }
+  .cf-split {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: clamp(28px, 5vw, 96px);
+    align-items: end;
+  }
+  .cf-split .cf-h2 {
+    margin-top: 1.25rem;
+  }
+
+  /* buttons */
+  .cf-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2.25rem;
+  }
+  .cf-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 50px;
+    padding: 0 1.35rem;
+    border-radius: 3px;
+    background: var(--lime);
+    color: var(--black);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .cf-btn--line {
+    background: transparent;
+    color: var(--white);
+    border: 1px solid var(--line-2);
+  }
+
+  /* hero */
+  .cf-hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+    padding-top: 110px;
+  }
+  .cf-hero-field {
+    position: absolute;
+    inset: 0;
+    opacity: 0.5;
+    --tf-bg: #040d09;
+    --tf-line: rgb(184 240 60 / 8%);
+    --tf-car: #1f3a2c;
+    --tf-car-2: #173025;
+    --tf-glass: rgb(0 0 0 / 45%);
+    --tf-accent: #b8f03c;
+  }
+  .cf-hero-shade {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgb(4 13 9 / 95%) 0%, rgb(4 13 9 / 75%) 50%, rgb(4 13 9 / 35%) 100%),
+      linear-gradient(0deg, rgb(4 13 9) 0%, transparent 35%);
+  }
+  .cf-hero-in {
+    position: relative;
+    width: 100%;
+    padding-bottom: clamp(40px, 5vw, 72px);
+  }
+  .cf-word {
+    font-size: clamp(3rem, 7vw, 6.4rem);
+  }
+  .cf-rail {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    border-top: 1px solid var(--line-2);
+    background: rgb(4 13 9 / 80%);
+  }
+  .cf-rail li {
+    padding: 1.25rem clamp(16px, 2vw, 28px) 1.5rem;
+    border-left: 1px solid var(--line);
+  }
+  .cf-rail li:first-child {
+    border-left: 0;
+    padding-left: clamp(20px, 4vw, 64px);
+  }
+  .cf-rail span {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--grey);
+  }
+  .cf-rail b {
+    display: block;
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(1.4rem, 2.4vw, 2.3rem);
+    letter-spacing: -0.03em;
+    color: var(--lime);
+    margin-top: 0.4rem;
+    white-space: nowrap;
+  }
+
+  /* sections */
+  .cf-sec {
+    padding: clamp(88px, 11vw, 168px) 0;
+  }
+  .cf-sec--ink {
+    background: var(--ink-2);
+  }
+
+  /* proven vs new */
+  .cf-compare {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: stretch;
+    margin-top: clamp(48px, 6vw, 88px);
+  }
+  .cf-col {
+    border: 1px solid var(--line-2);
+    border-radius: 4px;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+  }
+  .cf-col--new {
+    border-color: rgb(184 240 60 / 55%);
+    background: rgb(184 240 60 / 4%);
+  }
+  .cf-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .cf-badge i {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  .cf-col--proven .cf-badge {
+    color: var(--mint);
+  }
+  .cf-col--proven .cf-badge i {
+    background: var(--mint);
+  }
+  .cf-col--new .cf-badge {
+    color: var(--lime);
+  }
+  .cf-col--new .cf-badge i {
+    background: var(--lime);
+  }
+  .cf-col li {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+    line-height: 1.3;
+    padding: 0.85rem 0 0.85rem 1.8rem;
+    border-top: 1px solid var(--line);
+    position: relative;
+  }
+  .cf-col li::before {
+    position: absolute;
+    left: 0;
+    top: 0.85rem;
+    font-family: var(--text);
+    font-size: 0.95rem;
+  }
+  .cf-col--proven li::before {
+    content: '✓';
+    color: var(--mint);
+  }
+  .cf-col--new li::before {
+    content: '→';
+    color: var(--lime);
+  }
+  .cf-join {
+    display: grid;
+    place-items: center;
+    padding: 0 clamp(12px, 2vw, 28px);
+  }
+  .cf-join span {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid var(--line-2);
+    font-family: var(--display);
+    font-size: 1.5rem;
+    color: var(--lime);
+  }
+  .cf-statement {
+    margin-top: clamp(40px, 5vw, 72px);
+    font-size: clamp(1.4rem, 2.4vw, 2.2rem);
+    line-height: 1.2;
+    max-width: 40ch;
+  }
+
+  /* chronicle */
+  .cf-chron {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    margin-top: clamp(56px, 7vw, 104px);
+  }
+  .cf-chron::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 7px;
+    height: 1px;
+    background: linear-gradient(90deg, var(--line-2), var(--lime));
+  }
+  .cf-chron li {
+    position: relative;
+    padding: 2.25rem 1.5rem 0 0;
+  }
+  .cf-chron-dot {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: 1.5px solid var(--soft);
+    background: var(--ink-2);
+  }
+  .cf-chron li.now .cf-chron-dot {
+    background: var(--lime);
+    border-color: var(--lime);
+    box-shadow: 0 0 0 6px rgb(184 240 60 / 18%);
+  }
+  .cf-chron h3 {
+    font-size: 1.3rem;
+  }
+  .cf-chron li.now h3 {
+    color: var(--lime);
+  }
+  .cf-chron p {
+    color: var(--soft);
+    font-size: 0.92rem;
+    margin-top: 0.4rem;
+  }
+  .cf-legacy {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.2fr;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    margin-top: clamp(56px, 7vw, 104px);
+  }
+  .cf-legacy > div {
+    background: var(--ink-2);
+    padding: 1.75rem;
+  }
+  .cf-legacy > div > b {
+    font-family: var(--display);
+    font-weight: 300;
+    font-size: clamp(3.2rem, 6vw, 5.4rem);
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+    color: var(--lime);
+  }
+  .cf-legacy > div > span {
+    margin-left: 0.5rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--grey);
+  }
+  .cf-legacy h3 {
+    font-size: 1.3rem;
+    margin-top: 1rem;
+  }
+  .cf-legacy > div > p {
+    color: var(--soft);
+    font-size: 0.92rem;
+    margin-top: 0.35rem;
+  }
+  .cf-founders {
+    display: grid;
+    gap: 1rem;
+    align-content: center;
+  }
+  .cf-founders p {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+  .cf-founders i {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--lime);
+    color: var(--lime);
+    font-style: normal;
+    font-family: var(--display);
+  }
+  .cf-founders span {
+    color: var(--grey);
+    font-size: 0.86rem;
+  }
+  .cf-founders b {
+    display: block;
+    color: var(--white);
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 1.05rem;
+  }
+
+  /* tilepark */
+  .cf-demo {
+    margin-top: clamp(40px, 5vw, 72px);
+  }
+  .cf-four {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    margin-top: clamp(32px, 4vw, 56px);
+  }
+  .cf-four li {
+    background: var(--black);
+    padding: 1.5rem 1.5rem 1.75rem;
+  }
+  .cf-four span {
+    font-family: var(--display);
+    color: var(--lime);
+  }
+  .cf-four h3 {
+    font-size: 1.15rem;
+    margin-top: 0.5rem;
+  }
+  .cf-four p {
+    color: var(--soft);
+    font-size: 0.92rem;
+    margin-top: 0.4rem;
+  }
+
+  /* made by us */
+  .cf-chain {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    margin-top: clamp(48px, 6vw, 88px);
+    border-top: 1px solid var(--lime);
+  }
+  .cf-chain li {
+    padding: 1.1rem 0.8rem 0 0;
+    position: relative;
+  }
+  .cf-chain li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: -5px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--lime);
+  }
+  .cf-chain b {
+    display: block;
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 0.98rem;
+    line-height: 1.2;
+  }
+  .cf-chain span {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--grey);
+    margin-top: 0.3rem;
+    line-height: 1.4;
+  }
+  .cf-mosaic {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    grid-template-rows: repeat(2, clamp(180px, 18vw, 260px));
+    gap: 8px;
+    margin-top: clamp(48px, 6vw, 88px);
+  }
+  .cf-mosaic figure {
+    position: relative;
+    overflow: hidden;
+    border-radius: 3px;
+  }
+  .cf-mosaic figure.big {
+    grid-row: span 2;
+  }
+  .cf-mosaic img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .cf-mosaic figcaption,
+  .cf-qc-video figcaption {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.72rem;
+    font-weight: 500;
+    background: rgb(4 13 9 / 85%);
+    padding: 0.3rem 0.6rem;
+    border-radius: 2px;
+  }
+  .cf-qc {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: clamp(32px, 5vw, 96px);
+    align-items: center;
+    margin-top: clamp(72px, 9vw, 136px);
+  }
+  .cf-qc-video {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: 4px;
+    border: 1px solid rgb(184 240 60 / 35%);
+    background: #000;
+  }
+  .cf-qc-video video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .cf-qc-video i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #ff4d4d;
+  }
+  .cf-quote {
+    margin-top: 1.25rem;
+  }
+  .cf-quote p {
+    font-size: clamp(1.6rem, 2.8vw, 2.6rem);
+    line-height: 1.14;
+  }
+  .cf-qc .cf-body {
+    margin-top: 1.5rem;
+  }
+
+  /* service */
+  .cf-uptime {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: clamp(32px, 5vw, 96px);
+    align-items: center;
+    margin-top: 2rem;
+    padding: clamp(32px, 4vw, 64px) 0;
+    border-top: 1px solid var(--line-2);
+    border-bottom: 1px solid var(--line-2);
+  }
+  .cf-uptime-n {
+    font-family: var(--display);
+    font-weight: 300;
+    font-size: clamp(4.6rem, 12vw, 11rem);
+    line-height: 0.85;
+    letter-spacing: -0.05em;
+    color: var(--lime);
+    white-space: nowrap;
+  }
+  .cf-uptime-n span {
+    display: block;
+    font-family: var(--text);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--grey);
+    margin-top: 1rem;
+  }
+  .cf-uptime .cf-h2 {
+    margin-top: 0;
+    font-size: clamp(1.8rem, 3.4vw, 3.2rem);
+  }
+  .cf-uptime .cf-body {
+    margin-top: 1rem;
+  }
+  .cf-service {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-top: clamp(48px, 6vw, 88px);
+  }
+  .cf-service li {
+    border: 1px solid var(--line-2);
+    border-radius: 4px;
+    padding: 1.5rem 1.4rem;
+  }
+  .cf-service b {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 1.5rem;
+    color: var(--lime);
+  }
+  .cf-service p {
+    color: var(--soft);
+    font-size: 0.92rem;
+    margin-top: 0.4rem;
+  }
+
+  /* decision */
+  .cf-decision {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(110px, 13vw, 200px) 0;
+  }
+  .cf-decision-in {
+    position: relative;
+  }
+  .cf-decision h2 {
+    font-size: clamp(2.2rem, 4.6vw, 4.6rem);
+    line-height: 1.04;
+    max-width: 20ch;
+  }
+  .cf-decision .cf-body {
+    margin-top: 1.75rem;
+  }
+  .cf-sign {
+    margin-top: 2.5rem;
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 1.2rem;
+    color: var(--lime);
+  }
+  .cf-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 2rem;
+    padding: 2.5rem clamp(20px, 4vw, 64px) 5.5rem;
+    border-top: 1px solid var(--line);
+    color: var(--grey);
+    font-size: 0.85rem;
+  }
+  .cf-foot .pk {
+    font-size: 24px;
+  }
+
+  @media (max-width: 1100px) {
+    .cf-chain {
+      grid-template-columns: repeat(5, 1fr);
+      row-gap: 1.75rem;
+    }
+    .cf-legacy {
+      grid-template-columns: 1fr 1fr;
+    }
+    .cf-founders {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (max-width: 960px) {
+    .cf-nav {
+      height: auto;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      padding-top: 0.7rem;
+      background: rgb(4 13 9 / 92%);
+    }
+    .cf-logo {
+      opacity: 1;
+    }
+    .cf-links {
+      order: 3;
+      width: calc(100% + 2 * clamp(20px, 4vw, 64px));
+      margin: 0 calc(-1 * clamp(20px, 4vw, 64px));
+      padding: 0.7rem clamp(20px, 4vw, 64px);
+      overflow-x: auto;
+      scrollbar-width: none;
+      border-top: 1px solid var(--line);
+    }
+    .cf-links::-webkit-scrollbar {
+      display: none;
+    }
+    .cf-hero {
+      padding-top: 140px;
+    }
+    .cf-split,
+    .cf-qc,
+    .cf-uptime {
+      grid-template-columns: 1fr;
+    }
+    .cf-compare {
+      grid-template-columns: 1fr;
+    }
+    .cf-join {
+      padding: 1rem 0;
+    }
+    .cf-rail {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .cf-rail li:nth-child(4) {
+      border-left: 0;
+      padding-left: clamp(20px, 4vw, 64px);
+    }
+    .cf-rail li:nth-child(n + 4) {
+      border-top: 1px solid var(--line);
+    }
+    .cf-chron {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding-left: 2rem;
+    }
+    .cf-chron::before {
+      left: 7px;
+      right: auto;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      height: auto;
+      background: linear-gradient(var(--line-2), var(--lime));
+    }
+    .cf-chron li {
+      padding: 0;
+    }
+    .cf-chron-dot {
+      left: -2rem;
+      top: 0.35rem;
+    }
+    .cf-four,
+    .cf-service {
+      grid-template-columns: 1fr 1fr;
+    }
+    .cf-mosaic {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 260px repeat(2, 170px);
+    }
+    .cf-mosaic figure.big {
+      grid-column: 1 / -1;
+      grid-row: auto;
+    }
+  }
+  @media (max-width: 640px) {
+    .cf-nav-cta {
+      font-size: 0.78rem;
+      padding: 0.45rem 0.7rem;
+    }
+    .cf-logo {
+      font-size: 22px;
+    }
+    .cf-rail {
+      grid-template-columns: 1fr 1fr;
+    }
+    .cf-rail li,
+    .cf-rail li:first-child,
+    .cf-rail li:nth-child(4) {
+      padding: 1rem 20px 1.1rem;
+      border-left: 0;
+      border-top: 1px solid var(--line);
+    }
+    .cf-rail li:nth-child(even) {
+      border-left: 1px solid var(--line);
+    }
+    .cf-rail li:last-child {
+      grid-column: 1 / -1;
+      border-left: 0;
+    }
+    .cf-legacy,
+    .cf-four,
+    .cf-service {
+      grid-template-columns: 1fr;
+    }
+    .cf-chain {
+      grid-template-columns: 1fr 1fr;
+    }
+    .cf-mosaic {
+      grid-template-rows: 220px repeat(2, 140px);
+    }
+  }
+</style>

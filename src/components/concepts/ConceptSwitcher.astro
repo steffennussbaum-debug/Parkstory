@@ -1,5 +1,5 @@
 ---
-// Small floating bar to jump between the three design concepts and the
+// Small floating bar to jump between the design concepts and the
 // current site while comparing them. Only rendered on the concept pages.
 import { concepts } from '~/data/concepts';
 
@@ -96,6 +96,10 @@ const { current, theme = 'dark' } = Astro.props;
   }
   b {
     font-weight: 700;
+  }
+  /* six concepts: letters only, the name for the concept on screen */
+  .cs-link:not(.on):not(:last-child) span {
+    display: none;
   }
   @media (max-width: 720px) {
     .cs-link span {

@@ -1,0 +1,1106 @@
+---
+/**
+ * Concept E — Built by Parkstory, in the Parkstory corporate identity.
+ *
+ * Factory-first and photographic. The shop floor is the proof: the page walks
+ * through Parkstory's own production line, from raw steel to a running garage,
+ * before it shows TilePark, the know-how behind it and the service promise.
+ */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import ConceptLayout from '~/layouts/ConceptLayout.astro';
+import ParkstoryMark from '~/components/concepts/ParkstoryMark.astro';
+import TileField from '~/components/concepts/TileField.astro';
+import GridDemo from '~/components/tilepark/GridDemo.astro';
+import { shift, breakthrough, valueChain, quality, delivery, decision, dna } from '~/data/concepts';
+
+import drives from '~/assets/images/tilepark/gastonia-drive-assembly.webp';
+import steel from '~/assets/images/tilepark/kehl-steel.webp';
+import bending from '~/assets/images/tilepark/kehl-bending.webp';
+import welding from '~/assets/images/tilepark/kehl-welding.webp';
+import cnc from '~/assets/images/tilepark/gastonia-cnc.webp';
+import wheels from '~/assets/images/tilepark/gastonia-wheels.webp';
+import conveyors from '~/assets/images/tilepark/conveyors-installed.webp';
+import kehlPlant from '~/assets/images/tilepark/kehl-plant.webp';
+import gastPlant from '~/assets/images/tilepark/gastonia-plant.webp';
+
+import '@fontsource-variable/inter';
+import '@fontsource-variable/outfit';
+import '~/assets/styles/tilepark.css';
+import '~/assets/styles/concept-demos.css';
+
+const nav = [
+  ['Production', '#line'],
+  ['TilePark', '#tilepark'],
+  ['Know-how', '#knowhow'],
+  ['Service', '#service'],
+  ['Factories', '#factories'],
+];
+// The production line. Texts repeat Parkstory's own value-chain, plant and quality descriptions.
+type Step = { k: string; place: string; v: string; img?: ImageMetadata; pos?: string; media?: 'field' | 'video' };
+const line: Step[] = [
+  {
+    k: 'Engineering',
+    place: 'Parkstory engineering',
+    v: 'Mechanical, electrical and structural engineering, and the decentralised controls, by our own team. Every component is designed specifically for TilePark.',
+    media: 'field',
+  },
+  {
+    k: 'Steel processing',
+    place: 'Kehl, Germany',
+    v: 'Coil processing and laser cutting under our own roof, in about 10,000 m² of sheet-metal processing, welding and assembly.',
+    img: steel,
+    pos: '50% 50%',
+  },
+  {
+    k: 'CNC bending',
+    place: 'Kehl, Germany',
+    v: 'CNC bending up to 6 m: the steel structures that carry the conveyors and the storage levels.',
+    img: bending,
+    pos: '75% 55%',
+  },
+  {
+    k: 'Welding',
+    place: 'Kehl, Germany',
+    v: 'Robotic and manual welding of frames and structures.',
+    img: welding,
+    pos: '50% 35%',
+  },
+  {
+    k: 'Machining',
+    place: 'Gastonia, USA',
+    v: 'CNC turning and machining centers for drive components, built in the USA for North America.',
+    img: cnc,
+    pos: '50% 50%',
+  },
+  {
+    k: 'Drive assembly',
+    place: 'Gastonia, USA',
+    v: 'Drive wheel units and conveyor drives assembled from proven, industry-standard parts inside our own design.',
+    img: wheels,
+    pos: '50% 50%',
+  },
+  {
+    k: 'Load testing',
+    place: 'Every conveyor',
+    v: quality.body,
+    media: 'video',
+  },
+  {
+    k: 'Installation',
+    place: 'Your building',
+    v: 'Pre-assembled at the plant, installed and commissioned by our own team, and handed over by the people who built it.',
+    img: conveyors,
+    pos: '50% 60%',
+  },
+];
+const heroStats = [
+  ['75+', 'years of engineering'],
+  ['2', 'own factories'],
+  ['100 %', 'load-tested'],
+  ['30+', 'years of spare parts'],
+];
+const plantPics = [kehlPlant, gastPlant];
+---
+
+<ConceptLayout
+  title="Parkstory — Concept E · Built by Parkstory"
+  description={shift.lead}
+  bodyClass="ce"
+  current="built-by-parkstory"
+>
+  <header class="ce-nav">
+    <a href="#top" class="ce-logo" aria-label="Parkstory, back to top"><ParkstoryMark /></a>
+    <nav aria-label="Sections" class="ce-links">
+      {nav.map(([t, h]) => <a href={h}>{t}</a>)}
+    </nav>
+    <a href="#decision" class="ce-nav-cta">Technology briefing</a>
+  </header>
+
+  <main id="top">
+    <!-- HERO: the shop floor -->
+    <section class="ce-hero">
+      <Image
+        class="ce-hero-img"
+        src={drives}
+        alt="TilePark conveyor drives in assembly at Parkstory's plant in Gastonia"
+        widths={[800, 1400]}
+        sizes="100vw"
+        loading="eager"
+      />
+      <div class="ce-hero-shade" aria-hidden="true"></div>
+      <div class="ce-wrap ce-hero-in">
+        <p class="ce-kicker" data-reveal>Parkstory Manufacturing · Kehl, Germany · Gastonia, USA</p>
+        <h1 data-reveal><span>Designed by us.</span> <span>Built by us.</span> <em>Tested by us.</em></h1>
+        <p class="ce-lead" data-reveal>
+          Every TilePark is engineered by our own team and built in our own factories, from raw steel to finished
+          conveyor. Decades of industrial know-how, in every part of the system.
+        </p>
+        <div class="ce-ctas" data-reveal>
+          <a class="ce-btn" href="#line">Walk the production line<span aria-hidden="true">↓</span></a>
+          <a class="ce-btn ce-btn--line" href={decision.ctaHref}>{decision.cta}</a>
+        </div>
+        <ul class="ce-hero-stats" data-reveal>
+          {
+            heroStats.map(([n, t]) => (
+              <li>
+                <b>{n}</b>
+                <span>{t}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <p class="ce-hero-cap">Conveyor drive assembly, Gastonia</p>
+    </section>
+
+    <!-- THE PRODUCTION LINE -->
+    <section class="ce-sec" id="line">
+      <div class="ce-wrap">
+        <p class="ce-label" data-reveal>{valueChain.eyebrow}</p>
+        <div class="ce-split">
+          <h2 class="ce-h2" data-reveal>From raw steel <em>to a running garage.</em></h2>
+          <p class="ce-body" data-reveal>{valueChain.body}</p>
+        </div>
+      </div>
+      <ol class="ce-line">
+        {
+          line.map((st, i) => (
+            <li class:list={['ce-step', { flip: i % 2 === 1 }]}>
+              <div class="ce-step-media" data-reveal>
+                {st.img && (
+                  <Image
+                    src={st.img}
+                    alt={`${st.k}, ${st.place}`}
+                    widths={[600, 1000]}
+                    sizes="(max-width: 960px) 100vw, 55vw"
+                    style={`object-position:${st.pos}`}
+                  />
+                )}
+                {st.media === 'field' && (
+                  <div class="ce-step-field">
+                    <TileField cell={34} density={0.8} rate={10} accentShare={0.3} />
+                  </div>
+                )}
+                {st.media === 'video' && (
+                  <video
+                    src="/videos/load-test.mp4"
+                    autoplay
+                    muted
+                    loop
+                    playsinline
+                    preload="metadata"
+                    aria-label="A conveyor segment running on the load test rig"
+                  />
+                )}
+              </div>
+              <div class="ce-step-txt" data-reveal>
+                <p class="ce-step-n">
+                  <b>{String(i + 1).padStart(2, '0')}</b> / {String(line.length).padStart(2, '0')}
+                </p>
+                <h3>{st.k}</h3>
+                <p class="ce-step-place">{st.place}</p>
+                <p>{st.v}</p>
+                {st.media === 'video' && (
+                  <ul class="ce-checks">
+                    {quality.checks.map((c) => (
+                      <li>
+                        <b>{c.k}</b> {c.v}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+      <div class="ce-wrap">
+        <blockquote class="ce-quote" data-reveal>
+          <p>{dna.quality}</p>
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- WHAT WE BUILD -->
+    <section class="ce-sec ce-sec--lift" id="tilepark">
+      <div class="ce-wrap">
+        <p class="ce-label" data-reveal>What we build</p>
+        <div class="ce-split">
+          <h2 class="ce-h2" data-reveal>TilePark. <em>{breakthrough.title}</em></h2>
+          <p class="ce-body" data-reveal>{breakthrough.body}</p>
+        </div>
+        <ol class="ce-principles">
+          {
+            breakthrough.principles.map((p, i) => (
+              <li data-reveal style={`--reveal-delay:${0.08 * i}s`}>
+                <span>{p.n}</span>
+                <h3>{p.k}</h3>
+                <p>{p.v}</p>
+              </li>
+            ))
+          }
+        </ol>
+        <div class="cx-demos ce-demo" data-reveal><GridDemo /></div>
+        <p class="ce-note">{breakthrough.patent}</p>
+      </div>
+    </section>
+
+    <!-- KNOW-HOW -->
+    <section class="ce-sec" id="knowhow">
+      <div class="ce-wrap">
+        <p class="ce-label" data-reveal>{dna.eyebrow}</p>
+        <div class="ce-split">
+          <h2 class="ce-h2" data-reveal>{dna.title} <em>{dna.titleAccent}</em></h2>
+          <p class="ce-body" data-reveal>{dna.mergeBody}</p>
+        </div>
+        <div class="ce-legacy">
+          {
+            dna.legacies.map((l, i) => (
+              <div data-reveal style={`--reveal-delay:${0.1 * i}s`}>
+                <p class="ce-legacy-n">
+                  {l.years}
+                  <span>years</span>
+                </p>
+                <h3>{l.name}</h3>
+                <p class="ce-legacy-t">{l.text}</p>
+                <ol>
+                  {l.steps.map(([k, v]) => (
+                    <li>
+                      {k}
+                      {v && <span> · {v}</span>}
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            ))
+          }
+        </div>
+        <p class="ce-founders" data-reveal>{dna.foundersBody}</p>
+      </div>
+    </section>
+
+    <!-- SERVICE -->
+    <section class="ce-sec ce-sec--lift" id="service">
+      <div class="ce-wrap">
+        <p class="ce-label" data-reveal>{delivery.eyebrow}</p>
+        <div class="ce-uptime" data-reveal>
+          <p class="ce-uptime-n">{delivery.uptime.value}<span>{delivery.uptime.label}</span></p>
+          <div>
+            <h2 class="ce-h2">{delivery.uptime.claim}</h2>
+            <p class="ce-body">{delivery.body}</p>
+          </div>
+        </div>
+        <ul class="ce-service">
+          {
+            delivery.service.steps.map((st, i) => (
+              <li data-reveal style={`--reveal-delay:${0.08 * i}s`}>
+                <b>{st.k}</b>
+                <p>{st.v}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- FACTORIES AND PEOPLE -->
+    <section class="ce-sec" id="factories">
+      <div class="ce-wrap">
+        <p class="ce-label" data-reveal>Our factories, our people</p>
+        <div class="ce-split">
+          <h2 class="ce-h2" data-reveal>{dna.peopleTitle} <em>{dna.peopleAccent}</em></h2>
+          <p class="ce-body" data-reveal>{dna.peopleBody}</p>
+        </div>
+        <div class="ce-plants">
+          {
+            valueChain.plants.map((pl, i) => (
+              <article data-reveal style={`--reveal-delay:${0.1 * i}s`}>
+                <figure>
+                  <Image
+                    src={plantPics[i]}
+                    alt={`Parkstory plant in ${pl.name}`}
+                    widths={[600, 1000]}
+                    sizes="(max-width: 960px) 100vw, 50vw"
+                  />
+                  <figcaption>
+                    <span class="ce-flag">{pl.flag}</span>
+                    {pl.name}
+                  </figcaption>
+                </figure>
+                <ul>
+                  {pl.caps.map((c) => (
+                    <li>{c}</li>
+                  ))}
+                </ul>
+              </article>
+            ))
+          }
+        </div>
+        <ul class="ce-sites" data-reveal>
+          {
+            dna.stats.map(([n, t]) => (
+              <li>
+                <b>{n}</b>
+                <span>{t}</span>
+              </li>
+            ))
+          }
+          {
+            dna.sites.map((st) => (
+              <li>
+                <b class="ce-flag">{st.flag}</b>
+                <span>{st.place}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- DECISION -->
+    <section class="ce-decision" id="decision">
+      <Image class="ce-decision-img" src={conveyors} alt="" widths={[800]} sizes="100vw" />
+      <div class="ce-hero-shade" aria-hidden="true"></div>
+      <div class="ce-wrap ce-decision-in">
+        <h2 data-reveal>{dna.close} <em>{dna.closeAccent}</em></h2>
+        <p class="ce-body" data-reveal>{decision.body}</p>
+        <div class="ce-ctas" data-reveal>
+          <a class="ce-btn" href={decision.ctaHref}>{decision.cta}<span aria-hidden="true">→</span></a>
+          <a class="ce-btn ce-btn--line" href={decision.secondaryHref} target="_blank" rel="noopener"
+            >{decision.secondary}</a
+          >
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="ce-foot">
+    <ParkstoryMark />
+    <p>Designed, programmed and built by Parkstory in Kehl, Germany, and Gastonia, USA.</p>
+    <p>European patent EP 3924576 B1</p>
+  </footer>
+</ConceptLayout>
+
+<style is:global>
+  html:root {
+    --black: #090e0b;
+    --lift: #101813;
+    --line: rgb(255 255 255 / 10%);
+    --white: #ffffff;
+    --grey: #a2b5aa;
+    --soft: #cddbd3;
+    --lime: #b8f03c;
+    --amber: #f5a524;
+    --display: 'Outfit Variable', 'Outfit', Arial, sans-serif;
+    --text: 'Inter Variable', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+    --tp-accent: #b8f03c;
+    --tp-accent-soft: #b8f03c;
+    --tp-accent-wash: rgb(184 240 60 / 15%);
+    --tp-panel: #0c140f;
+    --tp-panel-2: #16241b;
+    --tp-board: #070b09;
+    --tp-line: rgb(255 255 255 / 8%);
+    --tp-line-2: rgb(255 255 255 / 18%);
+    --tp-text-dim: #a2b5aa;
+    --tp-text-soft: #cddbd3;
+    --tp-warn: #f5a524;
+    --cx-radius: 2px;
+    --cx-radius-sm: 2px;
+    --cx-btn-radius: 2px;
+    --cx-btn-bg: #b8f03c;
+    --cx-btn-fg: #090e0b;
+    --cx-font: var(--text);
+    --cx-font-display: var(--display);
+    --cx-font-mono: var(--text);
+    --cx-tile: #22342a;
+  }
+  .ce {
+    margin: 0;
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--text);
+    font-size: 17px;
+    line-height: 1.6;
+  }
+  .ce *,
+  .ce *::before,
+  .ce *::after {
+    box-sizing: border-box;
+  }
+  /* reset with zero specificity, so every component class can set its own spacing */
+  :where(.ce) :where(h1, h2, h3, p, ol, ul, figure, blockquote) {
+    margin: 0;
+  }
+  :where(.ce) :where(ol, ul) {
+    list-style: none;
+    padding: 0;
+  }
+  :where(.ce) img {
+    display: block;
+    max-width: 100%;
+  }
+  .ce em {
+    font-style: normal;
+    color: var(--lime);
+  }
+  .ce-wrap {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 4vw, 64px);
+  }
+
+  /* nav */
+  .ce-nav {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    height: 66px;
+    padding: 0 clamp(20px, 4vw, 64px);
+    background: linear-gradient(rgb(9 14 11 / 92%), rgb(9 14 11 / 75%));
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .ce-logo {
+    font-size: 26px;
+    text-decoration: none;
+    margin-right: auto;
+  }
+  .ce-links {
+    display: flex;
+    gap: 1.6rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .ce-links a {
+    color: var(--soft);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .ce-links a:hover {
+    color: var(--lime);
+  }
+  .ce-nav-cta {
+    color: var(--black);
+    background: var(--lime);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 2px;
+    padding: 0.55rem 0.95rem;
+    white-space: nowrap;
+  }
+
+  /* type */
+  .ce h1,
+  .ce-h2,
+  .ce h3,
+  .ce-quote p,
+  .ce-decision h2 {
+    font-family: var(--display);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+  }
+  .ce h1 span,
+  .ce h1 em {
+    display: block;
+  }
+  .ce h1 {
+    font-size: clamp(2.6rem, 6vw, 6.6rem);
+    line-height: 0.98;
+    margin-top: 1.25rem;
+  }
+  .ce-h2 {
+    font-size: clamp(2.1rem, 4vw, 4.2rem);
+    line-height: 1.02;
+    max-width: 18ch;
+  }
+  .ce-kicker,
+  .ce-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--grey);
+  }
+  .ce-label {
+    display: inline-block;
+    color: var(--lime);
+    border: 1px solid rgb(184 240 60 / 45%);
+    padding: 0.35rem 0.7rem;
+    border-radius: 2px;
+    margin-bottom: 1.75rem;
+  }
+  .ce-lead {
+    font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+    color: var(--soft);
+    max-width: 44ch;
+    margin-top: 1.75rem;
+  }
+  .ce-body {
+    font-size: clamp(1.02rem, 1.2vw, 1.15rem);
+    color: var(--soft);
+    max-width: 54ch;
+  }
+  .ce-note {
+    margin-top: 1.25rem;
+    font-size: 0.82rem;
+    color: var(--grey);
+  }
+  .ce-split {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: clamp(28px, 5vw, 96px);
+    align-items: end;
+  }
+
+  /* buttons */
+  .ce-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2.25rem;
+  }
+  .ce-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 50px;
+    padding: 0 1.35rem;
+    border-radius: 2px;
+    background: var(--lime);
+    color: var(--black);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .ce-btn:hover {
+    background: #c9f765;
+  }
+  .ce-btn--line {
+    background: rgb(9 14 11 / 40%);
+    color: var(--white);
+    border: 1px solid rgb(255 255 255 / 40%);
+  }
+  .ce-btn--line:hover {
+    background: rgb(9 14 11 / 70%);
+    border-color: var(--white);
+  }
+
+  /* hero */
+  .ce-hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    padding: 120px 0 clamp(48px, 6vw, 88px);
+  }
+  .ce-hero-img,
+  .ce-decision-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none !important;
+    object-fit: cover;
+    object-position: 50% 45%;
+  }
+  .ce-hero-shade {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgb(9 14 11 / 92%) 0%, rgb(9 14 11 / 70%) 45%, rgb(9 14 11 / 25%) 100%),
+      linear-gradient(0deg, rgb(9 14 11 / 90%) 0%, transparent 45%);
+  }
+  .ce-hero-in,
+  .ce-decision-in {
+    position: relative;
+    width: 100%;
+  }
+  .ce-hero-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    max-width: 880px;
+    margin-top: clamp(40px, 5vw, 72px);
+    border-top: 1px solid rgb(255 255 255 / 25%);
+  }
+  .ce-hero-stats li {
+    padding: 1.1rem 1rem 0 0;
+  }
+  .ce-hero-stats b {
+    display: block;
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--lime);
+  }
+  .ce-hero-stats span {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--soft);
+    margin-top: 0.4rem;
+  }
+  .ce-hero-cap {
+    position: absolute;
+    right: clamp(20px, 4vw, 64px);
+    bottom: 24px;
+    font-size: 0.72rem;
+    color: var(--grey);
+  }
+
+  /* sections */
+  .ce-sec {
+    padding: clamp(88px, 11vw, 168px) 0;
+  }
+  .ce-sec--lift {
+    background: var(--lift);
+  }
+
+  /* production line */
+  .ce-line {
+    margin-top: clamp(56px, 7vw, 104px);
+    counter-reset: step;
+  }
+  .ce-step {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+    align-items: center;
+    gap: clamp(28px, 5vw, 88px);
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 4vw, 64px);
+  }
+  .ce-step + .ce-step {
+    margin-top: clamp(40px, 6vw, 96px);
+  }
+  .ce-step.flip .ce-step-media {
+    order: 2;
+  }
+  .ce-step::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    width: 1px;
+    height: clamp(40px, 6vw, 96px);
+    background: linear-gradient(var(--lime), transparent);
+  }
+  .ce-step:last-child::before {
+    display: none;
+  }
+  .ce-step-media {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border-radius: 2px;
+    background: var(--lift);
+  }
+  .ce-step-media img,
+  .ce-step-media video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .ce-step-field {
+    position: absolute;
+    inset: 0;
+    --tf-bg: #0c140f;
+    --tf-line: rgb(184 240 60 / 10%);
+    --tf-car: #22342a;
+    --tf-car-2: #1a2a21;
+    --tf-glass: rgb(0 0 0 / 45%);
+    --tf-accent: #b8f03c;
+  }
+  .ce-step-n {
+    font-family: var(--display);
+    font-size: 0.95rem;
+    color: var(--grey);
+    font-variant-numeric: tabular-nums;
+  }
+  .ce-step-n b {
+    color: var(--lime);
+    font-weight: 600;
+    font-size: 1.6rem;
+  }
+  .ce-step-txt h3 {
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    line-height: 1.05;
+    margin-top: 0.75rem;
+  }
+  .ce-step-place {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-top: 0.6rem;
+  }
+  .ce-step-txt > p:last-of-type {
+    color: var(--soft);
+    margin-top: 1rem;
+    max-width: 46ch;
+  }
+  .ce-checks {
+    margin-top: 1.25rem;
+    display: grid;
+    gap: 0.5rem;
+    font-size: 0.92rem;
+    color: var(--soft);
+  }
+  .ce-checks li {
+    padding-left: 1.2rem;
+    position: relative;
+  }
+  .ce-checks li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--lime);
+  }
+  .ce-checks b {
+    color: var(--white);
+  }
+  .ce-quote {
+    margin: clamp(72px, 9vw, 136px) auto 0;
+    max-width: 1000px;
+    text-align: center;
+  }
+  .ce-quote p {
+    font-size: clamp(1.6rem, 3vw, 2.8rem);
+    line-height: 1.14;
+  }
+
+  /* tilepark */
+  .ce-principles {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    margin-top: clamp(40px, 5vw, 72px);
+  }
+  .ce-principles li {
+    background: var(--lift);
+    padding: 1.5rem 1.5rem 1.75rem;
+  }
+  .ce-principles span {
+    font-family: var(--display);
+    font-weight: 600;
+    color: var(--lime);
+  }
+  .ce-principles h3 {
+    font-size: 1.2rem;
+    margin-top: 0.6rem;
+  }
+  .ce-principles p {
+    font-size: 0.92rem;
+    color: var(--soft);
+    margin-top: 0.4rem;
+  }
+  .ce-demo {
+    margin-top: clamp(32px, 4vw, 56px);
+  }
+
+  /* know-how */
+  .ce-legacy {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(28px, 5vw, 96px);
+    margin-top: clamp(48px, 6vw, 88px);
+  }
+  .ce-legacy-n {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: clamp(4rem, 9vw, 8rem);
+    line-height: 0.85;
+    letter-spacing: -0.05em;
+    color: var(--lime);
+  }
+  .ce-legacy-n span {
+    font-family: var(--text);
+    font-size: 0.85rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--grey);
+    margin-left: 0.6rem;
+  }
+  .ce-legacy h3 {
+    font-size: 1.5rem;
+    margin-top: 1.25rem;
+  }
+  .ce-legacy-t {
+    color: var(--soft);
+    margin-top: 0.3rem;
+  }
+  .ce-legacy ol {
+    margin-top: 1.25rem;
+    border-top: 1px solid var(--line);
+  }
+  .ce-legacy li {
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--line);
+    font-weight: 500;
+  }
+  .ce-legacy li span {
+    color: var(--grey);
+    font-weight: 400;
+  }
+  .ce-founders {
+    margin-top: clamp(40px, 5vw, 72px);
+    color: var(--soft);
+    max-width: 70ch;
+    font-size: 1.05rem;
+  }
+
+  /* service */
+  .ce-uptime {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: clamp(32px, 5vw, 96px);
+    align-items: center;
+  }
+  .ce-uptime-n {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: clamp(4.6rem, 12vw, 11rem);
+    line-height: 0.85;
+    letter-spacing: -0.05em;
+    color: var(--lime);
+    white-space: nowrap;
+  }
+  .ce-uptime-n span {
+    display: block;
+    font-family: var(--text);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--grey);
+    margin-top: 1rem;
+  }
+  .ce-uptime .ce-body {
+    margin-top: 1.25rem;
+  }
+  .ce-service {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-top: clamp(48px, 6vw, 88px);
+  }
+  .ce-service li {
+    border-top: 2px solid var(--lime);
+    padding-top: 1rem;
+  }
+  .ce-service b {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 1.45rem;
+  }
+  .ce-service p {
+    color: var(--soft);
+    font-size: 0.92rem;
+    margin-top: 0.4rem;
+  }
+
+  /* factories */
+  .ce-plants {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(20px, 3vw, 40px);
+    margin-top: clamp(48px, 6vw, 88px);
+  }
+  .ce-plants figure {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 2px;
+  }
+  .ce-plants img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .ce-plants figcaption {
+    position: absolute;
+    left: 14px;
+    bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 1.2rem;
+    background: rgb(9 14 11 / 85%);
+    padding: 0.5rem 0.9rem 0.5rem 0.5rem;
+  }
+  .ce-plants ul {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.45rem 1.25rem;
+    margin-top: 1.25rem;
+    font-size: 0.9rem;
+    color: var(--soft);
+  }
+  .ce-plants li {
+    padding-left: 1rem;
+    position: relative;
+  }
+  .ce-plants li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 6px;
+    height: 6px;
+    background: var(--lime);
+  }
+  .ce-flag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1.5px solid var(--lime);
+    color: var(--lime);
+    font-family: var(--text);
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+  .ce-sites {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    margin-top: clamp(48px, 6vw, 88px);
+  }
+  .ce-sites li {
+    background: var(--black);
+    padding: 1.2rem 1.3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .ce-sites b:not(.ce-flag) {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 2.2rem;
+    line-height: 1;
+    color: var(--lime);
+  }
+  .ce-sites span {
+    color: var(--soft);
+    font-size: 0.9rem;
+  }
+
+  /* decision */
+  .ce-decision {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(120px, 14vw, 220px) 0;
+  }
+  .ce-decision h2 {
+    font-size: clamp(2.4rem, 5vw, 5rem);
+    line-height: 1.02;
+    max-width: 18ch;
+  }
+  .ce-decision .ce-body {
+    margin-top: 1.75rem;
+  }
+  .ce-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 2rem;
+    padding: 2.5rem clamp(20px, 4vw, 64px) 5.5rem;
+    border-top: 1px solid var(--line);
+    color: var(--grey);
+    font-size: 0.85rem;
+  }
+  .ce-foot .pk {
+    font-size: 24px;
+  }
+
+  @media (max-width: 1100px) {
+    .ce-sites {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (max-width: 960px) {
+    .ce-nav {
+      height: auto;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      padding-top: 0.7rem;
+    }
+    .ce-links {
+      order: 3;
+      width: calc(100% + 2 * clamp(20px, 4vw, 64px));
+      margin: 0 calc(-1 * clamp(20px, 4vw, 64px));
+      padding: 0.7rem clamp(20px, 4vw, 64px);
+      overflow-x: auto;
+      scrollbar-width: none;
+      border-top: 1px solid var(--line);
+    }
+    .ce-links::-webkit-scrollbar {
+      display: none;
+    }
+    .ce-split,
+    .ce-legacy,
+    .ce-plants,
+    .ce-uptime {
+      grid-template-columns: 1fr;
+    }
+    .ce-step {
+      grid-template-columns: 1fr;
+    }
+    .ce-step.flip .ce-step-media {
+      order: 0;
+    }
+    .ce-step::before {
+      display: none;
+    }
+    .ce-principles,
+    .ce-service {
+      grid-template-columns: 1fr 1fr;
+    }
+    .ce-hero-stats {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 640px) {
+    .ce-nav-cta {
+      font-size: 0.78rem;
+      padding: 0.45rem 0.7rem;
+    }
+    .ce-logo {
+      font-size: 22px;
+    }
+    .ce-hero {
+      padding-top: 150px;
+    }
+    .ce-hero-shade {
+      background: linear-gradient(0deg, rgb(9 14 11 / 95%) 0%, rgb(9 14 11 / 75%) 60%, rgb(9 14 11 / 55%) 100%);
+    }
+    .ce-principles,
+    .ce-service,
+    .ce-plants ul,
+    .ce-sites {
+      grid-template-columns: 1fr;
+    }
+    .ce-hero-cap {
+      display: none;
+    }
+  }
+</style>
