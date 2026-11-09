@@ -1450,6 +1450,15 @@ html:not([lang=en]) main :is(h1,h2,h3,b,strong,em,.motto,.bs-claim,.opp-feas-h,.
 @media print{.un-tog--bar{display:none}}
 </style>
 <style id="cr-cards-css">html body .cr-tile .cr-co{margin:0 0 .15rem!important;font-weight:700;font-size:.84rem;color:#ffffff;letter-spacing:.01em}html body .cr-tile .cr-teams{list-style:none!important;margin:.55rem 0 0!important;padding:0!important;display:flex!important;flex-wrap:wrap;gap:.3rem}html body .cr-tile .cr-teams li{margin:0!important;font-size:.74rem!important;line-height:1.3;padding:.22rem .55rem!important;border:1px solid #ffffff2e!important;border-radius:2px!important;background:transparent!important;color:#c8dccf!important}html body .cr-tile .cr-go{margin-top:auto!important;padding-top:.9rem;color:#b8f03c;font-weight:700;text-decoration:none}html body .cr-tile .cr-go:hover{text-decoration:underline}html body .cr-tile .cr-mail{font-size:.78rem;color:#8fb3a0}html body .cr-tile:hover{transform:none}</style>
+<style id="sec-bg-css">
+.sec-bg{position:relative;isolation:isolate}
+.sec-bg::before{content:"";position:absolute;left:0;right:0;top:0;height:min(100%,680px);z-index:-1;pointer-events:none;
+ background:linear-gradient(180deg,rgb(var(--sbg) / .78) 0%,rgb(var(--sbg) / .86) 45%,rgb(var(--sbg)) 100%),var(--bgimg) center 40%/cover no-repeat}
+.sec-bg.sec-dark::before{background:linear-gradient(180deg,rgb(var(--sbg) / .76) 0%,rgb(var(--sbg) / .88) 50%,rgb(var(--sbg)) 100%),var(--bgimg) center 40%/cover no-repeat}
+.sec-bgv{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;opacity:.38;pointer-events:none}
+.sec-bgv-shade{position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(90deg,rgb(var(--sbg) / .92) 0%,rgb(var(--sbg) / .6) 60%,rgb(var(--sbg) / .35) 100%)}
+@media print{.sec-bg::before,.sec-bgv,.sec-bgv-shade{display:none}}
+</style>
 <style id="design-fonts">
 @font-face{font-family:"Outfit";src:url(fonts/outfit.woff2) format("woff2");font-weight:100 900;font-style:normal;font-display:swap}
 @font-face{font-family:"Outfit";src:url(fonts/outfit-ext.woff2) format("woff2");font-weight:100 900;font-style:normal;font-display:swap;unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1EFF,U+20A0-20C0,U+2113,U+2C60-2C7F}
@@ -7253,6 +7262,28 @@ apply();
  const dodge=()=>{if(!box)return;const items=[...box.children].filter(e=>!e.hidden).map(e=>e.getBoundingClientRect());
   fabs.forEach(f=>{f.classList.remove('fab-dodge');const r=f.getBoundingClientRect();f.classList.toggle('fab-dodge',items.some(q=>hit(r,q)))})};
  addEventListener('scroll',dodge,{passive:true});addEventListener('resize',dodge);document.addEventListener('click',()=>setTimeout(dodge,50));dodge();
+})();
+</script>
+<script id="sec-bg">
+// Background photos for menu sections that have no video or simulation of their own.
+// The photos are taken from the page itself; the overlay uses each section's own colour, so it works in every design.
+(()=>{const MAP={economics:'Fiber laser cutting and CNC machining on the shop floor in Gastonia','future-proof':'TilePark garage entrance in Munich',
+ heart:'Drive wheel units with yellow polyurethane wheels',figures:'Aerial view of the Parkstory Manufacturing plant in Kehl',
+ service:'TilePark conveyor drives with geared motors and polyurethane wheels in assembly in Gastonia','engineering-ownership':'CLOOS welding robot cell in Kehl',
+ 'two-legacies':'Galvanized steel frames in Kehl','different-approach':'Parkstory plant in Gastonia, North Carolina',
+ 'follow-installations':'TilePark conveyors installed in an underground garage','ongoing-projects':'3D render of a parking tower built from stackers above the conveyor grid',
+ bim:'Illustrative TilePark render: Basement under a residential building',courses:'3D render of a TilePark garage: cars on conveyors next to the transfer cabin'};
+ const rgb=el=>{for(let e=el;e;e=e.parentElement){const c=getComputedStyle(e).backgroundColor,m=c.match(/[\d.]+/g);if(m&&(m.length<4||+m[3]>0))return m.slice(0,3).map(Number)}return[255,255,255]};
+ const setup=(sec,dark)=>{const c=rgb(sec);sec.style.setProperty('--sbg',c.join(' '));const l=(.2126*c[0]+.7152*c[1]+.0722*c[2])/255;sec.classList.toggle('sec-dark',l<.45);sec.classList.add('sec-bg')};
+ const imgs=[...document.querySelectorAll('img[alt]')];
+ Object.entries(MAP).forEach(([id,alt])=>{const sec=document.getElementById(id);const img=imgs.find(i=>i.alt===alt);if(!sec||!img)return;
+  const src=img.currentSrc||img.getAttribute('src');if(!src)return;setup(sec);sec.style.setProperty('--bgimg','url("'+src+'")')});
+ // "Talk to us": the transfer-cabin clip as a quiet background video
+ const ct=document.getElementById('contact'),clip=document.querySelector('#pop-cabin video');
+ if(ct&&clip){const c=rgb(ct);ct.style.setProperty('--sbg',c.join(' '));ct.style.position='relative';ct.style.isolation='isolate';ct.style.overflow='hidden';
+  const v=document.createElement('video');v.className='sec-bgv';v.muted=true;v.loop=true;v.playsInline=true;v.setAttribute('aria-hidden','true');v.preload='none';v.src=clip.getAttribute('src');
+  if(clip.poster)v.poster=clip.poster;const sh=document.createElement('div');sh.className='sec-bgv-shade';ct.prepend(sh);ct.prepend(v);
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches)new IntersectionObserver(es=>es[0].isIntersecting?v.play().catch(()=>{}):v.pause(),{threshold:.1}).observe(ct)}
 })();
 </script>
 
