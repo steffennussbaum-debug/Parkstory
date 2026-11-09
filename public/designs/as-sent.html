@@ -7181,7 +7181,16 @@ obs=new MutationObserver(function(rs){if(cur==='en')return;run(function(){rs.for
  else if(r.type==='attributes'){if(!skip(r.target))att(r.target)}
  else r.addedNodes.forEach(walk)})})});
 apply();
-})();</script>
+})();</script><script id="video-rewind">
+// Links to the real footage always start it from the beginning ("Driving into the transfer cabin").
+(()=>{const v=document.getElementById('realVid');if(!v)return;
+ const rewind=()=>{try{v.currentTime=0}catch(e){}const p=v.play();if(p&&p.catch)p.catch(()=>{})};
+ document.addEventListener('click',e=>{const a=e.target.closest('a[href="#video"]');if(!a)return;
+  if(v.readyState<1){v.preload='auto';v.addEventListener('loadedmetadata',rewind,{once:true});v.load()}
+  rewind();setTimeout(rewind,700)},true);
+})();
+</script>
+
 <nav class="dz" aria-label="Designs"><button type="button" class="dz-btn" aria-expanded="false">As sent ▴</button><a href="index.html" title="Clean"><b>Clean</b><span></span></a><a href="as-sent.html" class="on" aria-current="page" title="As sent"><b>As sent</b><span></span></a><a href="design-a.html" title="Architectural Future"><b>A</b><span>Architectural Future</span></a><a href="design-b.html" title="Technological Disruption"><b>B</b><span>Technological Disruption</span></a><a href="design-c.html" title="Industrial Intelligence"><b>C</b><span>Industrial Intelligence</span></a><a href="design-d.html" title="Engineering Heritage"><b>D</b><span>Engineering Heritage</span></a><a href="design-e.html" title="Built by Parkstory"><b>E</b><span>Built by Parkstory</span></a><a href="design-f.html" title="Proven Disruption"><b>F</b><span>Proven Disruption</span></a></nav>
 <script>
 (function(){var n=document.querySelector('.dz'),b=n&&n.querySelector('.dz-btn');if(!b)return;
