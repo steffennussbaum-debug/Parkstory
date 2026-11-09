@@ -52,7 +52,7 @@ s=s[:i]+'const FXN='+json.dumps(names,ensure_ascii=False)+s[j:]
 # ---------------- hero ----------------
 rep('<p class="bs-eye">TilePark XY</p><p class="bs-claim">What would you build if parking <em>didn’t dictate the design?</em></p>',
     '<p class="bs-eye">TilePark automated parking</p><p class="bs-claim">More cars on less space. <em>Your car, ready when you are.</em></p>'
-    '<div class="ov-proof"><div><b>100+</b><span>automated parking projects</span></div><div><b>20,000+</b><span>installed parking spaces</span></div><div><b>DE + US</b><span>our own plants</span></div><p>Including the Nussbaum automated parking legacy.</p></div>')
+    '')
 i=s.find('<p class="bs-lead">');j=s.find('</p>',i)+4
 s=s[:i]+'<p class="bs-lead">Drive into a bright transfer cabin and step out: TilePark parks the car for you. Independent conveyors move it in every direction, with no ramps, no drive aisles and no central lift that every car depends on. More cars fit on the same footprint, the garage keeps working if one machine stops, and the performance is agreed with you in the contract.</p>'\
  '<div class="ov-paths"><a class="ov-path" href="#primer" data-tour="primer"><span>New to automated parking?</span><b>Take the 5-minute tour</b><i aria-hidden="true">→</i></a><a class="ov-path ov-path2" href="#compare" data-tour="compare"><span>Comparing systems?</span><b>See how TilePark compares</b><i aria-hidden="true">→</i></a></div>'+s[j:]
