@@ -1403,7 +1403,7 @@ html:not([lang=en]) main :is(h1,h2,h3,b,strong,em,.motto,.bs-claim,.opp-feas-h,.
  .appsec .phone{width:min(360px,100%)}
 }
 @media (max-width:600px){.app-flow{grid-template-columns:1fr}}
-.bs-pop{position:relative;width:min(480px,100%);margin-top:.8rem;padding:.8rem;border:1px solid #b8f03c66;border-radius:2px;background:#090e0be6;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#e6f0ea;animation:bsPop .25s ease}
+.bs-pop{position:relative;width:min(480px,100%);margin:0 0 .15rem;padding:.8rem;border:1px solid #b8f03c66;border-radius:2px;background:#090e0be6;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#e6f0ea;animation:bsPop .25s ease}
 .bs-pop[hidden]{display:none}
 @keyframes bsPop{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 .bs-pop-x{position:absolute;top:.45rem;right:.45rem;z-index:2;width:30px;height:30px;border-radius:50%;border:0;background:#090e0bcc;color:#fff;font:600 1.1rem/1 "Inter",sans-serif;cursor:pointer}
@@ -1426,8 +1426,9 @@ html:not([lang=en]) main :is(h1,h2,h3,b,strong,em,.motto,.bs-claim,.opp-feas-h,.
 .mp-btn.tap{transform:scale(.94);background:#b8f03c;color:#0c120e}
 .mp-btn.done{background:#b8f03c;color:#0c120e}
 @media (max-width:520px){.mini-app{grid-template-columns:1fr;justify-items:center}.mp-copy{text-align:left}}
-@media (min-width:861px){.bs-links{position:relative}.bs-links .bs-pop{position:absolute;left:0;bottom:calc(100% + 10px);z-index:6;margin:0;box-shadow:0 24px 60px -20px #000e}}
+@media (min-width:861px){.bs-links .bs-pop{margin:0 0 .15rem;width:min(500px,100%);display:grid;grid-template-columns:230px 1fr;gap:.85rem;align-items:center;padding:.6rem}.bs-links .bs-pop[hidden]{display:none}.bs-links .bs-pop video{aspect-ratio:16/9}.bs-links .bs-pop .bs-pop-cap{margin:0 1.6rem 0 0;font-size:.84rem}.bs-links #pop-app{display:block}.bs-links #pop-app[hidden]{display:none}.bs-links .mini-phone{width:150px;padding:8px 7px 10px}.bs-links .mini-app{gap:.85rem}.bs-links .mp-copy{margin:0 1.6rem 0 0;font-size:.84rem}}
 .fab-dodge{opacity:0!important;pointer-events:none!important;transition:opacity .2s}
+@media (min-width:861px) and (min-height:800px){html.un-asking .bs-cue{display:flex!important;left:auto;right:2.5rem;transform:none;top:calc(100vh - 9.6rem);bottom:auto}}
 .bs-links{display:flex;flex-direction:column;align-items:flex-start;gap:.55rem;margin-top:.2rem}
 .bs-links .bs-app{margin-top:0}
 .bs-app{display:inline-flex;align-items:center;gap:.6rem;margin-top:.2rem;padding:.55rem .9rem .55rem .6rem;border:1px solid #b8f03c80;border-radius:2px;background:#090e0bb3;color:#fff;text-decoration:none;font-weight:600;font-size:.92rem;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);transition:border-color .2s,background .2s}
@@ -1498,7 +1499,7 @@ html body :is(.hiw-eyebrow,.opp-eye,.opp-k,.loc-eye,.sg-eye,.pl-eye,.part-k,.tou
     <h1 class="bs-word bs-plogo"><img src="assets/d72c15cc5784.png" alt="Parkstory" width="600" height="160"></h1>
     <div class="bs-row">
       <div><p class="bs-eye">TilePark XY</p><p class="bs-claim">What would you build if parking <em>didn’t dictate the design?</em></p></div>
-      <div><p class="bs-lead">TilePark changes the architecture of parking itself. Independent conveyors move vehicles in every horizontal direction, while stackers handle vertical movement. No ramps, no drive aisles, no central transport bottlenecks. Just more cars in less space, with unprecedented architectural flexibility and a decentralized design engineered for reliability. <strong>Before you design or finance around parking, discover what you could build without its limitations.</strong></p><div class="bs-links"><a class="bs-app" href="#video" data-pop="pop-cabin" aria-expanded="false" aria-controls="pop-cabin"><span class="bs-app-ic" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M2.5 10.5l1.4-4h8.2l1.4 4v2.5h-11z"/><path d="M2.5 10.5h11"/><circle cx="5" cy="13" r=".9" fill="currentColor"/><circle cx="11" cy="13" r=".9" fill="currentColor"/></svg></span><span>The transfer cabin: drive in, step out, done</span><i aria-hidden="true">→</i></a><a class="bs-app" href="#app" data-pop="pop-app" aria-expanded="false" aria-controls="pop-app"><span class="bs-app-ic" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="1.5" width="8" height="13" rx="2"/><path d="M7 12h2"/></svg></span><span>The app: your personal valet, without the tip</span><i aria-hidden="true">→</i></a><div class="bs-pop" id="pop-cabin" hidden><button type="button" class="bs-pop-x" aria-label="Close">×</button><video muted playsinline loop preload="none" poster="assets/2c642f978e35.webp" src="assets/d5496e24f84f.mp4" aria-label="Driving into the transfer cabin"></video><p class="bs-pop-cap"><b>Drive in, step out.</b> <span>Real footage from TilePark Munich: drive into the bright transfer cabin, confirm at the touchscreen, and step out. The system takes over from there.</span></p></div><div class="bs-pop" id="pop-app" hidden><button type="button" class="bs-pop-x" aria-label="Close">×</button><div class="mini-app"><div class="mini-phone" aria-hidden="true"><p class="mp-hi">Good evening, Steffen</p><div class="mp-card"><p class="mp-k">Your valet</p><b class="mp-car">Audi A4 Avant</b><ol class="mp-steps"><li>Request received</li><li>Moving through the grid</li><li>Ready in the transfer cabin</li></ol><span class="mp-btn">I'm leaving in 5 min</span></div></div><p class="mp-copy"><b>Tap “I’m leaving”.</b> <span>Your car is waiting in the transfer cabin when you get there. Guests, charging and payment in the same app.</span></p></div></div></div></div>
+      <div><p class="bs-lead">TilePark changes the architecture of parking itself. Independent conveyors move vehicles in every horizontal direction, while stackers handle vertical movement. No ramps, no drive aisles, no central transport bottlenecks. Just more cars in less space, with unprecedented architectural flexibility and a decentralized design engineered for reliability. <strong>Before you design or finance around parking, discover what you could build without its limitations.</strong></p><div class="bs-links"><a class="bs-app" href="#video" data-pop="pop-cabin" aria-expanded="false" aria-controls="pop-cabin"><span class="bs-app-ic" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M2.5 10.5l1.4-4h8.2l1.4 4v2.5h-11z"/><path d="M2.5 10.5h11"/><circle cx="5" cy="13" r=".9" fill="currentColor"/><circle cx="11" cy="13" r=".9" fill="currentColor"/></svg></span><span>The transfer cabin: drive in, step out, done</span><i aria-hidden="true">→</i></a><div class="bs-pop" id="pop-cabin" hidden><button type="button" class="bs-pop-x" aria-label="Close">×</button><video muted playsinline loop preload="none" poster="assets/2c642f978e35.webp" src="assets/d5496e24f84f.mp4" aria-label="Driving into the transfer cabin"></video><p class="bs-pop-cap"><b>Drive in, step out.</b> <span>Real footage from TilePark Munich: drive into the bright transfer cabin, confirm at the touchscreen, and step out. The system takes over from there.</span></p></div><a class="bs-app" href="#app" data-pop="pop-app" aria-expanded="false" aria-controls="pop-app"><span class="bs-app-ic" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="1.5" width="8" height="13" rx="2"/><path d="M7 12h2"/></svg></span><span>The app: your personal valet, without the tip</span><i aria-hidden="true">→</i></a><div class="bs-pop" id="pop-app" hidden><button type="button" class="bs-pop-x" aria-label="Close">×</button><div class="mini-app"><div class="mini-phone" aria-hidden="true"><p class="mp-hi">Good evening, Steffen</p><div class="mp-card"><p class="mp-k">Your valet</p><b class="mp-car">Audi A4 Avant</b><ol class="mp-steps"><li>Request received</li><li>Moving through the grid</li><li>Ready in the transfer cabin</li></ol><span class="mp-btn">I'm leaving in 5 min</span></div></div><p class="mp-copy"><b>Tap “I’m leaving”.</b> <span>Your car is waiting in the transfer cabin when you get there. Guests, charging and payment in the same app.</span></p></div></div></div></div>
     </div>
   </div>
 </header><span id="part-opp" class="part-anchor"></span><section class="sg" id="could-build"><div class="sg-in">
@@ -7240,7 +7241,8 @@ apply();
  const set=(id,open)=>{const el=document.getElementById(id);if(!el)return;el.hidden=!open;
   links.forEach(a=>{if(a.dataset.pop===id)a.setAttribute('aria-expanded',open)});
   const v=el.querySelector('video');if(v){if(open){try{v.currentTime=0}catch(e){}v.play().catch(()=>{})}else v.pause()}
-  if(id==='pop-app'){if(open)app();else clearInterval(timer)}};
+  if(id==='pop-app'){if(open)app();else clearInterval(timer)}
+  if(open)requestAnimationFrame(()=>{const r=el.getBoundingClientRect(),over=r.bottom-innerHeight+16;if(over>0)scrollBy({top:over,behavior:'smooth'})})};
  links.forEach(a=>a.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();const id=a.dataset.pop,open=document.getElementById(id).hidden;
   links.forEach(b=>{if(b.dataset.pop!==id)set(b.dataset.pop,false)});set(id,open)},true));
  document.querySelectorAll('.bs-pop-x').forEach(x=>x.addEventListener('click',()=>set(x.closest('.bs-pop').id,false)));
@@ -7257,22 +7259,24 @@ apply();
 <nav class="dz" aria-label="Designs"><button type="button" class="dz-btn" aria-expanded="false">Design E ▴</button><a href="index.html" title="Clean"><b>Clean</b><span></span></a><a href="as-sent.html" title="As sent"><b>As sent</b><span></span></a><a href="design-a.html" title="Architectural Future"><b>A</b><span>Architectural Future</span></a><a href="design-b.html" title="Technological Disruption"><b>B</b><span>Technological Disruption</span></a><a href="design-c.html" title="Industrial Intelligence"><b>C</b><span>Industrial Intelligence</span></a><a href="design-d.html" title="Engineering Heritage"><b>D</b><span>Engineering Heritage</span></a><a href="design-e.html" class="on" aria-current="page" title="Built by Parkstory"><b>E</b><span>Built by Parkstory</span></a><a href="design-f.html" title="Proven Disruption"><b>F</b><span>Proven Disruption</span></a></nav>
 <script>
 (function(){var n=document.querySelector('.dz'),b=n&&n.querySelector('.dz-btn');if(!b)return;
-b.addEventListener('click',function(){var o=n.classList.toggle('open');b.setAttribute('aria-expanded',o)});})();
+b.addEventListener('click',function(){var o=n.classList.toggle('open');b.setAttribute('aria-expanded',o)});var ly=scrollY;addEventListener('scroll',function(){var y=scrollY;n.classList.toggle('dz-away',y>ly&&y>120&&!n.classList.contains('open'));ly=y},{passive:true});})();
 </script>
 <style>
-.dz{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:2147483000;display:flex;gap:2px;padding:4px;
+.dz{position:fixed;left:50%;top:12px;transform:translateX(-50%);z-index:2147483000;display:flex;gap:2px;padding:4px;
   border-radius:999px;background:rgb(18 18 18 / 86%);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   box-shadow:0 10px 30px -10px rgb(0 0 0 / 55%);font:500 12px/1 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
   max-width:calc(100vw - 20px)}
 .dz a{display:inline-flex;align-items:center;gap:6px;padding:8px 11px;border-radius:999px;color:#e8e8e8;text-decoration:none;
   opacity:.75;white-space:nowrap}
 .dz a:hover{opacity:1}
+.dz{transition:transform .3s ease,opacity .3s}
+@media (min-width:721px){.dz.dz-away{transform:translate(-50%,-160%);opacity:0}}
 .dz a.on{background:#fff;color:#111;opacity:1}
 .dz a span{display:none}
 .dz a.on span{display:inline}
 .dz-btn{display:none}
 @media (max-width:720px){
-  .dz{left:auto;right:12px;bottom:12px;transform:none;flex-direction:column;align-items:stretch;border-radius:16px}
+  .dz{left:auto;top:auto;right:12px;bottom:12px;transform:none;flex-direction:column;align-items:stretch;border-radius:16px}
   .dz-btn{display:block;appearance:none;border:0;background:transparent;color:#fff;font:inherit;font-weight:600;padding:9px 12px;cursor:pointer}
   .dz a{display:none;border-radius:10px}
   .dz.open a{display:flex}

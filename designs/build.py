@@ -58,8 +58,8 @@ GREYS_STEEL = {
 HEX = {
     'design-a': {
         '07150f': '161615', '040d09': '0e0e0d', '0f261b': '22211f', '0b1f16': '161615', '0d1e16': '1b1a18',
-        '0d2219': '1d1c1a', '2e4f3f': '3a3835', '23784a': 'a8442b', '1f6b3f': '8f3720', '267d45': 'b5502f',
-        '2f9452': 'a8442b', 'b8f03c': 'e3a58f', 'a6e36b': 'e9b8a6', '5ee3a1': 'e3a58f', 'f6f3ea': 'f3f1ec',
+        '0d2219': '1d1c1a', '2e4f3f': '3a3835', '23784a': '2f6b3a', '1f6b3f': '24552d', '267d45': '3a7a45',
+        '2f9452': '2f6b3a', 'b8f03c': 'a9d07c', 'a6e36b': 'c3dea4', '5ee3a1': 'a9d07c', 'f6f3ea': 'f3f1ec',
         'eef0e6': 'e9e5dc', 'e4ede8': 'ebe7df', '284637': '2d2b28', '4b6558': '6b6862', '5f7a6c': '77736c',
         '2c3e35': '2d2b28', '3a4c43': '45423d', **GREYS_WARM,
     },
@@ -79,8 +79,8 @@ DARK = {'design-b', 'design-c', 'design-e', 'design-f'}
 TOKENS = {
     'design-a': """
   --navy:#161615; --navy-deep:#0e0e0d; --navy-lift:#22211f;
-  --green:#a8442b; --green-bright:#e3a58f; --green-ink:#8f3720; --green-hover:#b5502f;
-  --green-wash:#a8442b14; --green-edge:#a8442b40;
+  --green:#2f6b3a; --green-bright:#a9d07c; --green-ink:#24552d; --green-hover:#3a7a45;
+  --green-wash:#2f6b3a14; --green-edge:#2f6b3a40;
   --bg:#f3f1ec; --surface:#fbfaf7; --surface-2:#e9e5dc;
   --ink:#121212; --text:#2d2b28; --muted:#6b6862; --line:#1212121f; --line-soft:#12121212;
   --r:2px; --r-lg:2px; --r-sm:2px; --card-sh:none;""",
@@ -124,7 +124,7 @@ GX_DARK = """
 .gx{--paper:var(--bg);--paper-2:var(--surface-2);--ink:var(--ink);--mid:var(--muted);--rule:var(--line);
   --green:var(--green);--text:var(--text)}"""
 GX_A = """
-.gx{--paper:#f3f1ec;--paper-2:#e9e5dc;--ink:#121212;--mid:#6b6862;--rule:#1212121f;--green:#a8442b}"""
+.gx{--paper:#f3f1ec;--paper-2:#e9e5dc;--ink:#121212;--mid:#6b6862;--rule:#1212121f;--green:#2f6b3a}"""
 
 # The page's headings and small labels, as its own typography layer lists them.
 # Wrapped in :is() with html body so these rules win over that layer.
@@ -302,22 +302,24 @@ def switcher(current):
 <nav class="dz" aria-label="Designs"><button type="button" class="dz-btn" aria-expanded="false">{cur_label} ▴</button>{''.join(links)}</nav>
 <script>
 (function(){{var n=document.querySelector('.dz'),b=n&&n.querySelector('.dz-btn');if(!b)return;
-b.addEventListener('click',function(){{var o=n.classList.toggle('open');b.setAttribute('aria-expanded',o)}});}})();
+b.addEventListener('click',function(){{var o=n.classList.toggle('open');b.setAttribute('aria-expanded',o)}});var ly=scrollY;addEventListener('scroll',function(){{var y=scrollY;n.classList.toggle('dz-away',y>ly&&y>120&&!n.classList.contains('open'));ly=y}},{{passive:true}});}})();
 </script>
 <style>
-.dz{{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:2147483000;display:flex;gap:2px;padding:4px;
+.dz{{position:fixed;left:50%;top:12px;transform:translateX(-50%);z-index:2147483000;display:flex;gap:2px;padding:4px;
   border-radius:999px;background:rgb(18 18 18 / 86%);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   box-shadow:0 10px 30px -10px rgb(0 0 0 / 55%);font:500 12px/1 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
   max-width:calc(100vw - 20px)}}
 .dz a{{display:inline-flex;align-items:center;gap:6px;padding:8px 11px;border-radius:999px;color:#e8e8e8;text-decoration:none;
   opacity:.75;white-space:nowrap}}
 .dz a:hover{{opacity:1}}
+.dz{{transition:transform .3s ease,opacity .3s}}
+@media (min-width:721px){{.dz.dz-away{{transform:translate(-50%,-160%);opacity:0}}}}
 .dz a.on{{background:#fff;color:#111;opacity:1}}
 .dz a span{{display:none}}
 .dz a.on span{{display:inline}}
 .dz-btn{{display:none}}
 @media (max-width:720px){{
-  .dz{{left:auto;right:12px;bottom:12px;transform:none;flex-direction:column;align-items:stretch;border-radius:16px}}
+  .dz{{left:auto;top:auto;right:12px;bottom:12px;transform:none;flex-direction:column;align-items:stretch;border-radius:16px}}
   .dz-btn{{display:block;appearance:none;border:0;background:transparent;color:#fff;font:inherit;font-weight:600;padding:9px 12px;cursor:pointer}}
   .dz a{{display:none;border-radius:10px}}
   .dz.open a{{display:flex}}
