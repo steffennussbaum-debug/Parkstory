@@ -7182,12 +7182,15 @@ obs=new MutationObserver(function(rs){if(cur==='en')return;run(function(){rs.for
  else r.addedNodes.forEach(walk)})})});
 apply();
 })();</script><script id="video-rewind">
-// Links to the real footage always start it from the beginning ("Driving into the transfer cabin").
-(()=>{const v=document.getElementById('realVid');if(!v)return;
- const rewind=()=>{try{v.currentTime=0}catch(e){}const p=v.play();if(p&&p.catch)p.catch(()=>{})};
- document.addEventListener('click',e=>{const a=e.target.closest('a[href="#video"]');if(!a)return;
-  if(v.readyState<1){v.preload='auto';v.addEventListener('loadedmetadata',rewind,{once:true});v.load()}
-  rewind();setTimeout(rewind,700)},true);
+// Links to the real footage start it from the beginning and loop only the transfer-cabin scene
+// (drive-in and touchscreen kiosk, 0 to 7.95 s). Scrolling away ends the cabin loop; the full footage plays again next time.
+(()=>{const v=document.getElementById('realVid');if(!v)return;const END=7.95;let cabin=false,raf=0;
+ const watch=()=>{if(!cabin)return;if(v.currentTime>=END)v.currentTime=0;raf=requestAnimationFrame(watch)};
+ const start=()=>{try{v.currentTime=0}catch(e){}const p=v.play();if(p&&p.catch)p.catch(()=>{});cancelAnimationFrame(raf);raf=requestAnimationFrame(watch)};
+ document.addEventListener('click',e=>{const a=e.target.closest('a[href="#video"]');if(!a)return;cabin=true;
+  if(v.readyState<1){v.preload='auto';v.addEventListener('loadedmetadata',start,{once:true});v.load()}
+  start();setTimeout(start,700)},true);
+ let seen=false;new IntersectionObserver(es=>{const on=es[0].isIntersecting;if(on)seen=true;else if(seen&&cabin){cabin=false;cancelAnimationFrame(raf)}},{threshold:0}).observe(v);
 })();
 </script>
 
