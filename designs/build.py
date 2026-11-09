@@ -15,7 +15,8 @@ simulators stay exactly as they are. For each design this script
   4. adds the design's finishing rules (radii, weights, labels, cards),
   5. adds a small bar to switch between the designs.
 
-Output: index.html (the original look) and design-a.html ... design-f.html.
+Output: index.html (the page cleaned up), as-sent.html (untouched, for comparison)
+and design-a.html ... design-f.html (each design, with the same clean-up).
 """
 
 import base64
@@ -30,7 +31,8 @@ FONTS = os.path.join(ROOT, 'node_modules')
 
 # ---------------------------------------------------------------- designs --
 DESIGNS = [
-    ('index', '0', 'Original', 'Parkstory 13 as designed'),
+    ('index', '0', 'Clean', 'The page as sent, cleaned up: one type family, calmer labels and panels'),
+    ('as-sent', 'S', 'As sent', 'The page exactly as sent, for comparison'),
     ('design-a', 'A', 'Architectural Future', 'Minimal and bright, warm paper and oxide'),
     ('design-b', 'B', 'Technological Disruption', 'Cinematic dark, lime as signal'),
     ('design-c', 'C', 'Industrial Intelligence', 'Graphite, orange, engineering type'),
@@ -124,40 +126,62 @@ GX_DARK = """
 GX_A = """
 .gx{--paper:#f3f1ec;--paper-2:#e9e5dc;--ink:#121212;--mid:#6b6862;--rule:#1212121f;--green:#a8442b}"""
 
+# The page's headings and small labels, as its own typography layer lists them.
+# Wrapped in :is() with html body so these rules win over that layer.
+H = ('html body :is(main h1,main h2,main h3,.bs-claim,.opp-h,.loc-h,.opp-feas-h,.part-open h2,.cd-h2,.fab-h,.motto,'
+     '.opp-qh,.fut-sub,.fut-qh,.cd-ledger-n,.cd-uptime-n,.nat-tag,.loc-c h3,.opp-q b,.nat-eng b,.fut-cards b,.fut-cmp h3,'
+     '.pl-offer h3,.sg-steps b,.pb figcaption b,.cmp-h,.eng-h)')
+E = ('html body :is(.hiw-eyebrow,.opp-eye,.opp-k,.loc-eye,.sg-eye,.pl-eye,.part-k,.tour-eye,.cd-label,.bs-eye,.nat-eye,'
+     '.pf .pl-eye,.fut-st,.nw-evid-h,.cmp-eye,.eng-k,.nw-track-k)')
+
+# Clean-up, applied to every version except "As sent": one type family (Outfit for headings, Inter for
+# text and labels), one label style, flat cards, plain dark panels and a comfortable line length.
+CLEAN = f"""
+{H}{{font-family:"Outfit","Inter",Arial,sans-serif!important;font-stretch:100%!important;font-weight:600!important;letter-spacing:-.025em!important}}
+{E}{{font-family:"Inter",Arial,sans-serif!important;text-transform:uppercase!important;letter-spacing:.12em!important;font-weight:600!important;font-size:.74rem!important}}
+html body :is(.part-open,.sg,.nat,.pf,.loc-box,.fut-urg){{background-image:none!important}}
+html body :is(.card,.pc,.opp-note,.gx .cd-rail,.gx .cd-plant){{box-shadow:none!important}}
+main section p{{max-width:72ch}}
+"""
+
 # design finishing rules, applied after the page's own CSS
-EXTRA = {
+EXTRA_RAW = {
     'design-a': """
-h1,h2,h3{font-weight:600!important;letter-spacing:-.03em}
-:is(h1,h2,h3) em{font-family:"PS Serif",Georgia,serif!important;font-style:italic!important;font-weight:400!important;letter-spacing:-.01em}
-.hiw-eyebrow{color:var(--muted)!important;letter-spacing:.16em}
+{H}{font-weight:600!important;letter-spacing:-.03em}
+{HE}{font-family:"PS Serif",Georgia,serif!important;font-style:italic!important;font-weight:400!important;letter-spacing:-.01em}
+{E}{color:var(--muted)!important;letter-spacing:.16em}
 .card,.pc,.opp-q>div,.fut-cmp>div,.gx .cd-rail,.gx .cd-plant{box-shadow:none!important;border:1px solid var(--line)!important}
 .btn,.btn-primary,.cta-b1,.opp-cta a{border-radius:0!important}""",
     'design-b': """
-h1,h2,h3{font-weight:500!important;letter-spacing:-.035em}
-.hiw-eyebrow{color:var(--muted)!important;letter-spacing:.14em}
+{H}{font-weight:500!important;letter-spacing:-.035em}
+{E}{color:var(--muted)!important;letter-spacing:.14em}
 .card,.pc,.opp-q>div,.fut-cmp>div,.opp-note,.gx .cd-rail,.gx .cd-plant{box-shadow:none!important;border:1px solid var(--line)!important}
 section{border-color:var(--line)}""",
     'design-c': """
-h1,h2,h3{font-weight:600!important;letter-spacing:-.02em}
+{H}{font-weight:600!important;letter-spacing:-.02em}
 .hiw-eyebrow,.who,.lbl,.cd-label,.cd-kicker{font-family:"PS Mono",ui-monospace,monospace!important;color:var(--green)!important;letter-spacing:.08em}
 .card,.pc,.opp-q>div,.fut-cmp>div,.opp-note,.gx .cd-rail,.gx .cd-plant{box-shadow:none!important;border:1px solid var(--line)!important}
 .btn,.btn-primary,.cta-b1,.opp-cta a{border-radius:0!important}""",
     'design-d': """
-h1,h2,h3{font-weight:500!important;letter-spacing:-.03em}
-.hiw-eyebrow{display:flex;align-items:center;gap:.7rem;color:var(--muted)!important}
-.hiw-eyebrow::before{content:"";flex:none;width:10px;height:10px;border-radius:50%;background:#b8f03c;box-shadow:0 0 0 1px #0b1a13}
+{H}{font-weight:500!important;letter-spacing:-.03em}
+{E}{display:flex;align-items:center;gap:.7rem;color:var(--muted)!important}
+{EB}{content:"";flex:none;width:10px;height:10px;border-radius:50%;background:#b8f03c;box-shadow:0 0 0 1px #0b1a13}
 .card,.pc,.opp-q>div,.fut-cmp>div,.gx .cd-rail,.gx .cd-plant{box-shadow:none!important;border:1px solid var(--line)!important}""",
     'design-e': """
-h1,h2,h3{font-weight:700!important;letter-spacing:-.04em}
-.hiw-eyebrow{display:inline-block;border:1px solid #b8f03c73;padding:.35rem .7rem;border-radius:2px;color:#b8f03c!important}
+{H}{font-weight:700!important;letter-spacing:-.04em}
+{E}{display:inline-block;border:1px solid #b8f03c73;padding:.35rem .7rem;border-radius:2px;color:#b8f03c!important}
 .card,.pc,.opp-q>div,.fut-cmp>div,.opp-note,.gx .cd-rail,.gx .cd-plant{box-shadow:none!important;border:1px solid var(--line)!important}
 .btn,.btn-primary,.cta-b1,.opp-cta a{border-radius:2px!important}""",
     'design-f': """
-h1,h2,h3{font-weight:500!important;letter-spacing:-.035em}
-:is(h1,h2,h3) em{color:#b8f03c!important}
-.hiw-eyebrow{color:#5ee3a1!important;letter-spacing:.14em}
+{H}{font-weight:500!important;letter-spacing:-.035em}
+{HE}{color:#b8f03c!important}
+{E}{color:#5ee3a1!important;letter-spacing:.14em}
 .card,.pc,.opp-q>div,.fut-cmp>div,.opp-note,.gx .cd-rail,.gx .cd-plant{box-shadow:none!important;background:transparent!important;border:1px solid var(--line)!important}""",
 }
+
+HE = 'html body :is(main h1,main h2,main h3) em'
+EXTRA = {k: v.replace('{H}', H).replace('{HE}', HE).replace('{EB}', E[:-1] + ')::before').replace('{E}', E)
+         for k, v in EXTRA_RAW.items()}
 
 # ---------------------------------------------------------------- fonts ----
 FONT_FILES = {
@@ -190,17 +214,20 @@ def face(names, file, weight='100 900', style='normal', ext=None):
     return '\n'.join(out)
 
 
-DISPLAY = ['Outfit', 'Outfit Variable']
-TEXT = ['Inter', 'Inter Variable']
+DISPLAY = ['Outfit', 'Outfit Variable', 'Archivo']
+TEXT = ['Inter', 'Inter Variable', 'IBM Plex Mono']
 
 
 def fonts_for(slug):
+    if slug == 'as-sent':
+        return face(DISPLAY, 'outfit.woff2', ext='outfit-ext.woff2') + '\n' + face(TEXT, 'inter.woff2', ext='inter-ext.woff2')
     if slug == 'design-a':
         return face(DISPLAY + TEXT, 'inter-tight.woff2') + '\n' + face(['PS Serif'], 'newsreader-italic.woff2', style='italic')
     if slug == 'design-c':
-        rows = [face(DISPLAY + TEXT, f'plex-sans-{w}.woff2', weight=str(w)) for w in (400, 500, 600)]
-        rows.append(face(DISPLAY + TEXT, 'plex-sans-600.woff2', weight='700 900'))
-        rows += [face(['PS Mono'], f'plex-mono-{w}.woff2', weight=str(w)) for w in (400, 500)]
+        sans = DISPLAY + TEXT[:2]
+        rows = [face(sans, f'plex-sans-{w}.woff2', weight=str(w)) for w in (400, 500, 600)]
+        rows.append(face(sans, 'plex-sans-600.woff2', weight='700 900'))
+        rows += [face(['PS Mono', 'IBM Plex Mono'], f'plex-mono-{w}.woff2', weight=str(w)) for w in (400, 500)]
         return '\n'.join(rows)
     return face(DISPLAY, 'outfit.woff2', ext='outfit-ext.woff2') + '\n' + face(TEXT, 'inter.woff2', ext='inter-ext.woff2')
 
@@ -267,10 +294,10 @@ def switcher(current):
     links = []
     for slug, letter, name, _ in DESIGNS:
         on = ' class="on" aria-current="page"' if slug == current else ''
-        label = 'Original' if letter == '0' else letter
-        links.append(f'<a href="{slug}.html"{on} title="{name}"><b>{label}</b><span>{name if letter != "0" else ""}</span></a>')
+        label = name if letter in '0S' else letter
+        links.append(f'<a href="{slug}.html"{on} title="{name}"><b>{label}</b><span>{"" if letter in "0S" else name}</span></a>')
     cur = next(d for d in DESIGNS if d[0] == current)
-    cur_label = 'Original' if cur[1] == '0' else f'Design {cur[1]}'
+    cur_label = cur[2] if cur[1] in '0S' else f'Design {cur[1]}'
     return f"""
 <nav class="dz" aria-label="Designs"><button type="button" class="dz-btn" aria-expanded="false">{cur_label} ▴</button>{''.join(links)}</nav>
 <script>
@@ -338,17 +365,20 @@ def build(src, out):
             body = map_hex(body, HEX.get(slug, {}))
             return open_tag + body + close
 
-        if slug != 'index':
+        if slug not in ('index', 'as-sent'):
             page = re.sub(r'(<style[^>]*>)([\s\S]*?)(</style>)', recolour, page)
             page = re.sub(r'(<script(?![^>]*\bsrc=)[^>]*>)([\s\S]*?)(</script>)', recolour, page)
 
         theme = '<style id="design-fonts">\n' + fonts_for(slug) + '\n</style>\n'
-        if slug != 'index':
+        if slug != 'as-sent':
+            theme += f'<style id="design-clean">{CLEAN}</style>\n'
+        if slug not in ('index', 'as-sent'):
             gx = GX_A if slug == 'design-a' else (GX_DARK if slug in DARK else '')
             theme += f'<style id="design-theme">\nhtml:root{{{TOKENS[slug]}\n}}{gx}\n{EXTRA[slug]}\n</style>\n'
         page = page.replace('</head>', theme + '</head>', 1)
         if letter != '0':
-            page = re.sub(r'<title>(.*?)</title>', rf'<title>\1 · Design {letter}</title>', page, count=1)
+            suffix = 'As sent' if letter == 'S' else f'Design {letter}'
+            page = re.sub(r'<title>(.*?)</title>', rf'<title>\1 · {suffix}</title>', page, count=1)
         page = page.replace('</body>', switcher(slug) + '\n</body>', 1)
         with open(os.path.join(out, f'{slug}.html'), 'w', encoding='utf-8') as f:
             f.write(page)
