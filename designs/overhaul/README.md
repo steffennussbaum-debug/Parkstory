@@ -37,3 +37,13 @@ python3 designs/build.py Parkstory-overhaul-sim.html public/overhaul
 python3 designs/overhaul/case_patch.py Parkstory-overhaul-sim.html Parkstory-overhaul-case.html public/story/from-red-to-green.html <story img dir> designs/overhaul/sim3d/media
 python3 designs/build.py Parkstory-overhaul-case.html public/overhaul
 ```
+
+## FAQ
+
+`faq_patch.py` moves the buyer questions into their own menu part "FAQ" (before "Plan your TilePark"), grouped into
+five topics with 20 questions:
+
+```bash
+python3 designs/overhaul/faq_patch.py Parkstory-overhaul-case.html Parkstory-overhaul-faq.html
+python3 designs/build.py Parkstory-overhaul-faq.html public/overhaul
+```
