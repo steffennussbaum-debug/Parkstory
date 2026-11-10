@@ -47,3 +47,15 @@ five topics with 20 questions:
 python3 designs/overhaul/faq_patch.py Parkstory-overhaul-case.html Parkstory-overhaul-faq.html
 python3 designs/build.py Parkstory-overhaul-faq.html public/overhaul
 ```
+
+## Review round: precision, guides and SEO
+
+```bash
+python3 designs/overhaul/review_patch.py Parkstory-overhaul-faq.html Parkstory-overhaul-rev.html   # wording, evidence, economics, guide links
+python3 designs/build.py Parkstory-overhaul-rev.html public/overhaul
+python3 designs/overhaul/topics.py public/overhaul <story img dir>                                 # five guide pages + guides.css
+python3 designs/overhaul/seo_post.py public/overhaul                                               # one H1, metadata, JSON-LD, sitemap, robots
+```
+
+The canonical domain is assumed to be https://www.parkstory.com/ (change `BASE` in topics.py and seo_post.py).
+The guide pages use flat files (`automated-parking-cost.html`); with "clean URLs" on the host they are served as `/automated-parking-cost`.
