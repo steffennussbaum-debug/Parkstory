@@ -7,7 +7,14 @@ def dup_css(css):
     toks = re.split(r'([{}])', css); outp = []
     for k, t in enumerate(toks):
         if k + 1 < len(toks) and toks[k+1] == '{' and t not in '{}' and H1TOK.search(t) and not t.lstrip().startswith('@'):
-            parts = t.split(','); t = ','.join(parts + [H1TOK.sub('h2.h1x', q) for q in parts if H1TOK.search(q)])
+            parts, d, cur = [], 0, ''
+            for ch in t:
+                if ch == '(': d += 1
+                elif ch == ')': d -= 1
+                if ch == ',' and d == 0: parts.append(cur); cur = ''
+                else: cur += ch
+            parts.append(cur)
+            t = ','.join(parts + [H1TOK.sub('h2.h1x', q) for q in parts if H1TOK.search(q)])
         outp.append(t)
     return ''.join(outp)
 def one_h1(s):
