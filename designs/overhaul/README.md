@@ -28,3 +28,12 @@ designs/overhaul/sim3d/encode.sh            # frames -> mp4 + webm clips in sim3
 python3 designs/overhaul/sim_patch.py Parkstory-overhaul.html Parkstory-overhaul-sim.html designs/overhaul/sim3d/media
 python3 designs/build.py Parkstory-overhaul-sim.html public/overhaul
 ```
+
+## Case study "From red to green"
+
+`case_patch.py` adds the story page (`designs/story`) as a chapter of "Your opportunity", after "What you gain":
+
+```bash
+python3 designs/overhaul/case_patch.py Parkstory-overhaul-sim.html Parkstory-overhaul-case.html public/story/from-red-to-green.html <story img dir> designs/overhaul/sim3d/media
+python3 designs/build.py Parkstory-overhaul-case.html public/overhaul
+```
