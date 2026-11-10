@@ -20,6 +20,7 @@ for k, en in E.items():
     D[en] = [L['de'][k], L['fr'][k], L['es'][k]]
 for k,(en,de,fr,es) in EXTRA.items(): D[en] = [de,fr,es]
 D.update(NEW_STRINGS)
+D.update({'Is the extra area sold or rented?': ['Wird die zusätzliche Fläche verkauft oder vermietet?', 'La surface supplémentaire est-elle vendue ou louée ?', '¿La superficie adicional se vende o se alquila?'], 'Sellable area': ['Verkaufbare Fläche', 'Surface vendable', 'Superficie vendible'], 'Rentable area': ['Vermietbare Fläche', 'Surface locative', 'Superficie alquilable'], 'Rentable area with a conventional garage': ['Vermietbare Fläche mit konventioneller Garage', 'Surface locative avec un parking classique', 'Superficie alquilable con aparcamiento convencional'], 'Rent per year per': ['Jahresmiete pro', 'Loyer annuel par', 'Alquiler anual por'], 'Yield (cap rate), %': ['Kapitalisierungszins (Cap Rate), %', 'Taux de capitalisation, %', 'Tasa de capitalización (cap rate), %'], 'Value = annual rent ÷ yield': ['Wert = Jahresmiete ÷ Kapitalisierungszins', 'Valeur = loyer annuel ÷ taux de capitalisation', 'Valor = alquiler anual ÷ tasa de capitalización'], 'Value of the rentable area': ['Wert der vermietbaren Fläche', 'Valeur de la surface locative', 'Valor de la superficie alquilable'], 'New rentable area': ['Neue vermietbare Fläche', 'Nouvelle surface locative', 'Nueva superficie alquilable'], 'Annual rent from the new area': ['Jahresmiete der neuen Fläche', 'Loyer annuel de la nouvelle surface', 'Alquiler anual de la nueva superficie']})
 def t(k): return E[k]
 HTML = f'''<section class="rg" id="red-to-green"><div class="rg-wrap">
 <div class="rg-hero"><p class="rg-eye">{EXTRA['eye2'][0]}</p><h2 class="rg-h1"><span>{t('h1a')}</span> <em>{t('h1b')}</em></h2><p class="rg-lead">{t('lead')}</p><p class="rg-hint">{t('hint')}</p></div>
@@ -35,19 +36,19 @@ HTML = f'''<section class="rg" id="red-to-green"><div class="rg-wrap">
 <figure><video class="rgv" muted playsinline preload="none" poster="{b64(os.path.join(imgd,'c5.jpg'),'image/jpeg')}">{vid('apt')}</video><button type="button" class="rg-replay"><span aria-hidden="true">↻</span> Replay</button><figcaption>{t('cap5')}</figcaption></figure>
 <div class="rg-ledger"><div><span><span>{t('lv')}</span><small data-noi18n class="rgA2"></small></span><b data-noi18n class="rgV2"></b></div><div><span>{t('lc2')}</span><b data-noi18n class="rgC2"></b></div><div><span>{t('lf')}</span><b data-noi18n class="rgF2"></b></div><div class="res"><span>{t('lr')}</span><b data-noi18n class="rgR2 pos"></b></div></div></article>
 <article class="rg-ch grn" data-st="6"><p class="rg-k">{t('k6')}</p><h3>{t('h_6')}</h3><ul class="rg-ticks"><li>{t('t1')}</li><li>{t('t2')}</li><li>{t('t3')}</li><li>{t('t4')}</li></ul></article>
-<article class="rg-ch rg-you" data-st="7"><p class="rg-k">7 · Your project</p><h3>Now try it with your numbers.</h3><p>Enter the figures of your project. The result updates as you type. The example values are filled in to start.</p>
-<form class="rg-form" id="rgForm" novalidate>
+<article class="rg-ch rg-you" data-st="7" data-mode="sell"><p class="rg-k">7 · Your project</p><h3>Now try it with your numbers.</h3><p>Enter the figures of your project. The result updates as you type. The example values are filled in to start.</p>
+<form class="rg-form" id="rgForm" novalidate><div class="rg-mode"><span>Is the extra area sold or rented?</span><div class="rg-tog" role="group"><button type="button" data-mo="sell" aria-pressed="true">Sellable area</button><button type="button" data-mo="rent" aria-pressed="false">Rentable area</button></div></div>
 <label for="rgN"><span>Parking spaces required</span><input id="rgN" type="number" min="1" step="1" inputmode="numeric"></label>
-<label for="rgA"><span>Sellable area with a conventional garage</span><span class="rg-in" data-noi18n><input id="rgA" type="number" min="0" step="10" inputmode="numeric"><i class="rgUa"></i></span></label>
-<label for="rgV"><span><span>Value of sellable area per</span> <span class="rgUa2" data-noi18n></span></span><span class="rg-in" data-noi18n><i class="rgCur"></i><input id="rgV" type="number" min="0" step="10" inputmode="numeric"></span></label>
-<label for="rgC"><span>Land, building and garage, in millions</span><span class="rg-in" data-noi18n><i class="rgCur"></i><input id="rgC" type="number" min="0" step="0.1" inputmode="decimal"></span></label>
+<label for="rgA"><span><span class="ms">Sellable area with a conventional garage</span><span class="mr">Rentable area with a conventional garage</span></span><span class="rg-in" data-noi18n><input id="rgA" type="number" min="0" step="10" inputmode="numeric"><i class="rgUa"></i></span></label>
+<label for="rgV" class="ms"><span><span>Value of sellable area per</span> <span class="rgUa2" data-noi18n></span></span><span class="rg-in" data-noi18n><i class="rgCur"></i><input id="rgV" type="number" min="0" step="10" inputmode="numeric"></span></label>
+<label for="rgRent" class="mr"><span><span>Rent per year per</span> <span class="rgUa2" data-noi18n></span></span><span class="rg-in" data-noi18n><i class="rgCur"></i><input id="rgRent" type="number" min="0" step="0.5" inputmode="decimal"></span></label><label for="rgY" class="mr"><span>Yield (cap rate), %</span><span class="rg-in" data-noi18n><input id="rgY" type="number" min="0.5" max="30" step="0.1" inputmode="decimal"><i>%</i></span><small class="rg-hint2">Value = annual rent ÷ yield</small></label><label for="rgC"><span>Land, building and garage, in millions</span><span class="rg-in" data-noi18n><i class="rgCur"></i><input id="rgC" type="number" min="0" step="0.1" inputmode="decimal"></span></label>
 <label for="rgF"><span><span>Fit-out cost of the new area per</span> <span class="rgUa2" data-noi18n></span></span><span class="rg-in" data-noi18n><i class="rgCur"></i><input id="rgF" type="number" min="0" step="5" inputmode="numeric"></span></label>
 <div class="rg-fix"><span>Area recovered per space</span><b data-noi18n class="rgPer"></b><small>as in the gain calculator</small></div>
 <button type="button" class="rg-reset">Reset to the example</button>
 </form>
 <div class="rg-cmp">
-<div class="rg-col"><h4>With a conventional garage</h4><div class="rg-ledger"><div><span>Value of the sellable area</span><b data-noi18n class="yV1"></b></div><div><span>Land, building and garage</span><b data-noi18n class="yC1"></b></div><div class="res"><span>Result</span><b data-noi18n class="yR1"></b></div></div></div>
-<div class="rg-col"><h4>With TilePark</h4><div class="rg-ledger"><div><span><span>New sellable area</span></span><b data-noi18n class="yA2"></b></div><div><span>Value of the sellable area</span><b data-noi18n class="yV2"></b></div><div><span>Land, building and parking</span><b data-noi18n class="yC2"></b></div><div><span>Fit-out of the new area</span><b data-noi18n class="yF2"></b></div><div class="res"><span>Result</span><b data-noi18n class="yR2"></b></div></div></div>
+<div class="rg-col"><h4>With a conventional garage</h4><div class="rg-ledger"><div><span><span class="ms">Value of the sellable area</span><span class="mr">Value of the rentable area</span></span><b data-noi18n class="yV1"></b></div><div><span>Land, building and garage</span><b data-noi18n class="yC1"></b></div><div class="res"><span>Result</span><b data-noi18n class="yR1"></b></div></div></div>
+<div class="rg-col"><h4>With TilePark</h4><div class="rg-ledger"><div><span><span class="ms">New sellable area</span><span class="mr">New rentable area</span></span><b data-noi18n class="yA2"></b></div><div class="mr"><span>Annual rent from the new area</span><b data-noi18n class="yRent"></b></div><div><span><span class="ms">Value of the sellable area</span><span class="mr">Value of the rentable area</span></span><b data-noi18n class="yV2"></b></div><div><span>Land, building and parking</span><b data-noi18n class="yC2"></b></div><div><span>Fit-out of the new area</span><b data-noi18n class="yF2"></b></div><div class="res"><span>Result</span><b data-noi18n class="yR2"></b></div></div></div>
 </div>
 <div class="rg-diff"><span>Difference made by TilePark</span><b data-noi18n class="yD"></b></div>
 <p class="rg-note">The parking itself is assumed to cost about the same: most TilePark systems from 25 spaces cost around $30,000 per space. This is a first estimate; the free feasibility study shows the real numbers for your site.</p>
@@ -69,7 +70,8 @@ li_opp = re.search(r'<li><a href="#opportunity">.*?</li>', s, re.S).group(0)
 rep(li_opp, li_opp + '<li><a href="#red-to-green"><span class="t">%s</span></a></li>' % EXTRA['menu'][0])
 k = s.find('const FXN='); e = s.find(';\nconst vis=', k); names = json.loads(s[k+len('const FXN='):e]); names['c']['red-to-green'] = EXTRA['menu'][0]
 s = s[:k] + 'const FXN=' + json.dumps(names, ensure_ascii=False) + s[e:]
-X = {lg: {'mio': L[lg]['mio'], 'at': L[lg]['at'], 'c0': L[lg]['c0'], 'c1': L[lg]['c1'], 'c2': L[lg]['c2'], 'c3': L[lg]['c3']} for lg in L}
+YR={'en':'per year','de':'pro Jahr','fr':'par an','es':'al año'}
+X = {lg: {'yr': YR[lg], 'mio': L[lg]['mio'], 'at': L[lg]['at'], 'c0': L[lg]['c0'], 'c1': L[lg]['c1'], 'c2': L[lg]['c2'], 'c3': L[lg]['c3']} for lg in L}
 JS = '''<script id="rg-js">(()=>{const R=document.getElementById('red-to-green');if(!R)return;const H=document.documentElement,q=c=>R.querySelector(c),X=%s;
 const ST={0:{t:'none'},1:{t:'none'},2:{t:'none',pk:4,ea:4,ar:24000},3:{t:'red',c:'c1',pk:4,ea:4,ar:24000,res:-1.0},4:{t:'red',c:'c2',pk:2,ea:4,ar:24000,res:-1.0},5:{t:'green',c:'c3',pk:2,ea:6,ar:34200,res:1.3},6:{t:'green',c:'c3',pk:2,ea:6,ar:34200,res:1.3},7:{t:'none',you:1}};
 let cur=0,shown=null,raf=0;const lg=()=>X[H.lang]?H.lang:'en',loc=()=>lg()==='en'?'en-US':lg();
@@ -89,24 +91,25 @@ function paint(inst){const s=cur===7?you():ST[cur],m=q('.rg-meter'),big=q('.rg-b
  const mf2=cur===7?cm:money;if(inst||from===T||matchMedia('(prefers-reduced-motion: reduce)').matches){shown=T;big.textContent=mf2(T,true);return}
  const t0=performance.now();const st=t=>{const k=Math.min(1,(t-t0)/1200),v=from+(T-from)*(1-Math.pow(1-k,3));shown=v;big.textContent=mf2(Math.round(v*100)/100,true);if(k<1)raf=requestAnimationFrame(st)};raf=requestAnimationFrame(st)}
 
-const met=()=>H.dataset.units==='m',DEF={i:{n:68,a:24000,v:400,c:10.6,f:175,per:150,au:'sq ft',cur:'$'},m:{n:68,a:2230,v:4300,c:10.6,f:1890,per:14,au:'m²',cur:'€'}};
+const met=()=>H.dataset.units==='m',DEF={i:{n:68,a:24000,v:400,r:24,y:6,c:10.6,f:175,per:150,au:'sq ft',cur:'$'},m:{n:68,a:2230,v:4300,r:258,y:6,c:10.6,f:1890,per:14,au:'m²',cur:'€'}};let mode='sell';
 const F=R.querySelector('#rgForm'),inp=k=>R.querySelector('#rg'+k);let sys=null,Y={};
 const cm=(m,sg)=>{const c=DEF[sys].cur,s=sg?(m<0?'−':m>0?'+':''):'',v=nf(Math.abs(m),Math.abs(m)<1&&m!==0?2:1);return lg()==='en'?s+c+v+' '+X.en.mio:s+v+' '+X[lg()].mio+' '+c};
-function fill(){const d=DEF[sys];inp('N').value=d.n;inp('A').value=d.a;inp('V').value=d.v;inp('C').value=d.c;inp('F').value=d.f}
+function fill(){const d=DEF[sys];inp('N').value=d.n;inp('A').value=d.a;inp('V').value=d.v;inp('Rent').value=d.r;inp('Y').value=d.y;inp('C').value=d.c;inp('F').value=d.f}
 function calc(){const ns=met()?'m':'i';if(ns!==sys){sys=ns;fill()}const d=DEF[sys],g=k=>Math.max(0,+inp(k).value||0);
- const n=g('N'),a=g('A'),v=g('V'),c=g('C'),f=g('F'),add=n*d.per,v1=a*v/1e6,r1=v1-c,v2=(a+add)*v/1e6,f2=add*f/1e6,r2=v2-c-f2;Y={n,a,add,au:d.au,r1,r2,v1,v2,c,f2};
+ const n=g('N'),a=g('A'),rent=g('Rent'),yy=Math.max(0.1,g('Y')),v=mode==='rent'?rent/(yy/100):g('V'),c=g('C'),f=g('F'),add=n*d.per,v1=a*v/1e6,r1=v1-c,v2=(a+add)*v/1e6,f2=add*f/1e6,r2=v2-c-f2;Y={n,a,add,au:d.au,r1,r2,v1,v2,c,f2};
  R.querySelectorAll('.rgUa').forEach(e=>e.textContent=d.au);R.querySelectorAll('.rgUa2').forEach(e=>e.textContent=d.au);R.querySelectorAll('.rgCur').forEach(e=>e.textContent=d.cur);
  q('.rgPer').textContent=nf(d.per)+' '+d.au;
  q('.yV1').textContent=cm(v1);q('.yC1').textContent=cm(c);q('.yR1').textContent=cm(r1,true);q('.yR1').className='yR1 '+(r1<0?'neg':'pos');
- q('.yA2').textContent='+ '+nf(add)+' '+d.au;q('.yV2').textContent=cm(v2);q('.yC2').textContent=cm(c);q('.yF2').textContent=cm(f2);q('.yR2').textContent=cm(r2,true);q('.yR2').className='yR2 '+(r2<0?'neg':'pos');
+ q('.yA2').textContent='+ '+nf(add)+' '+d.au;q('.yRent').textContent=(lg()==='en'?d.cur+nf(add*rent):nf(add*rent)+' '+d.cur)+' '+X[lg()].yr;Y.mode=mode;q('.yV2').textContent=cm(v2);q('.yC2').textContent=cm(c);q('.yF2').textContent=cm(f2);q('.yR2').textContent=cm(r2,true);q('.yR2').className='yR2 '+(r2<0?'neg':'pos');
  q('.yD').textContent=cm(r2-r1,true);q('.yD').className='yD '+(r2-r1<0?'neg':'pos');
  if(cur===7)paint(true)}
 function you(){const t=Y.r2<0?'red':'green',sc=Math.max(0.5,Math.abs(Y.r1),Math.abs(Y.r2))*1.25;return {t,c:Y.r2<0?'c1':'c3',res:Y.r2,scale:sc,pk:null,ea:null,ar:Y.a+Y.add,au:Y.au}}
 F.addEventListener('input',()=>calc());F.addEventListener('submit',e=>e.preventDefault());
 R.querySelector('.rg-reset').addEventListener('click',()=>{fill();calc()});
+R.querySelectorAll('.rg-tog button').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.mo;R.querySelector('.rg-you').dataset.mode=mode;R.querySelectorAll('.rg-tog button').forEach(x=>x.setAttribute('aria-pressed',x===b));calc()}));
 R.querySelector('.rg-send').addEventListener('click',()=>{const f=document.querySelector('#request form')||document.querySelector('form [name=spaces]')?.form;if(!f)return;
  const sp=f.querySelector('[name=spaces]');if(sp)sp.value=Y.n;const m=f.querySelector('[name=message]');
- if(m){const line='TilePark case study: '+nf(Y.n)+' spaces, '+nf(Y.a)+' '+Y.au+' sellable, result '+cm(Y.r1,true)+' → '+cm(Y.r2,true)+' with TilePark.';if(!m.value.includes('TilePark case study'))m.value=(m.value?m.value+'\\n':'')+line}});
+ if(m){const line='TilePark case study: '+nf(Y.n)+' spaces, '+nf(Y.a)+' '+Y.au+(Y.mode==='rent'?' rentable':' sellable')+', result '+cm(Y.r1,true)+' → '+cm(Y.r2,true)+' with TilePark.';if(!m.value.includes('TilePark case study'))m.value=(m.value?m.value+'\\n':'')+line}});
 const chs=[...R.querySelectorAll('.rg-ch')];
 function onScroll(){const r=R.getBoundingClientRect();if(r.bottom<0||r.top>innerHeight)return;const line=innerHeight*.45;let n=0;chs.forEach(c=>{if(c.getClientRects().length&&c.getBoundingClientRect().top<line)n=+c.dataset.st});if(n!==cur){cur=n;paint(false)}}
 addEventListener('scroll',()=>requestAnimationFrame(onScroll),{passive:true});addEventListener('resize',onScroll);
@@ -170,6 +173,13 @@ CSS = '''<style id="rg-css">
 .rg-form input:focus{outline:2px solid var(--rg-green);outline-offset:1px;border-color:transparent}
 .rg-in{display:flex;align-items:center;gap:.4rem}.rg-in i{font-style:normal;color:var(--rg-muted);font-weight:600;white-space:nowrap}
 .rg-fix{display:flex;flex-direction:column;gap:.2rem;font-size:.86rem;color:var(--rg-muted)}.rg-fix b{font:600 1.05rem "Inter",sans-serif;color:var(--rg-ink)}.rg-fix small{font-size:.75rem}
+.rg-you[data-mode=sell] .mr,.rg-you[data-mode=rent] .ms{display:none!important}
+.rg-mode{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.6rem 1rem;padding-bottom:.4rem;border-bottom:1px solid var(--rg-line)}
+.rg-mode>span{font-size:.92rem;color:#d6e4db}
+.rg-tog{display:inline-flex;gap:3px;padding:3px;border:1px solid #ffffff2e;border-radius:999px}
+.rg-tog button{all:unset;cursor:pointer;font:600 .85rem "Inter",sans-serif;padding:.45rem .9rem;border-radius:999px;color:var(--rg-muted)}
+.rg-tog button[aria-pressed=true]{background:var(--rg-green);color:var(--rg-gink)}.rg-tog button:focus-visible{outline:2px solid var(--rg-green);outline-offset:2px}
+.rg-hint2{font-size:.75rem;color:var(--rg-muted)}
 .rg-reset{grid-column:1/-1;justify-self:start;all:unset;cursor:pointer;font:600 .82rem "Inter",sans-serif;color:var(--rg-green);padding:.3rem 0}
 .rg-reset:focus-visible{outline:2px solid var(--rg-green);outline-offset:2px}
 .rg-cmp{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:1.1rem}
