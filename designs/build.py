@@ -347,7 +347,7 @@ def build(src, out):
             seen[key] = name
         return seen[key]
 
-    html = re.sub(r'data:(image/webp|image/png|image/jpeg|video/mp4);base64,([A-Za-z0-9+/=]+)', media, html)
+    html = re.sub(r'data:(image/webp|image/png|image/jpeg|video/mp4|video/webm);base64,([A-Za-z0-9+/=]+)', media, html)
 
     # 2. fonts: self-hosted, no Google Fonts request
     for name, rel in FONT_FILES.items():
