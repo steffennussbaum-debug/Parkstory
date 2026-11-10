@@ -53,6 +53,7 @@ python3 designs/build.py Parkstory-overhaul-faq.html public/overhaul
 ```bash
 python3 designs/overhaul/review_patch.py Parkstory-overhaul-faq.html Parkstory-overhaul-rev.html   # wording, evidence, economics, guide links
 python3 designs/overhaul/fix_patch.py Parkstory-overhaul-rev.html Parkstory-overhaul-rev.html     # primer label, part-1 banner text
+python3 designs/overhaul/case_compact.py Parkstory-overhaul-rev.html Parkstory-overhaul-cc.html    # compact animated case study (build from -cc.html)
 python3 designs/build.py Parkstory-overhaul-rev.html public/overhaul
 python3 designs/overhaul/topics.py public/overhaul <story img dir>                                 # five guide pages + guides.css
 python3 designs/overhaul/seo_post.py public/overhaul                                               # one H1, metadata, JSON-LD, sitemap, robots
