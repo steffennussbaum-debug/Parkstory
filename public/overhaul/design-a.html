@@ -1765,7 +1765,13 @@ html:not([lang=en]) main :is(h2.h1x,h2,h3,b,strong,em,.motto,.bs-claim,.opp-feas
 .rgc-done .rgc-out .rg-col:nth-child(2) .rg-ledger{box-shadow:0 0 0 2px #a9d07c55}
 .rgc-act{margin-top:12px}.rgc .rg-foot{margin-top:1rem}
 @media (width<=1100px){.rgc-grid{grid-template-columns:minmax(0,1fr)}}
-@media (width<=520px){.rgc-in .rg-form{grid-template-columns:minmax(0,1fr)}.rgc-badge{min-width:0}.rgc-badge b{font-size:1.15rem}.rgc-play{bottom:auto;top:52px}}
+@media (width<=600px){.rgc-in .rg-form{grid-template-columns:minmax(0,1fr)}
+ .rgc-stage{aspect-ratio:16/12.4}.rgc-set{bottom:auto;height:72.6%}
+ .rgc-stage:after{content:"";position:absolute;left:0;right:0;bottom:0;height:27.4%;background:var(--rg-panel);border-top:1px solid var(--rg-line)}
+ .rgc-step{left:8px;top:8px}.rgc-step span{font-size:.7rem;padding:.25rem .55rem}
+ .rgc-size{right:8px;top:auto;bottom:calc(27.4% + 8px);font-size:.66rem;padding:.2rem .5rem}
+ .rgc-badge,.rgc-play{z-index:2}.rgc-badge{right:10px;bottom:10px;min-width:0;padding:.35rem .6rem;background:transparent;box-shadow:none!important;align-items:flex-end}
+ .rgc-badge b{font-size:1.15rem}.rgc-play{left:10px;bottom:calc(13.7% - 1rem);font-size:.8rem;padding:.45rem .8rem}}
 </style><style id="design-fonts">
 @font-face{font-family:"Outfit";src:url(fonts/inter-tight.woff2) format("woff2");font-weight:100 900;font-style:normal;font-display:swap}
 @font-face{font-family:"Outfit Variable";src:url(fonts/inter-tight.woff2) format("woff2");font-weight:100 900;font-style:normal;font-display:swap}
