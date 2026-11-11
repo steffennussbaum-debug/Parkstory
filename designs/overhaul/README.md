@@ -61,3 +61,14 @@ python3 designs/overhaul/seo_post.py public/overhaul                            
 
 The canonical domain is assumed to be https://www.parkstory.com/ (change `BASE` in topics.py and seo_post.py).
 The guide pages use flat files (`automated-parking-cost.html`); with "clean URLs" on the host they are served as `/automated-parking-cost`.
+
+## Case study: building size follows the customer's numbers
+
+The case study film exists in four building sizes: 34, 68, 136 and 272 spaces. `sim3d/scene_size.py` builds them
+(`NCOL=12 LP=2` → 34, `12 4` → 68, `24 4` → 136, `24 8` → 272); `runsize.sh S|L|XL` renders, `encsize.sh` encodes to
+`sim3d/media_S|L|XL`. The page plays the size closest to the number of spaces entered.
+
+```bash
+python3 designs/overhaul/case_compact.py Parkstory-overhaul-rev.html Parkstory-overhaul-cc.html \
+  '{"34":"designs/overhaul/sim3d/media_S","68":"designs/overhaul/sim3d/media","136":"designs/overhaul/sim3d/media_L","272":"designs/overhaul/sim3d/media_XL"}'
+```
