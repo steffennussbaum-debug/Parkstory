@@ -86,6 +86,14 @@ M = dict(
  accent1  = mat('accent1',(0.75,0.18,0.12),0.5),
  accent2  = mat('accent2',(0.12,0.35,0.55),0.5),
  grass    = mat('grass',(0.07,0.16,0.04),0.95,noise=0.3),
+ fc_light = mat('fc_light',(0.70,0.68,0.64),0.75,noise=0.06,bump=0.05),
+ fc_dark  = mat('fc_dark',(0.13,0.14,0.15),0.6,noise=0.05),
+ brick    = mat('brick',(0.40,0.19,0.12),0.85,noise=0.25,bump=0.3),
+ trim     = mat('trim',(0.82,0.81,0.78),0.6),
+ rail     = mat('rail',(0.04,0.045,0.05),0.4,metal=0.8),
+ shrub    = mat('shrub',(0.06,0.18,0.05),0.8,noise=0.35,bump=0.4),
+ soil     = mat('soil',(0.10,0.07,0.05),0.95),
+ awning   = mat('awning',(0.08,0.09,0.1),0.5,metal=0.3),
 )
 
 coll_cache = {}
@@ -142,7 +150,8 @@ for i, z in enumerate(P):
     slab(z, 'pslab%d'%i, holes=[RAMP] if i > 0 else [])
     box('pfloor%d'%i, 0, 0, z, W, D, z+0.01, 'floor')
 slab(RB, 'rbslab', holes=[RAMP])
-for i, z in enumerate(R[1:]+[TOP]): slab(z, 'rslab%d'%i)
+SB = 2.2   # upper floors set back from the podium edge: amenity terrace on the podium roof
+for i, z in enumerate(R[1:]+[TOP]): box('rslab%d'%i, 0, SB, z-SL, W, D, z, 'slabedge')
 # walls: left, back, right for parking levels; core on the right side
 box('wallL', -0.3, 0, GF, 0, D, RB, 'concrete')
 box('wallB', 0, D, 0, W, D+0.3, TOP, 'concrete')
@@ -152,23 +161,41 @@ box('annex', W+0.32, -0.4, 0, W+9.5, D+0.3, RB, 'concrete')
 box('corewin', W+6.81, 6.5, 2, W+6.86, 11.5, TOP+1.5, 'glass')
 for x in [float(v) for v in range(0, int(W)-4, 9)]:
     for z0 in P: box('col%d_%d'%(x,z0), x+0.0 if x else 0.0, 11.9, z0, (x or 0.0)+0.5, 12.4, z0+PH-SL, 'concrete')
-box('roofpar', -0.2, -0.2, TOP, W+0.2, 0.1, TOP+1.0, 'concrete')
-box('roofparL', -0.2, -0.2, TOP, 0.1, D, TOP+1.0, 'concrete')
+box('roofpar', -0.2, SB-0.2, TOP, W+0.2, SB+0.1, TOP+1.0, 'trim')
+box('roofparL', -0.2, SB-0.2, TOP, 0.1, D, TOP+1.0, 'trim')
 box('plant1', 6, 8, TOP, 12, 14, TOP+1.6, 'frame'); box('plant2', 20, 9, TOP, 24, 13, TOP+1.2, 'frame')
 
+rt = random.Random(5)
+for k in range(int(W/6.0)):
+    x0 = 0.6 + k*6.0
+    box('planter%d'%k, x0, 0.3, RB, x0+4.6, 1.5, RB+0.55, 'fc_dark')
+    box('soil%d'%k, x0+0.1, 0.4, RB+0.5, x0+4.5, 1.4, RB+0.56, 'soil')
+    for j in range(3):
+        cx = x0 + 0.8 + j*1.5 + rt.uniform(-0.2, 0.2); hh = rt.uniform(0.5, 0.9)
+        box('shr%d_%d'%(k,j), cx-0.45, 0.45, RB+0.55, cx+0.45, 1.35, RB+0.55+hh, 'shrub', bevel=0.3)
+    if k % 2 == 0:
+        tx = x0 + 2.3
+        box('trunk%d'%k, tx-0.07, 0.85, RB+0.55, tx+0.07, 0.99, RB+2.4, 'wood')
+        box('crown%d'%k, tx-0.9, 0.05, RB+2.0, tx+0.9, 1.8, RB+3.6, 'shrub', bevel=0.7)
+box('railpod', 0, 0.05, RB+1.05, W, 0.12, RB+1.1, 'rail')
 # ground floor: lobby glass, transfer cabin entrance
 box('gfback', 0, 6, SL, W, 6.2, GF-SL, 'plaster')
 box('gfwall', 0, 0, SL, 0.3, D, GF, 'concrete')
 for x in range(0, int(W-12), 3): box('gfmul%d'%x, x, 0.0, SL, x+0.08, 0.1, GF-SL, 'frame')
 box('gfglass', 0, 0.02, SL, W-12.2, 0.05, GF-SL, 'glass')
 box('lobbylite', 1, 1, GF-SL-0.06, W-13, 5, GF-SL-0.02, 'warm')
+for k in range(int((W-12.5)/6.0)):
+    box('awn%d'%k, 0.5+k*6.0, -1.3, GF-1.15, 0.5+k*6.0+5.0, 0.0, GF-1.05, 'awning')
+box('gfband', 0, -0.05, GF-0.95, W-12.1, 0.02, GF, 'fc_dark')
 box('cabin', W-12, 0, SL, W-0.4, 6.0, GF-SL, 'plaster')
 box('cabinin', W-11, -0.01, SL+0.02, W-1.4, 0.02, GF-SL-0.4, mat('cabinlight',(1,1,1),0.3,emit=(0.95,0.97,1.0),estr=3.5))
 box('cabinsign', W-11, -0.03, GF-SL-0.3, W-1.4, 0.0, GF-SL-0.05, 'green')
 
 # upper floors: glazing, balconies, warm interiors
-def interior_apartment(z, cname, warm_strength=6.0, dense=True, prefix='r'):
+BOX = box
+def interior_apartment(z, cname, warm_strength=6.0, dense=True, prefix='r', yoff=0.0):
     rnd = random.Random(int(z*10))
+    box = lambda n, x0, y0, z0, x1, y1, z1, *a, **k: BOX(n, x0, y0+yoff, z0, x1, y1+yoff, z1, *a, **k)
     for ux in range(int(W/7.2)):
         x0 = ux*7.2
         box(prefix+'part%d_%d'%(ux,z), x0+7.1, 0.5, z, x0+7.25, D-0.3, z+RH-SL, 'plaster', c=cname)
@@ -179,22 +206,45 @@ def interior_apartment(z, cname, warm_strength=6.0, dense=True, prefix='r'):
         box(prefix+'tleg%d_%d'%(ux,z), x0+4.7, 2.9, z, x0+4.9, 3.1, z+0.72, 'frame', c=cname)
         box(prefix+'plant%d_%d'%(ux,z), x0+6.2, 1.0, z, x0+6.8, 1.6, z+1.1, 'plant', c=cname, bevel=0.2)
         box(prefix+'back%d_%d'%(ux,z), x0+0.2, 9.0, z, x0+7.0, 9.15, z+RH-SL, 'plaster', c=cname)
-def facade(z, cname, prefix='f', balcony=True):
-    box(prefix+'glass_%d'%int(z*10), 0.2, 0.25, z, W, 0.3, z+RH-SL, 'glass', c=cname)
-    for k in range(0, int(W/1.8)+1): box(prefix+'mul%d_%d'%(k,int(z*10)), k*1.8, 0.2, z, k*1.8+0.07, 0.32, z+RH-SL, 'frame', c=cname)
-    box(prefix+'trans_%d'%int(z*10), 0, 0.2, z+RH-SL-0.12, W, 0.34, z+RH-SL, 'frame', c=cname)
-    if balcony:
-        for ux in range(int(W/7.2)):
-            x0 = ux*7.2
-            box(prefix+'bal%d_%d'%(ux,int(z*10)), x0+0.6, -1.5, z-0.22, x0+5.4, 0.2, z, 'slabedge', c=cname)
-            box(prefix+'rail%d_%d'%(ux,int(z*10)), x0+0.6, -1.5, z, x0+5.4, -1.46, z+1.05, 'glass', c=cname)
-            box(prefix+'railtop%d_%d'%(ux,int(z*10)), x0+0.6, -1.52, z+1.03, x0+5.4, -1.44, z+1.07, 'frame', c=cname)
-    box(prefix+'glassL_%d'%int(z*10), -0.05, 0.2, z, 0.0, D, z+RH-SL, 'glass', c=cname)
+BAYM = ['fc_light','fc_light','brick','brick','fc_light','fc_dark']
+def mf_facade(z, h, cname, prefix, y0=0.0, side=True, balcony=True):
+    out = []; nb = max(1, int(W/3.6)); bw = W/nb; zz = int(z*10)
+    for b in range(nb):
+        x0 = b*bw; m = BAYM[(b//2) % len(BAYM)]
+        wl, wr = x0+0.75, x0+bw-0.75; zb, zt = z+0.85, z+h-0.45
+        for (a0,a1,c0,c1) in ((x0,wl,z,z+h),(wr,x0+bw,z,z+h),(wl,wr,z,zb),(wl,wr,zt,z+h)):
+            out.append(box(prefix+'w%d_%d_%.0f'%(b,zz,a0*10), a0, y0+0.05, c0, a1, y0+0.3, c1, m, c=cname))
+        for (a0,a1,c0,c1) in ((wl,wl+0.06,zb,zt),(wr-0.06,wr,zb,zt),(wl,wr,zb,zb+0.06),(wl,wr,zt-0.06,zt),((wl+wr)/2-0.03,(wl+wr)/2+0.03,zb,zt)):
+            out.append(box(prefix+'f%d_%d_%.0f_%.0f'%(b,zz,a0*10,c0*10), a0, y0+0.18, c0, a1, y0+0.28, c1, 'fc_dark', c=cname))
+        out.append(box(prefix+'g%d_%d'%(b,zz), wl, y0+0.22, zb, wr, y0+0.24, zt, 'glass', c=cname))
+        if balcony and b % 4 == 2:
+            out.append(box(prefix+'bs%d_%d'%(b,zz), x0+0.3, y0-1.5, z-0.16, x0+bw-0.3, y0+0.05, z, 'fc_dark', c=cname))
+            out.append(box(prefix+'bt%d_%d'%(b,zz), x0+0.3, y0-1.52, z+1.0, x0+bw-0.3, y0-1.45, z+1.06, 'rail', c=cname))
+            for q in range(int((bw-0.6)/0.25)+1):
+                out.append(box(prefix+'bp%d_%d_%d'%(b,zz,q), x0+0.3+q*0.25, y0-1.5, z, x0+0.33+q*0.25, y0-1.47, z+1.0, 'rail', c=cname))
+    out.append(box(prefix+'band%d'%zz, 0, y0-0.02, z+h-0.02, W, y0+0.32, z+h+0.16, 'trim', c=cname))
+    if side:
+        for k in range(int((D-y0)/4.5)):
+            ya = y0+0.6+k*4.5
+            for (a0,a1,c0,c1) in ((ya,ya+1.4,z,z+0.85),(ya,ya+1.4,z+h-0.45,z+h),(ya+1.4,ya+4.5,z,z+h)):
+                out.append(box(prefix+'s%d_%d_%.0f'%(k,zz,a0*10+c0), -0.3, a0, c0, -0.05, a1, c1, 'fc_light', c=cname))
+            out.append(box(prefix+'sg%d_%d'%(k,zz), -0.22, ya, z+0.85, -0.2, ya+1.4, z+h-0.45, 'glass', c=cname))
+        out.append(box(prefix+'s0_%d'%zz, -0.3, y0, z, -0.05, y0+0.6, z+h, 'fc_light', c=cname))
+    return out
 for z in R:
-    interior_apartment(z, 'static', warm_strength=5.0); facade(z, 'static')
+    interior_apartment(z, 'static', warm_strength=9.0, yoff=SB); mf_facade(z, RH-SL, 'static', 'r', y0=SB)
 
 # ---------------- conventional garage ----------------
-PERL = 17*NCOL//12; NF = (PERL+1)//2; NB = PERL//2
+NT = int(os.environ.get('NCARS', str(LP*(17*NCOL//12))))
+FCAP = int((W-11.9)//2.7); BCAP = int((W-13.9)//2.7)
+PERLV = [NT//LP + (1 if i < NT % LP else 0) for i in range(LP)]
+SPLIT = []
+for n_ in PERLV:
+    f_ = min(FCAP, (n_+1)//2); b_ = n_ - f_
+    if b_ > BCAP: f_ += b_ - BCAP; b_ = BCAP
+    assert f_ <= FCAP and b_ <= BCAP, ('level does not fit', n_, FCAP, BCAP)
+    SPLIT.append((f_, b_))
+NF = max(f for f, b in SPLIT); NB = max(b for f, b in SPLIT)
 for i, z in enumerate(P):
     # ceiling lights
     for yy in (2.8, 9.0, 15.2):
@@ -294,11 +344,15 @@ o = new_car('cabincar', 'static'); o.location = (29.8, 3.0, SL); o.rotation_eule
 # conventional positions: per level front 9 (y center 3.05) and back 8 (y center 14.95)
 conv_pos = []
 for i, z in enumerate(P):
-    for k in range(NF): conv_pos.append((1.45+k*2.7, 3.05, z, math.pi, i))
-    for k in range(NB): conv_pos.append((1.45+k*2.7, 14.95, z, 0.0, i))
+    for k in range(SPLIT[i][0]): conv_pos.append((1.45+k*2.7, 3.05, z, math.pi, i))
+    for k in range(SPLIT[i][1]): conv_pos.append((1.45+k*2.7, 14.95, z, 0.0, i))
 # TilePark slots: P1/P2, 3 rows x 12 cols, 2 free per level
-NFREE = 2*NCOL//12
-free = set((i, (i+j) % 3, (j*5 + 3*i + 5) % NCOL) for i in range(TPL) for j in range(NFREE))
+FREE_N = TPL*3*NCOL - NT; assert FREE_N >= TPL, FREE_N
+rf = random.Random(11); cells = [(i, r_, c_) for i in range(TPL) for r_ in range(3) for c_ in range(NCOL)]
+rf.shuffle(cells); free = set()
+for lvl in range(TPL):   # spread the free positions evenly over the TilePark levels
+    want = FREE_N//TPL + (1 if lvl < FREE_N % TPL else 0)
+    free |= set([c for c in cells if c[0] == lvl][:want])
 tp_pos = []
 for i in range(TPL):
     for r in range(ROWS):
@@ -312,9 +366,7 @@ cars = [new_car('car%03d'%n) for n in range(NCARS)]
 FREED = P[TPL:]
 def freed_facade(cname):
     objs = []
-    for z in FREED:
-        objs.append(box('vglass_%s_%d'%(cname,z), 0.2, 0.25, z, W, 0.3, z+PH-SL, 'glass', c=cname))
-        for k in range(0, int(W/1.8)+1): objs.append(box('vmul_%s_%d_%d'%(cname,k,z), k*1.8, 0.2, z, k*1.8+0.07, 0.32, z+PH-SL, 'frame', c=cname))
+    for z in FREED: objs += mf_facade(z, PH-SL, cname, 'v'+cname[2:], y0=0.0, side=False, balcony=False)
     return objs
 def apt(cname):
     for z in FREED:

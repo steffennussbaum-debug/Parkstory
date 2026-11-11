@@ -25,9 +25,10 @@ def bal(txt, marker):
         if dd == 0: return txt[k:mm.end()]
 cmp_ = bal(old, '<div class="rg-cmp">')
 diff = bal(old, '<div class="rg-diff">')
+DEFN = (min([k for k in SIZES if int(k) >= 68], key=int) if SIZES else '68')
 if SIZES:
     SETS = ''.join('<div class="rgc-set%s" data-n="%s"><img class="rgc-p" src="%s" alt="Example building with a conventional garage" width="960" height="540"><video class="rgc-a" muted playsinline preload="%s" aria-hidden="true">%s</video><video class="rgc-v" muted playsinline preload="%s" poster="%s" aria-hidden="true">%s</video></div>'
-                   % (' cur' if n_ == '68' else '', n_, b64(os.path.join(d_, 'poster0.jpg'), 'image/jpeg'), 'metadata' if n_ == '68' else 'none', srcs(d_, 'common'), 'metadata' if n_ == '68' else 'none', b64(os.path.join(d_, 'poster_end.jpg'), 'image/jpeg'), srcs(d_, 'apt')) for n_, d_ in SIZES.items())
+                   % (' cur' if n_ == DEFN else '', n_, b64(os.path.join(d_, 'poster0.jpg'), 'image/jpeg'), 'metadata' if n_ == DEFN else 'none', srcs(d_, 'common'), 'metadata' if n_ == DEFN else 'none', b64(os.path.join(d_, 'poster_end.jpg'), 'image/jpeg'), srcs(d_, 'apt')) for n_, d_ in SIZES.items())
 else:
     SETS = '<div class="rgc-set cur" data-n="68"><img class="rgc-p" src="%s" alt="Example building with a conventional garage" width="960" height="540"><video class="rgc-a" muted playsinline preload="metadata" aria-hidden="true">%s</video><video class="rgc-v" muted playsinline preload="metadata" poster="%s" aria-hidden="true">%s</video></div>' % (poster1, vids[0], poster2, vids[1])
 NEW = f'''<section class="rg rgc" id="red-to-green"><div class="rg-wrap">
@@ -44,16 +45,16 @@ NEW = f'''<section class="rg rgc" id="red-to-green"><div class="rg-wrap">
 </div>
 <div class="rg-you rgc-out" data-mode="sell">{cmp_}{diff}
 <div class="rgc-act"><a class="btn rg-send" href="#request">Send these numbers with your request →</a></div></div>
-<p class="rg-foot">Fictional example. The animation shows the example building closest to your number of spaces (34, 68, 136 or 272); the recovered area (150 sq ft per space) follows the gain calculator, and the parking itself is assumed to cost about as much as a conventional garage. Your free feasibility study shows the real numbers for your site.</p>
+<p class="rg-foot">Fictional example. The animation shows the example building for the next size up from your number of spaces (20, 40, 60, 80, 100, 150, 200, 250 or 300); the recovered area (150 sq ft per space) follows the gain calculator, and the parking itself is assumed to cost about as much as a conventional garage. Your free feasibility study shows the real numbers for your site.</p>
 </div></section>'''
 s = s[:i] + NEW + s[j:]
 T.update({"Enter your figures, press play and watch what TilePark changes.":["Geben Sie Ihre Zahlen ein, starten Sie die Animation und sehen Sie, was TilePark verändert.","Saisissez vos chiffres, lancez l’animation et voyez ce que TilePark change.","Introduzca sus cifras, inicie la animación y vea lo que cambia TilePark."],
  "Play the case":["Fallstudie abspielen","Lancer l’étude de cas","Reproducir el caso"],
  "Example building with a conventional garage":["Beispielgebäude mit konventioneller Garage","Bâtiment exemple avec un parking classique","Edificio de ejemplo con aparcamiento convencional"],
- "Fictional example. The animation shows the example building closest to your number of spaces (34, 68, 136 or 272); the recovered area (150 sq ft per space) follows the gain calculator, and the parking itself is assumed to cost about as much as a conventional garage. Your free feasibility study shows the real numbers for your site.":
- ["Fiktives Beispiel. Die Animation zeigt das Beispielgebäude, das Ihrer Stellplatzzahl am nächsten kommt (34, 68, 136 oder 272); die gewonnene Fläche (150 sq ft pro Stellplatz) folgt dem Rechner, und für das Parken selbst sind etwa die Kosten einer konventionellen Garage angesetzt. Ihre kostenlose Machbarkeitsstudie zeigt die tatsächlichen Zahlen für Ihr Grundstück.",
-  "Exemple fictif. L’animation montre le bâtiment exemple le plus proche de votre nombre de places (34, 68, 136 ou 272) ; la surface gagnée (150 sq ft par place) suit le calculateur, et le stationnement lui-même est supposé coûter à peu près autant qu’un parking classique. Votre étude de faisabilité gratuite indique les chiffres réels pour votre site.",
-  "Ejemplo ficticio. La animación muestra el edificio de ejemplo más próximo a su número de plazas (34, 68, 136 o 272); la superficie recuperada (150 sq ft por plaza) sigue la calculadora y se supone que el aparcamiento en sí cuesta más o menos lo mismo que uno convencional. Su estudio de viabilidad gratuito muestra las cifras reales para su solar."]})
+ "Fictional example. The animation shows the example building for the next size up from your number of spaces (20, 40, 60, 80, 100, 150, 200, 250 or 300); the recovered area (150 sq ft per space) follows the gain calculator, and the parking itself is assumed to cost about as much as a conventional garage. Your free feasibility study shows the real numbers for your site.":
+ ["Fiktives Beispiel. Die Animation zeigt das Beispielgebäude der nächsthöheren Größe zu Ihrer Stellplatzzahl (20, 40, 60, 80, 100, 150, 200, 250 oder 300); die gewonnene Fläche (150 sq ft pro Stellplatz) folgt dem Rechner, und für das Parken selbst sind etwa die Kosten einer konventionellen Garage angesetzt. Ihre kostenlose Machbarkeitsstudie zeigt die tatsächlichen Zahlen für Ihr Grundstück.",
+  "Exemple fictif. L’animation montre le bâtiment exemple de la taille immédiatement supérieure à votre nombre de places (20, 40, 60, 80, 100, 150, 200, 250 ou 300) ; la surface gagnée (150 sq ft par place) suit le calculateur, et le stationnement lui-même est supposé coûter à peu près autant qu’un parking classique. Votre étude de faisabilité gratuite indique les chiffres réels pour votre site.",
+  "Ejemplo ficticio. La animación muestra el edificio de ejemplo del tamaño inmediatamente superior a su número de plazas (20, 40, 60, 80, 100, 150, 200, 250 o 300); la superficie recuperada (150 sq ft por plaza) sigue la calculadora y se supone que el aparcamiento en sí cuesta más o menos lo mismo que uno convencional. Su estudio de viabilidad gratuito muestra las cifras reales para su solar."]})
 # old script out, new script in
 a = s.find('<script id="rg-js">'); b = s.find('</script>', a) + 9; assert a > 0
 X = {'en':('million','per year','Example building: {n} spaces'),'de':('Mio.','pro Jahr','Beispielgebäude: {n} Stellplätze'),'fr':('millions','par an','Bâtiment exemple : {n} places'),'es':('millones','al año','Edificio de ejemplo: {n} plazas')}
@@ -77,7 +78,7 @@ function badge(v,inst){const b=q('.rgc-badge'),el=b.querySelector('b');cancelAni
 function step(n){stage=n;qa('.rgc-step span').forEach(s=>s.classList.toggle('on',+s.dataset.s===n));R.classList.toggle('rgc-done',n>=4)}
 useSize=null;let SET=q('.rgc-set.cur'),A=SET.querySelector('.rgc-a'),V=SET.querySelector('.rgc-v'),P=SET.querySelector('.rgc-p'),seen=false;
 const sizes=qa('.rgc-set').map(e=>+e.dataset.n).sort((a,b)=>a-b);
-function pick(n){let best=sizes[0];sizes.forEach(z=>{if(Math.abs(Math.log(Math.max(n,1)/z))<Math.abs(Math.log(Math.max(n,1)/best)))best=z});return best}
+function pick(n){for(const z of sizes)if(z>=n)return z;return sizes[sizes.length-1]}
 useSize=function(z){const ns=q('.rgc-set[data-n="'+z+'"]');q('.rgc-size').textContent=X[lg()][2].replace('{n}',nf(z));if(ns===SET)return false;run++;A.pause();V.pause();SET.classList.remove('cur');SET=ns;SET.classList.add('cur');A=SET.querySelector('.rgc-a');V=SET.querySelector('.rgc-v');P=SET.querySelector('.rgc-p');A.preload='auto';V.preload='auto';return true};
 function reset(){run++;A.pause();V.pause();try{A.currentTime=0;V.currentTime=0}catch(e){}V.classList.remove('on');A.classList.remove('on');P.classList.add('on');step(1);if(Y.r1!=null)badge(Y.r1,true)}
 function play(){reset();const tok=run;q('.rgc-play').classList.add('busy');

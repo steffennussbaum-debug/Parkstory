@@ -72,3 +72,24 @@ The case study film exists in four building sizes: 34, 68, 136 and 272 spaces. `
 python3 designs/overhaul/case_compact.py Parkstory-overhaul-rev.html Parkstory-overhaul-cc.html \
   '{"34":"designs/overhaul/sim3d/media_S","68":"designs/overhaul/sim3d/media","136":"designs/overhaul/sim3d/media_L","272":"designs/overhaul/sim3d/media_XL"}'
 ```
+
+## Podium design and nine building sizes
+
+The building is a typical multifamily building on a podium garage: shops at street level, the garage in the podium,
+a planted terrace on the podium roof, and residential floors above with punched windows, brick and panel bays and
+steel balconies. `sim3d/scene_size.py` builds it for any number of spaces (`NCARS`, `LP` levels, `NCOL` columns).
+
+The case study now has nine sizes: 20, 40, 60, 80, 100, 150, 200, 250 and 300 spaces. The page plays the next size
+up from the number entered; above 300 it plays the 300 building.
+
+```bash
+for cfg in "20 2 10" "40 2 14" "60 2 21" "80 4 14" "100 4 18" "150 4 26" "200 6 23" "250 8 22" "300 8 26"; do set -- $cfg
+  NCARS=$1 LP=$2 NCOL=$3 python designs/overhaul/sim3d/scene_size.py sz9/scene_$1.blend; done
+designs/overhaul/sim3d/runsz9.sh 20 40 60          # render + encode to sim3d/media9/<n> (run in batches)
+NCARS=68 LP=4 NCOL=13 python designs/overhaul/sim3d/scene_size.py film9/scene_film.blend
+designs/overhaul/sim3d/runfilm9.sh                 # landing-page film (apartments, offices, retail) -> film9/media
+python3 designs/overhaul/case_compact.py Parkstory-overhaul-rev.html cc9.html '{"20":".../media9/20", ..., "300":".../media9/300"}'
+python3 designs/overhaul/swap_film.py cc9.html cc9f.html designs/overhaul/sim3d/media designs/overhaul/sim3d/film9/media
+```
+
+Then build from `cc9f.html` with `designs/build.py`, `topics.py` and `seo_post.py` as above.
