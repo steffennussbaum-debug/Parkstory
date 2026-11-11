@@ -364,9 +364,40 @@ cars = [new_car('car%03d'%n) for n in range(NCARS)]
 
 # ---------------- variant interiors on the freed floors P3/P4 ----------------
 FREED = P[TPL:]
+def office_facade(z, h, cname, pf):
+    # full-height curtain wall: blue-grey glass, slim dark mullions every 1.5 m, spandrel at floor and ceiling
+    og = glass_mat('oglass', tint=(0.55,0.68,0.78), refl=0.22, transp=0.7); zz = int(z*10)
+    box(pf+'osp%d'%zz, 0, 0.05, z, W, 0.3, z+0.45, 'fc_dark', c=cname)
+    box(pf+'ost%d'%zz, 0, 0.05, z+h-0.25, W, 0.3, z+h, 'fc_dark', c=cname)
+    g = box(pf+'og%d'%zz, 0, 0.20, z+0.45, W, 0.22, z+h-0.25, 'glass', c=cname); g.data.materials[0] = og
+    n = int(W/1.5)
+    for k in range(n+1):
+        x = min(W-0.05, k*W/n); box(pf+'om%d_%d'%(zz,k), x-0.04, 0.08, z+0.45, x+0.04, 0.3, z+h-0.25, 'frame', c=cname)
+    box(pf+'otr%d'%zz, 0, 0.08, z+0.45+(h-0.7)*0.72, W, 0.3, z+0.45+(h-0.7)*0.72+0.05, 'frame', c=cname)
+    box(pf+'oband%d'%zz, 0, -0.02, z+h-0.02, W, 0.32, z+h+0.16, 'trim', c=cname)
+def retail_facade(z, h, cname, pf):
+    # shop fronts: one wide window per 9 m unit, dark frames, a lit sign band and a canopy per unit
+    zz = int(z*10); nu = max(1, int(W/9)); uw = W/nu
+    for u in range(nu):
+        x0 = u*uw; acc = 'accent2' if u % 2 else 'accent1'
+        box(pf+'rpl%d_%d'%(zz,u), x0, 0.05, z, x0+0.35, 0.32, z+h, 'fc_light', c=cname)
+        box(pf+'rpr%d_%d'%(zz,u), x0+uw-0.35, 0.05, z, x0+uw, 0.32, z+h, 'fc_light', c=cname)
+        box(pf+'rsill%d_%d'%(zz,u), x0+0.35, 0.05, z, x0+uw-0.35, 0.32, z+0.25, 'fc_dark', c=cname)
+        box(pf+'rg%d_%d'%(zz,u), x0+0.35, 0.22, z+0.25, x0+uw-0.35, 0.24, z+h-1.0, 'glass', c=cname)
+        for k in range(1, 4):
+            x = x0+0.35+k*(uw-0.7)/4; box(pf+'rm%d_%d_%d'%(zz,u,k), x-0.05, 0.12, z+0.25, x+0.05, 0.3, z+h-1.0, 'frame', c=cname)
+        box(pf+'rhd%d_%d'%(zz,u), x0+0.35, 0.05, z+h-1.0, x0+uw-0.35, 0.32, z+h-0.94, 'frame', c=cname)
+        box(pf+'rsign%d_%d'%(zz,u), x0+0.35, 0.02, z+h-0.94, x0+uw-0.35, 0.3, z+h, 'fc_dark', c=cname)
+        sl = box(pf+'rsl%d_%d'%(zz,u), x0+uw*0.3, -0.02, z+h-0.66, x0+uw*0.7, 0.02, z+h-0.32, acc, c=cname+'_light')
+        sl.data.materials[0] = mat('rsl%d_%d'%(zz,u), (1,1,1), 0.5, emit=((1.0,0.55,0.25) if u % 2 else (0.95,0.95,0.9)), estr=3.0)
+        box(pf+'rcan%d_%d'%(zz,u), x0+0.5, -1.1, z+h-1.08, x0+uw-0.5, 0.05, z+h-1.0, 'awning', c=cname)
+    box(pf+'rband%d'%zz, 0, -0.02, z+h-0.02, W, 0.32, z+h+0.16, 'trim', c=cname)
 def freed_facade(cname):
     objs = []
-    for z in FREED: objs += mf_facade(z, PH-SL, cname, 'v'+cname[2:], y0=0.0, side=False, balcony=False)
+    for z in FREED:
+        if cname == 'v_off': office_facade(z, PH-SL, cname, 'vo')
+        elif cname == 'v_ret': retail_facade(z, PH-SL, cname, 'vr')
+        else: objs += mf_facade(z, PH-SL, cname, 'v'+cname[2:], y0=0.0, side=False, balcony=False)
     return objs
 def apt(cname):
     for z in FREED:

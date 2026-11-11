@@ -119,13 +119,14 @@ CSS = '''<style id="rgc-css">
 .rgc-done .rgc-out .rg-col:nth-child(2) .rg-ledger{box-shadow:0 0 0 2px #b8f03c55}
 .rgc-act{margin-top:12px}.rgc .rg-foot{margin-top:1rem}
 @media (width<=1100px){.rgc-grid{grid-template-columns:minmax(0,1fr)}}
-@media (width<=600px){.rgc-in .rg-form{grid-template-columns:minmax(0,1fr)}
- .rgc-stage{aspect-ratio:16/12.4}.rgc-set{bottom:auto;height:72.6%}
- .rgc-stage:after{content:"";position:absolute;left:0;right:0;bottom:0;height:27.4%;background:var(--rg-panel);border-top:1px solid var(--rg-line)}
- .rgc-step{left:8px;top:8px}.rgc-step span{font-size:.7rem;padding:.25rem .55rem}
- .rgc-size{right:8px;top:auto;bottom:calc(27.4% + 8px);font-size:.66rem;padding:.2rem .5rem}
- .rgc-badge,.rgc-play{z-index:2}.rgc-badge{right:10px;bottom:10px;min-width:0;padding:.35rem .6rem;background:transparent;box-shadow:none!important;align-items:flex-end}
- .rgc-badge b{font-size:1.15rem}.rgc-play{left:10px;bottom:calc(13.7% - 1rem);font-size:.8rem;padding:.45rem .8rem}}
+@media (width<=600px){.rgc-in .rg-form{grid-template-columns:minmax(0,1fr)}}
+@media (width<=900px),(pointer:coarse){
+ .rgc-stage{aspect-ratio:auto;height:auto;padding-top:56.25%;padding-bottom:60px}.rgc-set{inset:0 0 60px 0;height:auto}
+ .rgc-stage:after{content:"";position:absolute;left:0;right:0;bottom:0;height:60px;background:var(--rg-panel);border-top:1px solid var(--rg-line)}
+ .rgc-step{left:8px;top:8px}.rgc-step span{font-size:.68rem;padding:.22rem .55rem}
+ .rgc-size{right:8px;top:auto;bottom:68px;font-size:.64rem;padding:.18rem .5rem}
+ .rgc-badge,.rgc-play{z-index:2}.rgc-badge{right:10px;bottom:6px;min-width:0;padding:.25rem .3rem;background:transparent;box-shadow:none!important;align-items:flex-end}
+ .rgc-badge .k{font-size:.6rem}.rgc-badge b{font-size:1.1rem}.rgc-play{left:10px;bottom:14px;font-size:.78rem;padding:.42rem .8rem}}
 </style>'''
 rep('</head>', CSS + '</head>')
 s = s.replace('var D={', 'var D=' + json.dumps(T, ensure_ascii=False)[:-1] + ', ', 1)
