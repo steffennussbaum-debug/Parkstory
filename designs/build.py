@@ -40,6 +40,7 @@ DESIGNS = [
     ('design-e', 'E', 'Built by Parkstory', 'Shop-floor dark, bold type'),
     ('design-f', 'F', 'Proven Disruption', 'Dark CI with proven-mint accents'),
     ('design-g', 'G', 'TilePark Home', 'Night navy, lime and light Montserrat, after the TilePark home page'),
+    ('design-h', 'H', 'TilePark Top Menu', 'Design G with a classic top menu bar and dropdowns'),
 ]
 
 # Colours used by the source page, mapped per design (6-digit hex, lower case;
@@ -86,7 +87,8 @@ HEX = {
         '2c3e35': 'c9d0d9', '3a4c43': 'c9d0d9', '4b6558': '8f99a7', '5f7a6c': '8f99a7', **GREYS_BLUE,
     },
 }
-DARK = {'design-b', 'design-c', 'design-e', 'design-f', 'design-g'}
+HEX['design-h'] = HEX['design-g']
+DARK = {'design-b', 'design-c', 'design-e', 'design-f', 'design-g', 'design-h'}
 
 # --------------------------------------------------------------- tokens ----
 TOKENS = {
@@ -139,6 +141,7 @@ TOKENS = {
   --ink:#f3f5f7; --text:#c9d0d9; --muted:#8f99a7; --line:#ffffff1f; --line-soft:#ffffff14;
   --r:14px; --r-lg:14px; --r-sm:6px; --card-sh:none;""",
 }
+TOKENS['design-h'] = TOKENS['design-g']
 # the DNA part of the page (.gx) has its own colour variables
 GX_DARK = """
 .gx{--paper:var(--bg);--paper-2:var(--surface-2);--ink:var(--ink);--mid:var(--muted);--rule:var(--line);
@@ -217,6 +220,63 @@ html body .nw-ph{background:#1a212c80!important;border-color:#ffffff2e!important
 html body .nw-phbox{background:#ffffff08!important;color:#ffffff55!important}""",
 }
 
+EXTRA_RAW['design-h'] = EXTRA_RAW['design-g'] + """
+.hx{position:fixed;left:0;right:0;top:0;z-index:49;height:64px;display:flex;align-items:center;gap:14px;padding:0 clamp(16px,2.6vw,40px);border-bottom:1px solid transparent;transition:background .4s,border-color .4s,transform .45s cubic-bezier(.22,1,.36,1)}
+.hx.hx-solid,.hx.hx-menu{background:rgb(14 18 25 / 80%);-webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%);border-color:#ffffff1f}
+.hx.hx-hide{transform:translateY(-100%)}
+.hx-logo{flex:none;display:block}.hx-logo img{height:24px;width:auto;display:block}
+.hx-nav{display:flex;align-items:center;gap:0;flex:1;min-width:0}
+.hx-item{position:relative;flex:none}
+.hx-top{position:relative;display:inline-flex;align-items:center;gap:5px;padding:8px 9px;white-space:nowrap;text-align:left;font:600 13px/1.15 "Outfit","Inter",sans-serif;color:#f3f5f7;text-decoration:none;transition:color .25s}
+.hx-top:after{content:"";position:absolute;left:9px;right:20px;bottom:3px;height:1.5px;background:#94ba3e;transform:scaleX(0);transform-origin:right;transition:transform .4s cubic-bezier(.22,1,.36,1)}
+.hx-item:hover>.hx-top:after,.hx-item.cur>.hx-top:after{transform:scaleX(1);transform-origin:left}
+.hx-item.cur>.hx-top{color:#94ba3e}
+.hx-wrap .hx-nav .hx-top .tx{display:block;white-space:normal;max-width:var(--txw,12em)}
+.hx-top .cv{font-size:9px;opacity:.6;transition:transform .3s}
+.hx-item:hover .cv,.hx-item.open .cv{transform:rotate(180deg)}
+.hx-dd{position:absolute;left:-6px;top:100%;margin-top:10px;width:320px;padding:14px;border-radius:14px;background:#1a212c;border:1px solid #ffffff1f;box-shadow:0 30px 50px -25px #000c;opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .25s,transform .35s,visibility 0s .35s;white-space:normal}
+.hx-dd:before{content:"";position:absolute;left:0;right:0;top:-12px;height:12px}
+@media (hover:hover){.hx-item:hover>.hx-dd{opacity:1;visibility:visible;transform:none;transition:opacity .25s,transform .35s}}
+.hx-item.open>.hx-dd,.hx-item:focus-within>.hx-dd{opacity:1;visibility:visible;transform:none;transition:opacity .25s,transform .35s}
+.hx-item:nth-last-child(-n+3) .hx-dd{left:auto;right:-6px}
+.hx-dd-d{font:400 12.5px/1.5 "PS Display","Inter",sans-serif;color:#8f99a7;margin:0 0 8px;padding:0 10px 10px;border-bottom:1px solid #ffffff14}
+.hx-dd a{display:block;padding:8px 10px;border-radius:8px;color:#e6e9ee;text-decoration:none;font:500 13.5px/1.3 "Inter",sans-serif}
+.hx-dd a:hover{background:#ffffff0d;color:#fff}
+.hx-dd a.sim{display:inline-flex;align-items:center;gap:5px;margin:0 0 4px 10px;padding:3px 9px;border-radius:999px;font:600 11px/1.3 "Inter",sans-serif;color:#94ba3e;border:1px solid #94ba3e59}
+.hx-dd a.sim:hover{background:#94ba3e;color:#11160a}
+.hx-dd a .tag{display:block;font:500 10px/1.4 "PS Mono",monospace;color:#8f99a7;margin-top:2px}
+.hx-item.hx-cta{margin-left:8px}
+.hx-item.hx-cta>.hx-top{border:1px solid #94ba3e;border-radius:999px;padding:9px 16px}
+.hx-wrap .hx-nav .hx-cta .hx-top .tx{white-space:nowrap;max-width:none}
+.hx-item.hx-cta>.hx-top:after{display:none}
+.hx-item.hx-cta>.hx-top:hover{background:#94ba3e;color:#11160a}
+.hx-set{position:relative;flex:none}
+.hx-set>button{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;border:1px solid #ffffff38;border-radius:999px;background:#ffffff0a;color:#f3f5f7;font:600 11.5px/1 "Outfit","Inter",sans-serif;cursor:pointer}
+.hx-set>button:hover{border-color:#94ba3e}
+.hx-set .hx-dd{left:auto;right:0;width:auto;min-width:210px}
+.hx-set .k{display:block;font:500 10px/1 "PS Mono",monospace;color:#8f99a7;margin:4px 4px 8px}
+.hx-set .grp{display:flex;padding:3px;border:1px solid #ffffff24;border-radius:999px;margin-bottom:12px}
+.hx-set .grp button{flex:1;border:0;background:none;cursor:pointer;color:#c9d0d9;font:600 11px/1 "Outfit","Inter",sans-serif;padding:7px 10px;border-radius:999px}
+.hx-set .grp button[aria-pressed=true]{background:#94ba3e;color:#10150a}
+.hx-units{display:contents}
+.hx-units button{border:0;background:none;cursor:pointer;color:#c9d0d9;font:600 10.5px/1 "Outfit","Inter",sans-serif;padding:5px 9px;border-radius:999px;transition:background .3s,color .3s}
+.hx-units button[aria-pressed=true]{background:#94ba3e;color:#10150a}
+.hx-burger{display:none;flex:none;margin-left:auto;width:40px;height:40px;border:1px solid #ffffff38;border-radius:999px;background:none;position:relative;cursor:pointer}
+.hx-burger span{position:absolute;left:12px;right:12px;height:1.5px;background:#f3f5f7;transition:transform .35s,opacity .2s}
+.hx-burger span:nth-child(1){top:15px}.hx-burger span:nth-child(2){top:19px}.hx-burger span:nth-child(3){top:23px}
+.hx-menu .hx-burger span:nth-child(1){transform:translateY(4px) rotate(45deg)}.hx-menu .hx-burger span:nth-child(2){opacity:0}.hx-menu .hx-burger span:nth-child(3){transform:translateY(-4px) rotate(-45deg)}
+.hx.hx-compact .hx-nav{display:none}.hx.hx-compact .hx-burger{display:block}.hx.hx-compact .hx-set{margin-left:auto}.hx.hx-compact .hx-burger{margin-left:0}
+.hx.hx-compact.hx-menu .hx-nav{display:grid;position:fixed;left:0;right:0;top:64px;max-height:calc(100vh - 64px);overflow:auto;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));align-items:start;gap:22px 18px;padding:22px clamp(16px,3vw,40px) 30px;background:rgb(14 18 25 / 97%);border-bottom:1px solid #ffffff1f;white-space:normal}
+.hx-compact.hx-menu .hx-nav .hx-dd{position:static;width:auto;opacity:1;visibility:visible;transform:none;margin:4px 0 0;padding:0;background:none;border:0;box-shadow:none}
+.hx-compact.hx-menu .hx-dd-d,.hx-compact .cv{display:none}
+.hx-compact.hx-menu .hx-item.hx-cta{margin-left:0}
+.lang-sw{transition:transform .45s cubic-bezier(.22,1,.36,1)}
+@media (width>600px){html body .lang-sw{display:none!important}}
+html body .dz{top:auto;bottom:14px}
+@media (min-width:721px){html body .dz.dz-away{transform:translate(-50%,160%)}}
+@media (width>600px){html body .hr-rail{display:none!important}html body .hr-shell{grid-template-columns:minmax(0,1fr)!important}}
+@media (width<=600px){.hx{display:none!important}}"""
+
 HE = 'html body :is(main h1,main h2,main h3) em'
 EXTRA = {k: v.replace('{H}', H).replace('{HE}', HE).replace('{EB}', E[:-1] + ')::before').replace('{E}', E)
          for k, v in EXTRA_RAW.items()}
@@ -270,7 +330,7 @@ def fonts_for(slug):
         rows.append(face(sans, 'plex-sans-600.woff2', weight='700 900'))
         rows += [face(['PS Mono', 'IBM Plex Mono'], f'plex-mono-{w}.woff2', weight=str(w)) for w in (400, 500)]
         return '\n'.join(rows)
-    if slug == 'design-g':
+    if slug in ('design-g', 'design-h'):
         return '\n'.join([face(DISPLAY, 'outfit.woff2', ext='outfit-ext.woff2'), face(TEXT, 'inter.woff2', ext='inter-ext.woff2'),
                           face(['PS Display'], 'montserrat.woff2', ext='montserrat-ext.woff2'),
                           face(['PS Mono'], 'jetbrains-mono.woff2', weight='100 800')])
@@ -296,7 +356,7 @@ def light(h):
 
 
 # corner radius per design: the page's rounded corners are capped at this value
-RADIUS = {'design-a': 2, 'design-b': 6, 'design-c': 0, 'design-d': 8, 'design-e': 2, 'design-f': 6, 'design-g': 14}
+RADIUS = {'design-a': 2, 'design-b': 6, 'design-c': 0, 'design-d': 8, 'design-e': 2, 'design-f': 6, 'design-g': 14, 'design-h': 14}
 
 
 def cap_radius(css, cap):
@@ -333,6 +393,71 @@ def darken_light_sections(css):
         return sel + '{' + body + '}'
 
     return re.sub(r'([^{}]+)\{([^{}]*)\}', rule, css)
+
+
+# Design H: a classic top menu bar built from the page's own contents menu. Every entry clicks the matching
+# link in the (hidden) side menu, so the page's own navigation logic stays in charge.
+TOPBAR_JS = r'''
+addEventListener("DOMContentLoaded",function(){
+ var rail=document.querySelector(".hr-rail");if(!rail)return;
+ var bar=document.createElement("header");bar.className="hx";
+ bar.innerHTML='<a class="hx-logo" href="#main" aria-label="Parkstory, back to top"></a><nav class="hx-nav" aria-label="Main"></nav><div class="hx-set hx-item"><button type="button" aria-haspopup="true"></button><div class="hx-dd"><span class="k">Language</span><div class="grp hx-langs"></div><span class="k">Units</span><div class="grp hx-units"></div></div></div><button class="hx-burger" type="button" aria-expanded="false" aria-label="Menu"><span></span><span></span><span></span></button>';
+ document.body.insertBefore(bar,document.body.firstChild);
+ var nav=bar.querySelector(".hx-nav"),units=bar.querySelector(".hx-units"),langs=bar.querySelector(".hx-langs"),burger=bar.querySelector(".hx-burger"),set=bar.querySelector(".hx-set"),setb=set.querySelector("button");
+ var ol=document.querySelector(".lang-sw");
+ function label(){var l=ol&&ol.querySelector('[aria-pressed="true"]'),u=units.querySelector('[aria-pressed="true"]');var K={en:["Language","Units"],de:["Sprache","Einheiten"],fr:["Langue","Unit\u00E9s"],es:["Idioma","Unidades"]}[l?l.dataset.l:"en"]||["Language","Units"];[].forEach.call(set.querySelectorAll(".k"),function(k,i){k.textContent=K[i]});setb.textContent=(l?l.textContent:"EN")+(u?" \u00B7 "+u.textContent:"")+" \u25BE";
+  if(ol)[].forEach.call(langs.children,function(b,i){b.setAttribute("aria-pressed",ol.children[i].getAttribute("aria-pressed"))})}
+ if(ol)[].forEach.call(ol.querySelectorAll("button"),function(ob){var b=document.createElement("button");b.type="button";b.textContent=ob.textContent;b.addEventListener("click",function(){ob.click();setTimeout(function(){label();build()},80)});langs.appendChild(b)});
+ setb.addEventListener("click",function(e){e.stopPropagation();var o=!set.classList.contains("open");[].forEach.call(bar.querySelectorAll(".hx-item.open"),function(i){i.classList.remove("open")});set.classList.toggle("open",o)});
+ var logo=rail.querySelector(".hr-logo img");if(logo)bar.querySelector(".hx-logo").appendChild(logo.cloneNode());
+ bar.querySelector(".hx-logo").addEventListener("click",function(e){e.preventDefault();scrollTo({top:0,behavior:"instant"})});
+ var lock=0;function setMenu(o){bar.classList.toggle("hx-menu",o);burger.setAttribute("aria-expanded",o)}
+ function closeAll(){[].forEach.call(nav.querySelectorAll(".hx-item.open"),function(i){i.classList.remove("open")});setMenu(false);if(document.activeElement&&bar.contains(document.activeElement))document.activeElement.blur()}
+ function go(el){closeAll();lock=Date.now()+1300;bar.classList.add("hx-hide");document.body.classList.add("hx-up");el.click()}
+ var ou=rail.querySelector(".un-tog");
+ function syncUnits(){if(ou)[].forEach.call(units.children,function(b,i){b.setAttribute("aria-pressed",ou.children[i].getAttribute("aria-pressed"))});label()}
+ if(ou){[].forEach.call(ou.querySelectorAll("button"),function(ob){var b=document.createElement("button");b.type="button";b.textContent=ob.textContent;b.addEventListener("click",function(){ob.click();setTimeout(syncUnits,30)});units.appendChild(b)});
+  new MutationObserver(syncUnits).observe(ou,{subtree:true,attributes:true,attributeFilter:["aria-pressed"]})}syncUnits();
+ var secs=[].slice.call(rail.querySelectorAll(".hr-sec"));
+ function build(){
+  nav.innerHTML="";
+  secs.forEach(function(sec){
+   var pa=sec.querySelector(".hr-pa");if(!pa)return;var pt=pa.querySelector(".pt"),pd=pa.querySelector(".pd");
+   var it=document.createElement("div");it.className="hx-item"+(sec.dataset.part==="part-plan"?" hx-cta":"");it.dataset.part=sec.dataset.part;
+   var top=document.createElement("a");top.className="hx-top";top.href=pa.getAttribute("href");var tx=document.createElement("span");tx.className="tx";tx.textContent=(pt?pt.textContent:pa.textContent).trim();top.appendChild(tx);
+   var dd=document.createElement("div");dd.className="hx-dd";
+   if(pd&&pd.textContent.trim()){var d=document.createElement("p");d.className="hx-dd-d";d.textContent=pd.textContent.trim();dd.appendChild(d)}
+   [].forEach.call(sec.querySelectorAll(".hr-ch>li>a"),function(a){
+    var l=document.createElement("a");l.href=a.getAttribute("href");
+    if(a.classList.contains("hr-sim")){l.className="sim";l.textContent="▸ "+a.textContent.trim()}
+    else{var t=a.querySelector(".t");l.textContent=(t?t.textContent:a.textContent).trim();var g=a.querySelector(".hr-tag");if(g){var s=document.createElement("span");s.className="tag";s.textContent=g.textContent.trim();l.appendChild(s)}}
+    l.addEventListener("click",function(e){e.preventDefault();go(a)});dd.appendChild(l)});
+   if(dd.querySelector("a")){var cv=document.createElement("span");cv.className="cv";cv.setAttribute("aria-hidden","true");cv.textContent="▾";top.appendChild(cv);it.appendChild(top);it.appendChild(dd)}else it.appendChild(top);
+   top.addEventListener("click",function(e){e.preventDefault();
+    var touch=matchMedia("(hover: none)").matches&&!bar.classList.contains("hx-compact");
+    if(touch&&dd.querySelector("a")&&!it.classList.contains("open")){[].forEach.call(nav.querySelectorAll(".hx-item.open"),function(i){i.classList.remove("open")});it.classList.add("open");return}
+    go(pa)});
+   nav.appendChild(it)});
+  fit();active()}
+ function over(){return nav.scrollWidth>nav.clientWidth+2}
+ function tight(){[].forEach.call(nav.querySelectorAll(".tx"),function(t){var r=document.createRange();r.selectNodeContents(t);var w=0;[].forEach.call(r.getClientRects(),function(x){w=Math.max(w,x.width)});if(w)t.style.width=Math.ceil(w+1)+"px"})}
+ function fit(){bar.classList.remove("hx-compact","hx-wrap");[].forEach.call(nav.querySelectorAll(".tx"),function(t){t.style.width=""});
+  if(innerWidth<1000){bar.classList.add("hx-compact");return}
+  if(over()){bar.classList.add("hx-wrap");var ok=false;["12em","10.5em","9em"].some(function(m){[].forEach.call(nav.querySelectorAll(".tx"),function(t){t.style.width=""});bar.style.setProperty("--txw",m);tight();ok=!over();return ok});if(!ok)bar.classList.add("hx-compact")}
+  if(!bar.classList.contains("hx-compact"))setMenu(false)}
+ burger.addEventListener("click",function(){setMenu(!bar.classList.contains("hx-menu"))});
+ document.addEventListener("click",function(e){if(!set.contains(e.target))set.classList.remove("open");if(!bar.contains(e.target)){[].forEach.call(nav.querySelectorAll(".hx-item.open"),function(i){i.classList.remove("open")});setMenu(false)}});
+ addEventListener("keydown",function(e){if(e.key==="Escape")closeAll()});
+ function active(){var cur=null;secs.forEach(function(sec){var el=document.getElementById(sec.dataset.part);if(el&&el.offsetParent!==null&&el.getBoundingClientRect().top<innerHeight*.35)cur=sec.dataset.part});
+  [].forEach.call(nav.children,function(i){i.classList.toggle("cur",i.dataset.part===cur)})}
+ var ly=scrollY;addEventListener("scroll",function(){var y=scrollY;bar.classList.toggle("hx-solid",y>20);
+  var open=bar.classList.contains("hx-menu")||nav.querySelector(".hx-item.open");
+  if(Date.now()<lock){bar.classList.add("hx-hide")}else if(y>ly+4&&y>300&&!open){bar.classList.add("hx-hide")}else if(y<ly-4||y<=300){bar.classList.remove("hx-hide")}
+  document.body.classList.toggle("hx-up",bar.classList.contains("hx-hide"));ly=y;active()},{passive:true});
+ addEventListener("resize",fit);
+ build();if(document.fonts)document.fonts.ready.then(fit);
+});
+'''
 
 
 def switcher(current):
@@ -422,7 +547,9 @@ def build(src, out):
         if slug not in ('index', 'as-sent'):
             gx = GX_A if slug == 'design-a' else (GX_DARK if slug in DARK else '')
             theme += f'<style id="design-theme">\nhtml:root{{{TOKENS[slug]}\n}}{gx}\n{EXTRA[slug]}\n</style>\n'
-        if slug == 'design-g':
+        if slug == 'design-h':
+            theme += '<script>' + TOPBAR_JS + '</script>\n'
+        if slug in ('design-g', 'design-h'):
             theme += ('<script>addEventListener("DOMContentLoaded",function(){var p=document.createElement("div");p.className="g-progress";'
                       'document.body.appendChild(p);var f=function(){var m=document.documentElement.scrollHeight-innerHeight;'
                       'p.style.transform="scaleX("+(m>0?scrollY/m:0)+")"};addEventListener("scroll",f,{passive:true});f()})</script>\n')

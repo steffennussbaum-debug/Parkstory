@@ -4,7 +4,7 @@
 # switcher links become ?d=slug, so switching reloads the same file with another design.
 import base64, gzip, os, re, sys
 d, out = sys.argv[1], sys.argv[2]; default = sys.argv[3] if len(sys.argv) > 3 else 'index'
-SL = ['index', 'as-sent', 'design-a', 'design-b', 'design-c', 'design-d', 'design-e', 'design-f', 'design-g']
+SL = ['index', 'as-sent'] + sorted(f[:-5] for f in os.listdir(d) if re.fullmatch(r'design-[a-z]\.html', f))
 MIME = {'webp': 'image/webp', 'png': 'image/png', 'jpeg': 'image/jpeg', 'jpg': 'image/jpeg', 'mp4': 'video/mp4',
         'webm': 'video/webm', 'woff2': 'font/woff2'}
 PAT = r'(?:assets|fonts)/[0-9A-Za-z_-]+\.(?:webp|png|jpeg|jpg|mp4|webm|woff2)'
