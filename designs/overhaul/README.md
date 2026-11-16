@@ -102,3 +102,13 @@ python3 designs/overhaul/onefile.py public/overhaul Parkstory-all-designs.html
 
 Photos, films and fonts are stored once; each design is stored compressed. The design switcher opens the same file
 with `?d=design-g` (or `index`, `as-sent`, `design-a` …).
+
+## TilePark products as one chapter
+
+```bash
+python3 designs/overhaul/prodtabs_patch.py Parkstory-overhaul-cc9f.html Parkstory-overhaul-pt.html   # build from -pt.html
+```
+
+The three product cards work as tabs; TilePark (with the simulator, the Munich video and the conveyor photo),
+Automated Stackers and Tower open below them. The menu lists "TilePark products" once. Links to content in a
+closed tab (for example `#video` or `#tower`) open that tab first.
