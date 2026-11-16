@@ -93,3 +93,12 @@ python3 designs/overhaul/swap_film.py cc9.html cc9f.html designs/overhaul/sim3d/
 ```
 
 Then build from `cc9f.html` with `designs/build.py`, `topics.py` and `seo_post.py` as above.
+
+## One HTML file with every design
+
+```bash
+python3 designs/overhaul/onefile.py public/overhaul Parkstory-all-designs.html
+```
+
+Photos, films and fonts are stored once; each design is stored compressed. The design switcher opens the same file
+with `?d=design-g` (or `index`, `as-sent`, `design-a` …).
