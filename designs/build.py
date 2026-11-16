@@ -16,7 +16,7 @@ simulators stay exactly as they are. For each design this script
   5. adds a small bar to switch between the designs.
 
 Output: index.html (the page cleaned up), as-sent.html (untouched, for comparison)
-and design-a.html ... design-f.html (each design, with the same clean-up).
+and design-a.html ... design-g.html (each design, with the same clean-up).
 """
 
 import base64
@@ -39,6 +39,7 @@ DESIGNS = [
     ('design-d', 'D', 'Engineering Heritage', 'Light chronicle in the Parkstory CI'),
     ('design-e', 'E', 'Built by Parkstory', 'Shop-floor dark, bold type'),
     ('design-f', 'F', 'Proven Disruption', 'Dark CI with proven-mint accents'),
+    ('design-g', 'G', 'TilePark Home', 'Night navy, lime and light Montserrat, after the TilePark home page'),
 ]
 
 # Colours used by the source page, mapped per design (6-digit hex, lower case;
@@ -54,6 +55,12 @@ GREYS_STEEL = {
     '8fb3a0': '8d9297', '8fb8a2': '8d9297', 'cfe0d6': 'd3d5d7', 'ddeae3': 'e1e2e3', '8fae9e': '8d9297',
     'cbdbd3': 'cfd1d3', '93b4a3': '8d9297', 'aabeb4': 'a3a8ad', '608774': '6b7075', 'd9e1dd': 'dcdddf',
     '7f9f8f': '7d8287', 'bbcdc4': 'bfc2c5',
+}
+GREYS_BLUE = {
+    'c8dccf': 'c9d0d9', 'a2beb0': '8f99a7', 'c5d9cf': 'c9d0d9', 'e6f0ea': 'e6e9ee', 'a9c3b5': '9aa4b2',
+    '8fb3a0': '8f99a7', '8fb8a2': '8f99a7', 'cfe0d6': 'c9d0d9', 'ddeae3': 'dde2e8', '8fae9e': '8f99a7',
+    'cbdbd3': 'c9d0d9', '93b4a3': '8f99a7', 'aabeb4': 'a3acb8', '608774': '67717f', 'd9e1dd': 'd8dde3',
+    '7f9f8f': '7d8796', 'bbcdc4': 'bcc4ce',
 }
 HEX = {
     'design-a': {
@@ -72,8 +79,14 @@ HEX = {
     'design-e': {'07150f': '0c120e', '040d09': '090e0b', '0f261b': '16211a', '0b1f16': '0c120e'},
     'design-f': {},
     'design-b': {},
+    'design-g': {
+        '07150f': '141a24', '040d09': '0c1016', '0f261b': '1a212c', '0b1f16': '141a24', '0d1e16': '1a212c',
+        '0d2219': '1c2738', '2e4f3f': '2b3c58', '23784a': '94ba3e', '1f6b3f': '7fa332', '267d45': 'b4d85a',
+        '2f9452': '94ba3e', 'b8f03c': '94ba3e', 'a6e36b': 'b4d85a', '5ee3a1': 'b4d85a', '284637': '2b3c58',
+        '2c3e35': 'c9d0d9', '3a4c43': 'c9d0d9', '4b6558': '8f99a7', '5f7a6c': '8f99a7', **GREYS_BLUE,
+    },
 }
-DARK = {'design-b', 'design-c', 'design-e', 'design-f'}
+DARK = {'design-b', 'design-c', 'design-e', 'design-f', 'design-g'}
 
 # --------------------------------------------------------------- tokens ----
 TOKENS = {
@@ -118,6 +131,13 @@ TOKENS = {
   --bg:#040d09; --surface:#040d09; --surface-2:#07150f;
   --ink:#ffffff; --text:#c5d9cf; --muted:#a2beb0; --line:#ffffff24; --line-soft:#ffffff14;
   --r:4px; --r-lg:4px; --r-sm:3px; --card-sh:none;""",
+    'design-g': """
+  --navy:#141a24; --navy-deep:#0c1016; --navy-lift:#1a212c;
+  --green:#94ba3e; --green-bright:#94ba3e; --green-ink:#b4d85a; --green-hover:#b4d85a;
+  --green-wash:#94ba3e14; --green-edge:#94ba3e59;
+  --bg:#141a24; --surface:#1a212c; --surface-2:#1c2738;
+  --ink:#f3f5f7; --text:#c9d0d9; --muted:#8f99a7; --line:#ffffff1f; --line-soft:#ffffff14;
+  --r:14px; --r-lg:14px; --r-sm:6px; --card-sh:none;""",
 }
 # the DNA part of the page (.gx) has its own colour variables
 GX_DARK = """
@@ -177,6 +197,24 @@ section{border-color:var(--line)}""",
 {HE}{color:#b8f03c!important}
 {E}{color:#5ee3a1!important;letter-spacing:.14em}
 .card,.pc,.opp-q>div,.fut-cmp>div,.opp-note,.gx .cd-rail,.gx .cd-plant{box-shadow:none!important;background:transparent!important;border:1px solid var(--line)!important}""",
+    'design-g': """
+{H}{font-family:"PS Display","Outfit",sans-serif!important;font-weight:400!important;letter-spacing:-.01em!important}
+html body :is(main h3,.g-x h3){font-family:"Outfit","Inter",sans-serif!important;font-weight:600!important;letter-spacing:-.015em!important}
+{HE}{color:#94ba3e!important;font-style:normal!important}
+{E}{font-family:"PS Mono",ui-monospace,monospace!important;text-transform:none!important;letter-spacing:0!important;font-weight:500!important;font-size:.8rem!important;color:#94ba3e!important}
+html body main :is(p,li){font-family:"PS Display","Inter",sans-serif}
+.card,.pc,.opp-q>div,.fut-cmp>div,.opp-note,.gx .cd-rail,.gx .cd-plant{box-shadow:none!important;background:#1a212c!important;border:1px solid var(--line)!important;border-radius:14px!important}
+.btn,.btn-primary,.cta-b1,.opp-cta a,.tour-play,.rgc-play,.ov-ctas a{border-radius:999px!important}
+html body .part-open{background:radial-gradient(55% 80% at 50% 35%,#36496b 0%,#25334c 45%,#1c2738 100%)!important}
+html body :is(.sg,.pf,.nat){background:radial-gradient(60% 70% at 55% 45%,#0f2142 0%,#0b1220 55%,#0a0d12 100%)!important}
+.snav{background:rgb(14 18 25 / 72%)!important;backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border-bottom:1px solid #ffffff1f}
+.g-progress{position:fixed;left:0;top:0;height:2px;width:100%;background:#94ba3e;transform-origin:left;transform:scaleX(0);z-index:2147482000;pointer-events:none}
+::selection{background:#94ba3e;color:#10150a}
+html body :is(.plx,.crx){--bg:#141a24;--surface:#1a212c;--surface-2:#1c2738;--ink:#f3f5f7;--text:#c9d0d9;--muted:#8f99a7;--line:#ffffff1f;--line-soft:#ffffff14;--green-ink:#b4d85a;--card-sh:none}
+html body .plx .pl-sec.tint{background:radial-gradient(50% 55% at 30% 40%,#33476a 0%,#1f2b40 45%,#161d29 100%)}
+html body .plx :is(input,select,textarea){background:rgb(12 17 26 / 35%)!important;color:#f3f5f7!important;border-color:#ffffff24!important}
+html body .nw-ph{background:#1a212c80!important;border-color:#ffffff2e!important}
+html body .nw-phbox{background:#ffffff08!important;color:#ffffff55!important}""",
 }
 
 HE = 'html body :is(main h1,main h2,main h3) em'
@@ -190,6 +228,9 @@ FONT_FILES = {
     'inter.woff2': '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2',
     'inter-ext.woff2': '@fontsource-variable/inter/files/inter-latin-ext-wght-normal.woff2',
     'inter-tight.woff2': '@fontsource-variable/inter-tight/files/inter-tight-latin-wght-normal.woff2',
+    'montserrat.woff2': '@fontsource-variable/montserrat/files/montserrat-latin-wght-normal.woff2',
+    'montserrat-ext.woff2': '@fontsource-variable/montserrat/files/montserrat-latin-ext-wght-normal.woff2',
+    'jetbrains-mono.woff2': '@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2',
     'newsreader-italic.woff2': '@fontsource-variable/newsreader/files/newsreader-latin-wght-italic.woff2',
     **{
         f'plex-sans-{w}.woff2': f'@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-{w}-normal.woff2'
@@ -229,6 +270,10 @@ def fonts_for(slug):
         rows.append(face(sans, 'plex-sans-600.woff2', weight='700 900'))
         rows += [face(['PS Mono', 'IBM Plex Mono'], f'plex-mono-{w}.woff2', weight=str(w)) for w in (400, 500)]
         return '\n'.join(rows)
+    if slug == 'design-g':
+        return '\n'.join([face(DISPLAY, 'outfit.woff2', ext='outfit-ext.woff2'), face(TEXT, 'inter.woff2', ext='inter-ext.woff2'),
+                          face(['PS Display'], 'montserrat.woff2', ext='montserrat-ext.woff2'),
+                          face(['PS Mono'], 'jetbrains-mono.woff2', weight='100 800')])
     return face(DISPLAY, 'outfit.woff2', ext='outfit-ext.woff2') + '\n' + face(TEXT, 'inter.woff2', ext='inter-ext.woff2')
 
 
@@ -251,7 +296,7 @@ def light(h):
 
 
 # corner radius per design: the page's rounded corners are capped at this value
-RADIUS = {'design-a': 2, 'design-b': 6, 'design-c': 0, 'design-d': 8, 'design-e': 2, 'design-f': 6}
+RADIUS = {'design-a': 2, 'design-b': 6, 'design-c': 0, 'design-d': 8, 'design-e': 2, 'design-f': 6, 'design-g': 14}
 
 
 def cap_radius(css, cap):
@@ -377,6 +422,10 @@ def build(src, out):
         if slug not in ('index', 'as-sent'):
             gx = GX_A if slug == 'design-a' else (GX_DARK if slug in DARK else '')
             theme += f'<style id="design-theme">\nhtml:root{{{TOKENS[slug]}\n}}{gx}\n{EXTRA[slug]}\n</style>\n'
+        if slug == 'design-g':
+            theme += ('<script>addEventListener("DOMContentLoaded",function(){var p=document.createElement("div");p.className="g-progress";'
+                      'document.body.appendChild(p);var f=function(){var m=document.documentElement.scrollHeight-innerHeight;'
+                      'p.style.transform="scaleX("+(m>0?scrollY/m:0)+")"};addEventListener("scroll",f,{passive:true});f()})</script>\n')
         page = page.replace('</head>', theme + '</head>', 1)
         if letter != '0':
             suffix = 'As sent' if letter == 'S' else f'Design {letter}'
