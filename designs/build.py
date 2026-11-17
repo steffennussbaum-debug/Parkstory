@@ -236,7 +236,7 @@ EXTRA_RAW['design-h'] = EXTRA_RAW['design-g'] + """
 .hx-item:hover .cv,.hx-item.open .cv{transform:rotate(180deg)}
 .hx-dd{position:absolute;left:-6px;top:100%;margin-top:10px;width:320px;padding:14px;border-radius:14px;background:#1a212c;border:1px solid #ffffff1f;box-shadow:0 30px 50px -25px #000c;opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .25s,transform .35s,visibility 0s .35s;white-space:normal}
 .hx-dd:before{content:"";position:absolute;left:0;right:0;top:-12px;height:12px}
-@media (hover:hover){.hx-item:hover>.hx-dd{opacity:1;visibility:visible;transform:none;transition:opacity .25s,transform .35s}}
+@media (hover:hover) and (pointer:fine) and (not (any-pointer:coarse)){.hx-item:hover>.hx-dd{opacity:1;visibility:visible;transform:none;transition:opacity .25s,transform .35s}}
 .hx-item.open>.hx-dd,.hx-item:focus-within>.hx-dd{opacity:1;visibility:visible;transform:none;transition:opacity .25s,transform .35s}
 .hx-item:nth-last-child(-n+3) .hx-dd{left:auto;right:-6px}
 .hx-dd-d{font:400 12.5px/1.5 "PS Display","Inter",sans-serif;color:#8f99a7;margin:0 0 8px;padding:0 10px 10px;border-bottom:1px solid #ffffff14}
@@ -266,13 +266,13 @@ EXTRA_RAW['design-h'] = EXTRA_RAW['design-g'] + """
 .hx-burger span:nth-child(1){top:15px}.hx-burger span:nth-child(2){top:19px}.hx-burger span:nth-child(3){top:23px}
 .hx-menu .hx-burger span:nth-child(1){transform:translateY(4px) rotate(45deg)}.hx-menu .hx-burger span:nth-child(2){opacity:0}.hx-menu .hx-burger span:nth-child(3){transform:translateY(-4px) rotate(-45deg)}
 .hx.hx-compact .hx-nav{display:none}.hx.hx-compact .hx-burger{display:block}.hx.hx-compact .hx-set{margin-left:auto}.hx.hx-compact .hx-burger{margin-left:0}
-.hx.hx-compact.hx-menu .hx-nav{display:grid;position:fixed;left:0;right:0;top:64px;max-height:calc(100vh - 64px);overflow:auto;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));align-items:start;gap:22px 18px;padding:22px clamp(16px,3vw,40px) 30px;background:rgb(14 18 25 / 97%);border-bottom:1px solid #ffffff1f;white-space:normal}
+.hx.hx-compact.hx-menu .hx-nav{display:grid;position:fixed;left:0;right:0;top:64px;max-height:calc(100dvh - 64px);overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));align-items:start;gap:22px 18px;padding:22px clamp(16px,3vw,40px) 30px;background:rgb(14 18 25 / 97%);border-bottom:1px solid #ffffff1f;white-space:normal}
 .hx-compact.hx-menu .hx-nav .hx-dd{position:static;width:auto;opacity:1;visibility:visible;transform:none;margin:4px 0 0;padding:0;background:none;border:0;box-shadow:none}
 .hx-compact.hx-menu .hx-dd-d,.hx-compact .cv{display:none}
 .hx-compact.hx-menu .hx-item.hx-cta{margin-left:0}
 .lang-sw{transition:transform .45s cubic-bezier(.22,1,.36,1)}
 @media (width>600px){html body .lang-sw{display:none!important}}
-@media (min-width:1181px),(min-width:721px) and (pointer:fine){html body .dz{top:auto;bottom:14px;left:16px;transform:none}html body .dz.dz-away{transform:translateY(160%)}}
+@media (min-width:1181px),(min-width:721px) and (not (any-pointer:coarse)){html body .dz{top:auto;bottom:14px;left:16px;transform:none}html body .dz.dz-away{transform:translateY(160%)}}
 @media (width>600px){html body .hr-rail,html body .hr-tab{display:none!important}html body .hr-shell{grid-template-columns:minmax(0,1fr)!important}}
 @media (width<=600px){.hx{display:none!important}}"""
 
@@ -410,6 +410,7 @@ addEventListener("DOMContentLoaded",function(){
  setb.addEventListener("click",function(e){e.stopPropagation();var o=!set.classList.contains("open");[].forEach.call(bar.querySelectorAll(".hx-item.open"),function(i){i.classList.remove("open")});set.classList.toggle("open",o)});
  var logo=rail.querySelector(".hr-logo img");if(logo)bar.querySelector(".hx-logo").appendChild(logo.cloneNode());
  bar.querySelector(".hx-logo").addEventListener("click",function(e){e.preventDefault();scrollTo({top:0,behavior:"instant"})});
+ var lastTouch=false;addEventListener("pointerdown",function(e){lastTouch=e.pointerType!=="mouse"},true);
  var lock=0;function setMenu(o){bar.classList.toggle("hx-menu",o);burger.setAttribute("aria-expanded",o)}
  function closeAll(){[].forEach.call(nav.querySelectorAll(".hx-item.open"),function(i){i.classList.remove("open")});setMenu(false);if(document.activeElement&&bar.contains(document.activeElement))document.activeElement.blur()}
  function go(el){closeAll();lock=Date.now()+1300;bar.classList.add("hx-hide");document.body.classList.add("hx-up");el.click()}
@@ -423,17 +424,17 @@ addEventListener("DOMContentLoaded",function(){
   secs.forEach(function(sec){
    var pa=sec.querySelector(".hr-pa");if(!pa)return;var pt=pa.querySelector(".pt"),pd=pa.querySelector(".pd");
    var it=document.createElement("div");it.className="hx-item"+(sec.dataset.part==="part-plan"?" hx-cta":"");it.dataset.part=sec.dataset.part;
-   var top=document.createElement("a");top.className="hx-top";top.href=pa.getAttribute("href");var tx=document.createElement("span");tx.className="tx";tx.textContent=(pt?pt.textContent:pa.textContent).trim();top.appendChild(tx);
+   var top=document.createElement("a");top.className="hx-top";top.href="#!"+pa.getAttribute("href").slice(1);var tx=document.createElement("span");tx.className="tx";tx.textContent=(pt?pt.textContent:pa.textContent).trim();top.appendChild(tx);
    var dd=document.createElement("div");dd.className="hx-dd";
    if(pd&&pd.textContent.trim()){var d=document.createElement("p");d.className="hx-dd-d";d.textContent=pd.textContent.trim();dd.appendChild(d)}
    [].forEach.call(sec.querySelectorAll(".hr-ch>li>a"),function(a){
-    var l=document.createElement("a");l.href=a.getAttribute("href");
+    var l=document.createElement("a");l.href="#!"+a.getAttribute("href").slice(1);
     if(a.classList.contains("hr-sim")){l.className="sim";l.textContent="▸ "+a.textContent.trim()}
     else{var t=a.querySelector(".t");l.textContent=(t?t.textContent:a.textContent).trim();var g=a.querySelector(".hr-tag");if(g){var s=document.createElement("span");s.className="tag";s.textContent=g.textContent.trim();l.appendChild(s)}}
-    l.addEventListener("click",function(e){e.preventDefault();go(a)});dd.appendChild(l)});
+    l.addEventListener("click",function(e){e.preventDefault();e.stopPropagation();go(a)});dd.appendChild(l)});
    if(dd.querySelector("a")){var cv=document.createElement("span");cv.className="cv";cv.setAttribute("aria-hidden","true");cv.textContent="▾";top.appendChild(cv);it.appendChild(top);it.appendChild(dd)}else it.appendChild(top);
-   top.addEventListener("click",function(e){e.preventDefault();
-    var touch=matchMedia("(hover: none)").matches&&!bar.classList.contains("hx-compact");
+   top.addEventListener("click",function(e){e.preventDefault();e.stopPropagation();
+    var touch=(lastTouch||matchMedia("(hover: none)").matches)&&!bar.classList.contains("hx-compact");
     if(touch&&dd.querySelector("a")&&!it.classList.contains("open")){[].forEach.call(nav.querySelectorAll(".hx-item.open"),function(i){i.classList.remove("open")});it.classList.add("open");return}
     go(pa)});
    nav.appendChild(it)});
@@ -482,12 +483,12 @@ b.addEventListener('click',function(){{var o=n.classList.toggle('open');b.setAtt
   opacity:.75;white-space:nowrap}}
 .dz a:hover{{opacity:1}}
 .dz{{transition:transform .3s ease,opacity .3s}}
-@media (min-width:1181px),(min-width:721px) and (pointer:fine){{.dz.dz-away{{transform:translate(-50%,-160%);opacity:0}}}}
+@media (min-width:1181px),(min-width:721px) and (not (any-pointer:coarse)){{.dz.dz-away{{transform:translate(-50%,-160%);opacity:0}}}}
 .dz a.on{{background:#fff;color:#111;opacity:1}}
 .dz a span{{display:none}}
 .dz a.on span{{display:inline}}
 .dz-btn{{display:none}}
-@media (max-width:720px),(pointer:coarse) and (max-width:1180px){{
+@media (max-width:720px),(any-pointer:coarse) and (max-width:1180px){{
   .dz{{left:auto;top:auto;right:12px;bottom:12px;transform:none;flex-direction:column;align-items:stretch;border-radius:16px}}
   .dz-btn{{display:block;appearance:none;border:0;background:transparent;color:#fff;font:inherit;font-weight:600;padding:9px 12px;cursor:pointer}}
   .dz a{{display:none;border-radius:10px}}

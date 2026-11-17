@@ -6,7 +6,7 @@ import re, sys
 src, dst = sys.argv[1], sys.argv[2]
 h = open(src, encoding='utf-8').read()
 Q_OLD = '(width<=600px)'
-Q_NEW = '(width<=600px),(pointer:coarse) and (width<=1180px)'
+Q_NEW = '(width<=600px),(any-pointer:coarse) and (width<=1180px)'
 MENU = re.compile(r'\.hr-(shell|tab|rail|top|close)\b')
 
 def block_end(s, i):  # i = index of the "{" that opens the @media block
