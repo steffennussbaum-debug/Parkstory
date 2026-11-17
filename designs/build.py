@@ -272,8 +272,8 @@ EXTRA_RAW['design-h'] = EXTRA_RAW['design-g'] + """
 .hx-compact.hx-menu .hx-item.hx-cta{margin-left:0}
 .lang-sw{transition:transform .45s cubic-bezier(.22,1,.36,1)}
 @media (width>600px){html body .lang-sw{display:none!important}}
-@media (min-width:721px){html body .dz{top:auto;bottom:14px;left:16px;transform:none}html body .dz.dz-away{transform:translateY(160%)}}
-@media (width>600px){html body .hr-rail{display:none!important}html body .hr-shell{grid-template-columns:minmax(0,1fr)!important}}
+@media (min-width:1181px),(min-width:721px) and (pointer:fine){html body .dz{top:auto;bottom:14px;left:16px;transform:none}html body .dz.dz-away{transform:translateY(160%)}}
+@media (width>600px){html body .hr-rail,html body .hr-tab{display:none!important}html body .hr-shell{grid-template-columns:minmax(0,1fr)!important}}
 @media (width<=600px){.hx{display:none!important}}"""
 
 HE = 'html body :is(main h1,main h2,main h3) em'
@@ -482,12 +482,12 @@ b.addEventListener('click',function(){{var o=n.classList.toggle('open');b.setAtt
   opacity:.75;white-space:nowrap}}
 .dz a:hover{{opacity:1}}
 .dz{{transition:transform .3s ease,opacity .3s}}
-@media (min-width:721px){{.dz.dz-away{{transform:translate(-50%,-160%);opacity:0}}}}
+@media (min-width:1181px),(min-width:721px) and (pointer:fine){{.dz.dz-away{{transform:translate(-50%,-160%);opacity:0}}}}
 .dz a.on{{background:#fff;color:#111;opacity:1}}
 .dz a span{{display:none}}
 .dz a.on span{{display:inline}}
 .dz-btn{{display:none}}
-@media (max-width:720px){{
+@media (max-width:720px),(pointer:coarse) and (max-width:1180px){{
   .dz{{left:auto;top:auto;right:12px;bottom:12px;transform:none;flex-direction:column;align-items:stretch;border-radius:16px}}
   .dz-btn{{display:block;appearance:none;border:0;background:transparent;color:#fff;font:inherit;font-weight:600;padding:9px 12px;cursor:pointer}}
   .dz a{{display:none;border-radius:10px}}

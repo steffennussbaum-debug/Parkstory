@@ -112,3 +112,12 @@ python3 designs/overhaul/prodtabs_patch.py Parkstory-overhaul-cc9f.html Parkstor
 The three product cards work as tabs; TilePark (with the simulator, the Munich video and the conveyor photo),
 Automated Stackers and Tower open below them. The menu lists "TilePark products" once. Links to content in a
 closed tab (for example `#video` or `#tower`) open that tab first.
+
+## Tablets and foldables
+
+```bash
+python3 designs/overhaul/tablet_patch.py Parkstory-overhaul-pt.html Parkstory-overhaul-tb.html   # build from -tb.html
+```
+
+Touch screens up to 1180 px wide (tablets, unfolded foldables) get the phone menu: a top bar with a menu button
+that opens the contents as a slide-in panel. Only the menu rules change; content keeps its own breakpoints.
