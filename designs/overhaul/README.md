@@ -121,3 +121,14 @@ python3 designs/overhaul/tablet_patch.py Parkstory-overhaul-pt.html Parkstory-ov
 
 Touch screens up to 1180 px wide (tablets, unfolded foldables) get the phone menu: a top bar with a menu button
 that opens the contents as a slide-in panel. Only the menu rules change; content keeps its own breakpoints.
+
+## Stacker and EV simulators: open right away, photorealistic 3D
+
+```bash
+npx esbuild designs/overhaul/sim3d-web/sims3d.js --bundle --minify --format=iife --target=es2019 --outfile=designs/overhaul/sim3d-web/sims3d.min.js
+python3 designs/overhaul/sims_patch.py Parkstory-overhaul-tb.html Parkstory-overhaul-sm.html designs/overhaul/sim3d-web/sims3d.min.js   # build from -sm.html
+```
+
+Both simulators are open without an "Open the simulation" button. `sim3d-web/sims3d.js` (three.js) renders each one
+in 3D on top of its 2D logic: physically based materials, image-based lighting, soft shadows and filmic tone
+mapping. Cars can be picked in the 3D stacker view; a 3D/2D switch shows the original drawing.
