@@ -236,7 +236,7 @@ EXTRA_RAW['design-h'] = EXTRA_RAW['design-g'] + """
 .hx-item:hover .cv,.hx-item.open .cv{transform:rotate(180deg)}
 .hx-dd{position:absolute;left:-6px;top:100%;margin-top:10px;width:320px;padding:14px;border-radius:14px;background:#1a212c;border:1px solid #ffffff1f;box-shadow:0 30px 50px -25px #000c;opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .25s,transform .35s,visibility 0s .35s;white-space:normal}
 .hx-dd:before{content:"";position:absolute;left:0;right:0;top:-12px;height:12px}
-@media (hover:hover) and (pointer:fine) and (not (any-pointer:coarse)){.hx-item:hover>.hx-dd{opacity:1;visibility:visible;transform:none;transition:opacity .25s,transform .35s}}
+.hx-dd{transition:opacity .2s,transform .3s,visibility 0s .3s}
 .hx-item.open>.hx-dd,.hx-item:focus-within>.hx-dd{opacity:1;visibility:visible;transform:none;transition:opacity .25s,transform .35s}
 .hx-item:nth-last-child(-n+3) .hx-dd{left:auto;right:-6px}
 .hx-dd-d{font:400 12.5px/1.5 "PS Display","Inter",sans-serif;color:#8f99a7;margin:0 0 8px;padding:0 10px 10px;border-bottom:1px solid #ffffff14}
@@ -413,7 +413,7 @@ addEventListener("DOMContentLoaded",function(){
  var lastTouch=false;addEventListener("pointerdown",function(e){lastTouch=e.pointerType!=="mouse"},true);
  var lock=0;function setMenu(o){bar.classList.toggle("hx-menu",o);burger.setAttribute("aria-expanded",o)}
  function closeAll(){[].forEach.call(nav.querySelectorAll(".hx-item.open"),function(i){i.classList.remove("open")});setMenu(false);if(document.activeElement&&bar.contains(document.activeElement))document.activeElement.blur()}
- function go(el){closeAll();lock=Date.now()+1300;bar.classList.add("hx-hide");document.body.classList.add("hx-up");el.click()}
+ function go(el){closeAll();el.click()}
  var ou=rail.querySelector(".un-tog");
  function syncUnits(){if(ou)[].forEach.call(units.children,function(b,i){b.setAttribute("aria-pressed",ou.children[i].getAttribute("aria-pressed"))});label()}
  if(ou){[].forEach.call(ou.querySelectorAll("button"),function(ob){var b=document.createElement("button");b.type="button";b.textContent=ob.textContent;b.addEventListener("click",function(){ob.click();setTimeout(syncUnits,30)});units.appendChild(b)});
@@ -434,7 +434,7 @@ addEventListener("DOMContentLoaded",function(){
     l.addEventListener("click",function(e){e.preventDefault();e.stopPropagation();go(a)});dd.appendChild(l)});
    if(dd.querySelector("a")){var cv=document.createElement("span");cv.className="cv";cv.setAttribute("aria-hidden","true");cv.textContent="▾";top.appendChild(cv);it.appendChild(top);it.appendChild(dd)}else it.appendChild(top);
    top.addEventListener("click",function(e){e.preventDefault();e.stopPropagation();
-    var touch=(lastTouch||matchMedia("(hover: none)").matches)&&!bar.classList.contains("hx-compact");
+    var touch=!bar.classList.contains("hx-compact");
     if(touch&&dd.querySelector("a")&&!it.classList.contains("open")){[].forEach.call(nav.querySelectorAll(".hx-item.open"),function(i){i.classList.remove("open")});it.classList.add("open");return}
     go(pa)});
    nav.appendChild(it)});
@@ -446,14 +446,17 @@ addEventListener("DOMContentLoaded",function(){
   if(over()){bar.classList.add("hx-wrap");var ok=false;["12em","10.5em","9em"].some(function(m){[].forEach.call(nav.querySelectorAll(".tx"),function(t){t.style.width=""});bar.style.setProperty("--txw",m);tight();ok=!over();return ok});if(!ok)bar.classList.add("hx-compact")}
   if(!bar.classList.contains("hx-compact"))setMenu(false)}
  burger.addEventListener("click",function(){setMenu(!bar.classList.contains("hx-menu"))});
+ // mouse: open on hover, keep open for a moment after the pointer leaves
+ var tm=null;function openOnly(it){[].forEach.call(bar.querySelectorAll(".hx-item.open"),function(i){if(i!==it)i.classList.remove("open")});it.classList.add("open")}
+ bar.addEventListener("pointerover",function(e){if(e.pointerType!=="mouse"||bar.classList.contains("hx-compact"))return;var it=e.target.closest(".hx-item");if(!it||it.classList.contains("hx-set")||!it.querySelector(".hx-dd"))return;clearTimeout(tm);openOnly(it)});
+ bar.addEventListener("pointerout",function(e){if(e.pointerType!=="mouse")return;var it=e.target.closest(".hx-item");if(!it||it.classList.contains("hx-set")||(e.relatedTarget&&it.contains(e.relatedTarget)))return;clearTimeout(tm);tm=setTimeout(function(){it.classList.remove("open")},550)});
  document.addEventListener("click",function(e){if(!set.contains(e.target))set.classList.remove("open");if(!bar.contains(e.target)){[].forEach.call(nav.querySelectorAll(".hx-item.open"),function(i){i.classList.remove("open")});setMenu(false)}});
  addEventListener("keydown",function(e){if(e.key==="Escape")closeAll()});
  function active(){var cur=null;secs.forEach(function(sec){var el=document.getElementById(sec.dataset.part);if(el&&el.offsetParent!==null&&el.getBoundingClientRect().top<innerHeight*.35)cur=sec.dataset.part});
   [].forEach.call(nav.children,function(i){i.classList.toggle("cur",i.dataset.part===cur)})}
  var ly=scrollY;addEventListener("scroll",function(){var y=scrollY;bar.classList.toggle("hx-solid",y>20);
   var open=bar.classList.contains("hx-menu")||nav.querySelector(".hx-item.open");
-  if(Date.now()<lock){bar.classList.add("hx-hide")}else if(y>ly+4&&y>300&&!open){bar.classList.add("hx-hide")}else if(y<ly-4||y<=300){bar.classList.remove("hx-hide")}
-  document.body.classList.toggle("hx-up",bar.classList.contains("hx-hide"));ly=y;active()},{passive:true});
+  ly=y;active()},{passive:true});
  addEventListener("resize",fit);
  build();if(document.fonts)document.fonts.ready.then(fit);
 });
@@ -549,6 +552,14 @@ def build(src, out):
             theme += f'<style id="design-theme">\nhtml:root{{{TOKENS[slug]}\n}}{gx}\n{EXTRA[slug]}\n</style>\n'
         if slug == 'design-h':
             theme += '<script>' + TOPBAR_JS + '</script>\n'
+            HX = 'var hx=document.querySelector(".hx");if(hx&&getComputedStyle(hx).display!=="none")return hx.offsetHeight;'
+            for a, b in (('const off=()=>phone()?tab.offsetHeight:0;', 'const off=()=>{' + HX + 'return phone()?tab.offsetHeight:0};'),):
+                assert page.count(a) == 1, a
+                page = page.replace(a, b)
+            page = re.sub(r"(const tab=document\.querySelector\('\.hr-tab'\),off=)(matchMedia\('[^']*'\)\.matches&&tab\?tab\.offsetHeight:0)",
+                          lambda m: m.group(1) + '(function(){' + HX + 'return ' + m.group(2) + '})()', page, count=1)
+            page = re.sub(r"(const off=)(matchMedia\('[^']*'\)\.matches\?\(document\.querySelector\('\.hr-tab'\)\|\|\{\}\)\.offsetHeight\|\|0:0)",
+                          lambda m: m.group(1) + '(function(){' + HX + 'return ' + m.group(2) + '})()', page, count=1)
         if slug in ('design-g', 'design-h'):
             theme += ('<script>addEventListener("DOMContentLoaded",function(){var p=document.createElement("div");p.className="g-progress";'
                       'document.body.appendChild(p);var f=function(){var m=document.documentElement.scrollHeight-innerHeight;'
